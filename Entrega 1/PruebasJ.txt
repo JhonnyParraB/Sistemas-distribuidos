@@ -10,3 +10,7 @@
 
 -HILOS: DOS CLIENTES SE CONECTAN AL TIEMPO/DOS PROXY'S
 proxies o proxys?
+
+
+-Nuevo proxy?
+-Mandar el nuevo proxy a las fuentes

@@ -104,11 +104,5 @@ public class Proxy {
 
     public static int getPuertoFuentes() {
         return puertoFuentes;
-    }
-
-
-
-    
-    
-    
+    }   
 }
