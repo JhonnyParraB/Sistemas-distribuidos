@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class LeeFichero{
 
-    public static Consulta leer() {
+    public static Fuente leer() {
 
-        List<Proyecto> proyectos = new ArrayList<Proyecto>();;
+        List<Consulta> consultas = new ArrayList<Consulta>();;
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -43,8 +43,8 @@ public class LeeFichero{
                 Date fecha = formatter.parse(parts[0]);
                 fecha = formatter.parse(parts[0]);
                 String nombre = parts[1];
-                Proyecto proyecto = new Proyecto(fecha, nombre);
-                proyectos.add(proyecto);
+                Consulta consulta = new Consulta(fecha, nombre);
+                consultas.add(consulta);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,8 +60,8 @@ public class LeeFichero{
                 e2.printStackTrace();
             }
         }
-        Consulta consulta = new Consulta(proyectos);
-        return consulta;
+        Fuente fuente = new Fuente(consultas);
+        return fuente;
     }
     
     

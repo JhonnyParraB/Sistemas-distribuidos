@@ -17,15 +17,15 @@ public class FuenteDeConsultasYProyectos {
     public static void main(String[] args) {
         // TODO code application logic here
         LeeFichero funcion = new LeeFichero();
-        Consulta consulta = funcion.leer();
+        Fuente fuente = funcion.leer();
 
-        for (Proyecto str : consulta.proyectos) {
+        for (Consulta str : fuente.getConsultas()) {
             //imprimimos el objeto pivote
             System.out.println(str.getFecha().toString());
         }
         
         while (true){
-        consulta.start();
+        fuente.start();
         }
     }
 

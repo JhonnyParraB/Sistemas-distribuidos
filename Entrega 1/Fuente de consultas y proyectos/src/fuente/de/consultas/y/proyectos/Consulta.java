@@ -5,41 +5,36 @@
  */
 package fuente.de.consultas.y.proyectos;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
  * @author green
  */
-public class Consulta extends Thread {
+public class Consulta {
+    private Date fecha;
+    private String nombre;
 
-    List<Proyecto> proyectos;
+    public Consulta(Date fecha, String nombre) {
+        this.fecha = fecha;
+        this.nombre = nombre;
+    }
 
-    public Consulta(List<Proyecto> ejemploLista) {
-        this.proyectos = ejemploLista;
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
-    public Consulta() {
-        this.proyectos = new ArrayList <Proyecto>();
-    }
-
-    public void evaluarTiempos() {
-        Date actual=java.util.Calendar.getInstance().getTime();
-        System.out.println(actual.toString());
-        for (Proyecto proy : this.proyectos) {
-            //imprimimos el objeto pivote
-            if (proy.getFecha().before(actual)){
-                System.out.println("Ya paso"+proy.getNombre());
-            }
-        }
-    }
-
-    @Override
-    public void run() {
-        this.evaluarTiempos();
-    }
-
+    
 }
