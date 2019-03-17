@@ -13,7 +13,8 @@ import java.io.Serializable;
  */
 public class Proxy implements Serializable {
     private String IP;
-    private int puerto;
+    private int puertoFuentes;
+    private int puertoClientes;
     private int numeroClientes;
 
     public Proxy() {
@@ -30,12 +31,20 @@ public class Proxy implements Serializable {
         this.IP = IP;
     }
 
-    public int getPuerto() {
-        return puerto;
+    public int getPuertoFuentes() {
+        return puertoFuentes;
     }
 
-    public void setPuerto(int puerto) {
-        this.puerto = puerto;
+    public void setPuertoFuentes(int puertoFuentes) {
+        this.puertoFuentes = puertoFuentes;
+    }
+
+    public int getPuertoClientes() {
+        return puertoClientes;
+    }
+
+    public void setPuertoClientes(int puertoClientes) {
+        this.puertoClientes = puertoClientes;
     }
 
     public int getNumeroClientes() {

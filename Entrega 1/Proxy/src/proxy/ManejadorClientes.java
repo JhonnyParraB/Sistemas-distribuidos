@@ -20,7 +20,7 @@ public class ManejadorClientes extends Thread{
     @Override
     public void run() {
         try {
-            ServerSocket socket = new ServerSocket(Proxy.getPuerto());
+            ServerSocket socket = new ServerSocket(Proxy.getPuertoClientes());
             do{
                 Socket socket_cli = socket.accept();
                 ConexionCliente conexionCliente = new ConexionCliente (socket_cli);

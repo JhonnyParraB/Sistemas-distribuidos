@@ -26,8 +26,7 @@ public class ConexionCliente extends Thread{
     @Override
     public void run() {
         String mensaje;
-        do{
-            
+        do{            
             try {
                 DataOutputStream out = new DataOutputStream (socket.getOutputStream());
                 DataInputStream in = new DataInputStream (socket.getInputStream());

@@ -64,9 +64,9 @@ public class Usuario {
                 System.out.println (mensaje);  
                 ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy)in.readObject();
                 System.out.println(proxy.getIP());
-                System.out.println(proxy.getPuerto());
+                System.out.println(proxy.getPuertoClientes());
                 socket.close();
-                socket = new Socket (proxy.getIP(), proxy.getPuerto());                
+                socket = new Socket (proxy.getIP(), proxy.getPuertoClientes());                
             }
             else{
                 System.out.println (mensaje);

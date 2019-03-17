@@ -26,7 +26,8 @@ public class Proxy {
     private static ServerSocket Pservidor;
     private static int puertoManejador = 6000;
     private static int conexionesActuales = 0;
-    private static int puerto;
+    private static int puertoClientes;
+    private static int puertoFuentes;
     
 
     /**
@@ -67,7 +68,8 @@ public class Proxy {
             mensaje = InetAddress.getLocalHost().getHostAddress().toString();
             out.writeUTF(mensaje);
             
-            out.writeInt(puerto);
+            out.writeInt(puertoClientes);
+            out.writeInt(puertoFuentes);
             
             mensaje = in.readUTF();
             System.out.println (mensaje);   
@@ -87,15 +89,24 @@ public class Proxy {
     private static void inicializarProxy (){
         Scanner reader = new Scanner (System.in);
         System.out.println ("--Creacion del proxy--");
-        System.out.println ("Ingrese el puerto en el que se comunicara el proxy:");
-        puerto = reader.nextInt();
+        System.out.println ("Ingrese el puerto en el que el proxy se comunicara con los clientes:");
+        puertoClientes = reader.nextInt();
+        System.out.println ("Ingrese el puerto en el que el proxy se comunicara con las fuentes:");
+        puertoFuentes = reader.nextInt();
         ManejadorClientes manejadorClientes = new ManejadorClientes();
         manejadorClientes.start();
     }
 
-    public static int getPuerto() {
-        return puerto;
+    public static int getPuertoClientes() {
+        return puertoClientes;
     }
+
+    public static int getPuertoFuentes() {
+        return puertoFuentes;
+    }
+
+
+
     
     
     
