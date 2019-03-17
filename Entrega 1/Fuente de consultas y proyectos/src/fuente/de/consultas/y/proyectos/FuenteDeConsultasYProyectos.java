@@ -16,6 +16,13 @@ public class FuenteDeConsultasYProyectos {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        LeeFichero funcion = new LeeFichero();
+        Consulta consulta = funcion.leer();
+
+        for (Proyecto str : consulta.proyectos) {
+            //imprimimos el objeto pivote
+            System.out.println(str.getNombre());
+        }
     }
-    
+
 }
