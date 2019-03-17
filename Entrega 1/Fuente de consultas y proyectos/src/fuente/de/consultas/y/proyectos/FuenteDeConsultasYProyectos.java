@@ -25,7 +25,7 @@ public class FuenteDeConsultasYProyectos {
         }
         
         while (true){
-        consulta.run();
+        consulta.start();
         }
     }
 
