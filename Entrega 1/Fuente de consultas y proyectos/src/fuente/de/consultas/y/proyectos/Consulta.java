@@ -5,6 +5,7 @@
  */
 package fuente.de.consultas.y.proyectos;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,10 @@ public class Consulta extends Thread {
 
     public Consulta(List<Proyecto> ejemploLista) {
         this.proyectos = ejemploLista;
+    }
+    
+    public Consulta() {
+        this.proyectos = new ArrayList <Proyecto>();
     }
 
     public void evaluarTiempos() {
