@@ -93,7 +93,9 @@ public class Proxy {
         System.out.println ("Ingrese el puerto en el que el proxy se comunicara con las fuentes:");
         puertoFuentes = reader.nextInt();
         ManejadorClientes manejadorClientes = new ManejadorClientes();
+        ManejadorFuentes manejadorFuentes = new ManejadorFuentes();
         manejadorClientes.start();
+        manejadorFuentes.start();
     }
 
     public static int getPuertoClientes() {

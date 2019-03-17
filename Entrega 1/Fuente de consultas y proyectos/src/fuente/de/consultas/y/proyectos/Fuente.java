@@ -71,15 +71,19 @@ public class Fuente extends Thread {
                 directorio = (List <ClasesdeComunicacion.Proxy>)in.readObject();
                 socket.close();
                 for (ClasesdeComunicacion.Proxy proxy : directorio){
-                    socket = new Socket (proxy.getIP(), proxy.getPuertoClientes());
-                    sockets.add(socket);
+                    Socket socketp;
+                    System.out.println("se totea1");
+                    socketp = new Socket (proxy.getIP(), proxy.getPuertoFuentes());
+                    System.out.println("se totea2");
+                    /*sockets.add( new Socket (proxy.getIP(), proxy.getPuertoFuentes()));*/
+                    System.out.println("se totea3");
                 }
             }
             else{
                 System.out.println (mensaje);
+                socket.close();
                 System.exit(1);
             }
-            socket.close();
                     
         }catch(Exception e){
             System.err.println(e.getMessage());
