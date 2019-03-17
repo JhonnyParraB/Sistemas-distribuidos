@@ -44,11 +44,12 @@ public class RegistroCliente extends Thread{
                     
                     if (!clientes.contains(ID)){
                         out.writeObject ("El ID es valido\nBienvenido!");
+                        clientes.add(ID);
                         ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
                         out.writeObject(proxy);
                     }
                     else
-                        out.writeObject ("El ID esta siendo usado por otro usuario");                            
+                        out.writeObject ("El ID esta siendo usado por otro usuario");                       
                     
                     socket_cli.close();
             }while (true);

@@ -32,7 +32,7 @@ public class RegistroProxy extends Thread{
         try {
             socket = new ServerSocket(6000);           
             String IP="";
-            String puerto="";
+            int puerto;
             do{
                     Socket socket_cli = socket.accept();
                 
@@ -40,11 +40,11 @@ public class RegistroProxy extends Thread{
                     DataInputStream in = new DataInputStream (socket_cli.getInputStream());
                     IP = in.readUTF();
                     System.out.println(IP);
-                    puerto = in.readUTF();
+                    puerto = in.readInt();
                     System.out.println(puerto);
                     ClasesdeComunicacion.Proxy proxy = new ClasesdeComunicacion.Proxy();
                     proxy.setIP(IP);
-                    proxy.setPuerto(Integer.parseInt(puerto));
+                    proxy.setPuerto(puerto);
                     directorio.add(proxy);
                     
                     out.writeUTF ("Proxy preparado!"); 

@@ -26,7 +26,7 @@ public class Proxy {
     private static ServerSocket Pservidor;
     private static int puertoManejador = 6000;
     private static int conexionesActuales = 0;
-    private static String puerto;
+    private static int puerto;
     
 
     /**
@@ -34,7 +34,9 @@ public class Proxy {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        inicializarProxy();
         conectarConManejador();
+
     }
     
     /*
@@ -46,13 +48,11 @@ public class Proxy {
         Scanner reader = new Scanner (System.in);
         String ipManejador;
         
-        System.out.println ("--Creacion del proxy--");
-        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
-             
+        
+        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");             
         ipManejador = reader.nextLine ();
         
-        System.out.println ("Ingrese el puerto en el que se comunicara el proxy:");
-        puerto = reader.nextLine ();
+        
         
         Socket socket;
         String mensaje = "";       
@@ -66,8 +66,8 @@ public class Proxy {
             
             mensaje = InetAddress.getLocalHost().getHostAddress().toString();
             out.writeUTF(mensaje);
-            mensaje = String.valueOf(puerto);
-            out.writeUTF(mensaje);
+            
+            out.writeInt(puerto);
             
             mensaje = in.readUTF();
             System.out.println (mensaje);   
@@ -85,12 +85,18 @@ public class Proxy {
     }
     
     private static void inicializarProxy (){
-        try {
-            Pservidor = new ServerSocket(Integer.parseInt(puerto));
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
+        Scanner reader = new Scanner (System.in);
+        System.out.println ("--Creacion del proxy--");
+        System.out.println ("Ingrese el puerto en el que se comunicara el proxy:");
+        puerto = reader.nextInt();
+        ManejadorClientes manejadorClientes = new ManejadorClientes();
+        manejadorClientes.start();
     }
+
+    public static int getPuerto() {
+        return puerto;
+    }
+    
+    
     
 }
