@@ -1,0 +1,5 @@
+
+-Pruebas puerto repetido
+-No se puede imprimir en los hilos ???
+-Hacer un hilo cada vez que se recibe un proxy o encolarlos? (Actualmente están encolados)
+-Y si coloca una ip x? nunca se conecta y se queda esperando el mensaje?
