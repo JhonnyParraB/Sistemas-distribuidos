@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,10 +23,11 @@ public class Proxy {
     
    
     
-    private ServerSocket servidor;
+    private static ServerSocket Pservidor;
     private static int puertoManejador = 6000;
-    static int conexionesActuales = 0;
-    static Socket tabla [] = new Socket [500];
+    private static int conexionesActuales = 0;
+    private static String puerto;
+    private static Socket tabla [] = new Socket [500];
     
 
     /**
@@ -43,7 +46,6 @@ public class Proxy {
     private static void conectarConManejador(){
         Scanner reader = new Scanner (System.in);
         String ipManejador;
-        String puerto;
         
         System.out.println ("--Creacion del proxy--");
         System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
@@ -54,11 +56,7 @@ public class Proxy {
         puerto = reader.nextLine ();
         
         Socket socket;
-        byte [] mensaje_bytes = new byte [256];
-        String mensaje = "";
-        
-        
-        
+        String mensaje = "";       
         
         try{
             socket = new Socket (ipManejador, puertoManejador);      
@@ -83,8 +81,17 @@ public class Proxy {
         }
         
         
-        
-        //COLOCAR TAMBIÉN EL PUERTO?
+       
         
     }
+    
+    private static void inicializarProxy (){
+        try {
+            Pservidor = new ServerSocket(Integer.parseInt(puerto));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+    }
+    
 }
