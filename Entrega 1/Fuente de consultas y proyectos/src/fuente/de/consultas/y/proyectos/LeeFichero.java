@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author green
  */
-public class LeeFichero {
+public class LeeFichero{
 
     public static Consulta leer() {
 
@@ -37,7 +37,7 @@ public class LeeFichero {
             // Lectura del fichero
             System.out.println("Leyendo el contendio del archivo.txt");
             String linea;
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             while ((linea = br.readLine()) != null) {
                 String[] parts = linea.split("-");
                 Date fecha = formatter.parse(parts[0]);
@@ -63,4 +63,6 @@ public class LeeFichero {
         Consulta consulta = new Consulta(proyectos);
         return consulta;
     }
+    
+    
 }

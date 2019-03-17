@@ -21,7 +21,7 @@ public class FuenteDeConsultasYProyectos {
 
         for (Proyecto str : consulta.proyectos) {
             //imprimimos el objeto pivote
-            System.out.println(str.getNombre());
+            System.out.println(str.getFecha().toString());
         }
     }
 
