@@ -23,6 +23,10 @@ public class FuenteDeConsultasYProyectos {
             //imprimimos el objeto pivote
             System.out.println(str.getFecha().toString());
         }
+        
+        while (true){
+        consulta.run();
+        }
     }
 
 }
