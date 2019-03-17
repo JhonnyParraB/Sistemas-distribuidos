@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
@@ -20,6 +22,10 @@ import java.util.Scanner;
 public class Usuario {
     
     private static int puertoManejador = 5999;
+    private static Socket socket;
+    private static final String 
+            menu = "1. Ver nuevas consultas/proyectos y votarlos\n"
+            + "2. Desconectarse";
 
     /**
      * @param args the command line arguments
@@ -27,6 +33,7 @@ public class Usuario {
     public static void main(String[] args) {
         // TODO code application logic here
         solicitarConexión();
+        mostrarMenu();
     }
     
     /**
@@ -41,21 +48,23 @@ public class Usuario {
         
         System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
         ID = reader.nextInt();
-        
-        Socket socket;
-        
+                
         try{
             socket = new Socket (ipManejador, puertoManejador);      
             
-            DataOutputStream out = new DataOutputStream (socket.getOutputStream());
-            DataInputStream in = new DataInputStream (socket.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream (socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream (socket.getInputStream());
             
            
-            out.writeInt(ID);
+            out.writeObject(ID);
                   
-            String mensaje = in.readUTF();
-            if (mensaje.equals("El ID es valido\nBienvenido!"))
+            String mensaje = (String)in.readObject();
+            if (mensaje.equals("El ID es valido\nBienvenido!")){
                 System.out.println (mensaje);  
+                /*Proxy proxy = (Proxy)in.readObject();
+                socket.close();
+                socket = new Socket (proxy.getIP(), proxy.getPuerto())*/;                
+            }
             else{
                 System.out.println (mensaje);
                 System.exit(1);
@@ -66,11 +75,17 @@ public class Usuario {
             System.err.println(e.getMessage());
             System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
             System.exit(1);
-        }
-                        
-        
-        
-        
+        }                     
     }
+    
+    private static void mostrarMenu(){
+        int opcion;
+        Scanner reader = new Scanner (System.in);
+        do{
+            System.out.println (menu);
+            System.out.print("Ingrese la opcion: ");
+            opcion = reader.nextInt();
+        }while (opcion!=2);
+    }   
     
 }

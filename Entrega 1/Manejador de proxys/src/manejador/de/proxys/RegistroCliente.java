@@ -7,6 +7,8 @@ package manejador.de.proxys;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
  * @author LENOVO PC
  */
 public class RegistroCliente extends Thread{
-    private List <Integer> clientes;
+    private static List <Integer> clientes;
 
     public RegistroCliente() {
         clientes = new ArrayList <Integer>();
@@ -31,18 +33,20 @@ public class RegistroCliente extends Thread{
             socket = new ServerSocket(5999);           
             do{
                     Socket socket_cli = socket.accept();                
-                    DataOutputStream out = new DataOutputStream (socket_cli.getOutputStream());
-                    DataInputStream in = new DataInputStream (socket_cli.getInputStream());
+                    ObjectOutputStream out = new ObjectOutputStream (socket_cli.getOutputStream());
+                    ObjectInputStream in = new ObjectInputStream (socket_cli.getInputStream());
+                    
                     int ID;
-                    ID = in.readInt();
+                    ID = (Integer)in.readObject();
                     System.out.println(ID);
                     
                     if (!clientes.contains(ID)){
-                        out.writeUTF ("El ID es valido\nBienvenido!");
-                        clientes.add(ID);
+                        out.writeObject ("El ID es valido\nBienvenido!");
+                        Proxy proxy = RegistroProxy.mejorProxy();
+                        out.writeObject(proxy);
                     }
                     else
-                        out.writeUTF ("El ID esta siendo usado por otro usuario");                            
+                        out.writeObject ("El ID esta siendo usado por otro usuario");                            
                     
                     socket_cli.close();
             }while (true);
@@ -51,6 +55,9 @@ public class RegistroCliente extends Thread{
             System.exit(1);
         }
     }
+
+        
+    
     
     
     

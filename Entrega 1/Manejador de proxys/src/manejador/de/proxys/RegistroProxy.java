@@ -19,7 +19,7 @@ import java.util.List;
  * @author LENOVO PC
  */
 public class RegistroProxy extends Thread{
-    private List <Proxy> directorio;
+    private static List <Proxy> directorio;
     private ServerSocket servidor;
 
     public RegistroProxy() {
@@ -56,10 +56,21 @@ public class RegistroProxy extends Thread{
             System.exit(1);
         }
     }
+
+    public static List<manejador.de.proxys.Proxy> getDirectorio() {
+        return directorio;
+    }
     
-    
-    
-    
-    
-    
+    public static Proxy mejorProxy(){
+        int min = 1000000;
+        Proxy mejor = null;
+        for (Proxy proxy: directorio ){
+            if (proxy.getNumeroClientes()<=min){
+                min = proxy.getNumeroClientes();      
+                mejor = proxy;
+            }
+        }
+        mejor.adicionarCliente();
+        return mejor;
+    }   
 }

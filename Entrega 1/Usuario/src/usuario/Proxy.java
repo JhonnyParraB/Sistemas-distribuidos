@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package manejador.de.proxys;
+package usuario;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Clase que representa la información para poder conectarse a un proxy
  * @author LENOVO PC
  */
-public class Proxy implements Serializable {
+public class Proxy implements Serializable{
     private String IP;
     private int puerto;
     private int numeroClientes;
@@ -40,10 +40,6 @@ public class Proxy implements Serializable {
 
     public int getNumeroClientes() {
         return numeroClientes;
-    }
-
-    void adicionarCliente() {
-        this.numeroClientes++;
     }
     
     

@@ -27,7 +27,6 @@ public class Proxy {
     private static int puertoManejador = 6000;
     private static int conexionesActuales = 0;
     private static String puerto;
-    private static Socket tabla [] = new Socket [500];
     
 
     /**
