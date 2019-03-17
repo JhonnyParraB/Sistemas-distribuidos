@@ -6,8 +6,7 @@
 package manejador.de.proxys;
 
 /**
- *
- * @author LENOVO PC
+ * Inicia los hilos que manejan los proxies
  */
 public class ManejadorDeProxys {
 

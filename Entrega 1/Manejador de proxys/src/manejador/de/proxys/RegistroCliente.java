@@ -6,12 +6,11 @@
 package manejador.de.proxys;
 
 /**
- * Hilo que se encarga de ir registrando los proxys
- * Registra la IP y el puerto del proxy
- * Lo agrega al directorio de proxys
- * Se envian nuevamente los proxys a las fuentes
+ * Hilo que escucha espera nuevos clientes/usuarios
+ * Asigna un proxy del directorio al nuevo cliente
+ * Valida el ID del cliente
  * @author LENOVO PC
  */
-public class RegistroProxy extends Thread{
+public class RegistroCliente extends Thread{
     
 }
