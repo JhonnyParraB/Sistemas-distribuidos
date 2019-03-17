@@ -19,29 +19,37 @@ import java.util.List;
  * @author LENOVO PC
  */
 public class RegistroProxy extends Thread{
-    private List <Proxy> proxies;
+    private List <Proxy> directorio;
     private ServerSocket servidor;
 
     public RegistroProxy() {
-        this.proxies = new ArrayList <Proxy>();
+        this.directorio = new ArrayList <Proxy>();
         
     }
 
     public void run() {
         ServerSocket socket;
         try {
-            socket = new ServerSocket(6000);
-            Socket socket_cli = socket.accept();
-
-            DataOutputStream out = new DataOutputStream (socket_cli.getOutputStream());
-            DataInputStream in = new DataInputStream (socket_cli.getInputStream());
+            socket = new ServerSocket(6000);           
+            String IP="";
+            String puerto="";
             do{
-                String mensaje = "";
-                mensaje = in.readUTF();
-                System.out.println(mensaje);
-                mensaje = in.readUTF();
-                System.out.println(mensaje);
+                    Socket socket_cli = socket.accept();
                 
+                    DataOutputStream out = new DataOutputStream (socket_cli.getOutputStream());
+                    DataInputStream in = new DataInputStream (socket_cli.getInputStream());
+                    IP = in.readUTF();
+                    System.out.println(IP);
+                    puerto = in.readUTF();
+                    System.out.println(puerto);
+                    Proxy proxy = new Proxy();
+                    proxy.setIP(IP);
+                    proxy.setPuerto(Integer.parseInt(puerto));
+                    directorio.add(proxy);
+                    
+                    out.writeUTF ("Proxy preparado!"); 
+                    
+                    socket_cli.close();
             }while (true);
         } catch (Exception e) {
             System.err.println(e.getMessage());

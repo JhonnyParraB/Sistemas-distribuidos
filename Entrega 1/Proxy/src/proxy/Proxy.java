@@ -22,7 +22,7 @@ public class Proxy {
    
     
     private ServerSocket servidor;
-    private static int puerto = 6000;
+    private static int puertoManejador = 6000;
     static int conexionesActuales = 0;
     static Socket tabla [] = new Socket [500];
     
@@ -43,26 +43,38 @@ public class Proxy {
     private static void conectarConManejador(){
         Scanner reader = new Scanner (System.in);
         String ipManejador;
+        String puerto;
         
         System.out.println ("--Creacion del proxy--");
         System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
-        
+             
         ipManejador = reader.nextLine ();
+        
+        System.out.println ("Ingrese el puerto en el que se comunicara el proxy:");
+        puerto = reader.nextLine ();
         
         Socket socket;
         byte [] mensaje_bytes = new byte [256];
         String mensaje = "";
         
         
+        
+        
         try{
-            socket = new Socket (ipManejador, 6000);            
+            socket = new Socket (ipManejador, puertoManejador);      
+            
             DataOutputStream out = new DataOutputStream (socket.getOutputStream());
             DataInputStream in = new DataInputStream (socket.getInputStream());
+            
             
             mensaje = InetAddress.getLocalHost().getHostAddress().toString();
             out.writeUTF(mensaje);
             mensaje = String.valueOf(puerto);
             out.writeUTF(mensaje);
+            
+            mensaje = in.readUTF();
+            System.out.println (mensaje);   
+            socket.close();
                     
         }catch(Exception e){
             System.err.println(e.getMessage());
