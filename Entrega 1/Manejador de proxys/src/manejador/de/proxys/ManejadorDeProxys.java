@@ -19,10 +19,9 @@ public class ManejadorDeProxys {
     public static void main(String[] args) throws UnknownHostException {
         // TODO code application logic here
         RegistroProxy registradorProxies = new RegistroProxy ();
-        System.out.println("Manejador de proxies iniciado en la dirección IP "+
-                InetAddress.getLocalHost().getHostAddress());
         registradorProxies.start();  
-        
+        System.out.println("Manejador de proxies iniciado en la dirección IP "+
+                InetAddress.getLocalHost().getHostAddress());        
     }
     
 }

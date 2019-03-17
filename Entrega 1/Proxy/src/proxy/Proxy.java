@@ -22,7 +22,7 @@ public class Proxy {
    
     
     private ServerSocket servidor;
-    private int puerto = 6000;
+    private static int puerto = 6000;
     static int conexionesActuales = 0;
     static Socket tabla [] = new Socket [500];
     
@@ -42,7 +42,6 @@ public class Proxy {
     */
     private static void conectarConManejador(){
         Scanner reader = new Scanner (System.in);
-        BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
         String ipManejador;
         
         System.out.println ("--Creacion del proxy--");
@@ -58,11 +57,13 @@ public class Proxy {
         try{
             socket = new Socket (ipManejador, 6000);            
             DataOutputStream out = new DataOutputStream (socket.getOutputStream());
-            do{
-                mensaje =in.readLine();
-                out.writeUTF(mensaje);
-            }while (!mensaje.startsWith("fin"));
-        
+            DataInputStream in = new DataInputStream (socket.getInputStream());
+            
+            mensaje = InetAddress.getLocalHost().getHostAddress().toString();
+            out.writeUTF(mensaje);
+            mensaje = String.valueOf(puerto);
+            out.writeUTF(mensaje);
+                    
         }catch(Exception e){
             System.err.println(e.getMessage());
             System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
