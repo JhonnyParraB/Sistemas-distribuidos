@@ -5,9 +5,13 @@
  */
 package proxy;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
+import java.util.Scanner;
 
 /**
  *
@@ -15,8 +19,10 @@ import java.net.*;
  */
 public class Proxy {
     
-    static ServerSocket servidor;
-    public final int puerto = 6000;
+   
+    
+    private ServerSocket servidor;
+    private int puerto = 6000;
     static int conexionesActuales = 0;
     static Socket tabla [] = new Socket [500];
     
@@ -44,9 +50,42 @@ public class Proxy {
     }
     
     /*
-        Realiza una conexión con el manejador para registrarse como proxy disponible    
+        Realiza una conexión con el manejador para registrarse como proxy disponible
+        Envia la información del puerto y de la IP
+        El puerto está quemado
     */
     private static void conectarConManejador(){
+        Scanner reader = new Scanner (System.in);
+        BufferedReader in = new BufferedReader (new InputStreamReader (System.in));
+        String ipManejador;
+        
+        System.out.println ("--Creacion del proxy--");
+        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
+        
+        ipManejador = reader.nextLine ();
+        
+        Socket socket;
+        byte [] mensaje_bytes = new byte [256];
+        String mensaje = "";
+        
+        
+        try{
+            socket = new Socket (ipManejador, 6000);            
+            DataOutputStream out = new DataOutputStream (socket.getOutputStream());
+            do{
+                mensaje =in.readLine();
+                out.writeUTF(mensaje);
+            }while (!mensaje.startsWith("fin"));
+        
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
+            System.exit(1);
+        }
+        
+        
+        
+        //COLOCAR TAMBIÉN EL PUERTO?
         
     }
 }

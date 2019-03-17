@@ -10,6 +10,6 @@ package manejador.de.proxys;
  * Envía la información de los proxies disponibles a las fuentes de consultas
  * @author LENOVO PC
  */
-public class RegistroFuenteConsultasYProyectos {
+public class RegistroFuenteConsultasYProyectos extends Thread {
     
 }
