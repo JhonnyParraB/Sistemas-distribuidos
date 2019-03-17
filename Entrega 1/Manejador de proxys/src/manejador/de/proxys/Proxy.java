@@ -12,5 +12,22 @@ package manejador.de.proxys;
 public class Proxy {
     private String IP;
     private int puerto;
+
+    public String getIP() {
+        return IP;
+    }
+
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
+
+    public int getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
+    }
+    
     
 }
