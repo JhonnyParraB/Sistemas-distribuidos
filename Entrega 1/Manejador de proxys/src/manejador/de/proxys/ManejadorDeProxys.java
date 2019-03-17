@@ -20,9 +20,11 @@ public class ManejadorDeProxys {
         // TODO code application logic here
         RegistroProxy registradorProxies = new RegistroProxy ();
         RegistroCliente registradorClientes = new RegistroCliente();
+        RegistroFuenteConsultasYProyectos registradorFuentes = new RegistroFuenteConsultasYProyectos();
         
         registradorClientes.start();
-        registradorProxies.start();  
+        registradorProxies.start();
+        registradorFuentes.start();
         System.out.println("Manejador de proxies iniciado en la dirección IP "+
                 InetAddress.getLocalHost().getHostAddress());  
     }

@@ -23,7 +23,6 @@ public class Proxy {
     
    
     
-    private static ServerSocket Pservidor;
     private static int puertoManejador = 6000;
     private static int conexionesActuales = 0;
     private static int puertoClientes;

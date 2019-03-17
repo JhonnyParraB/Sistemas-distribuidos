@@ -10,7 +10,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import ClasesdeComunicacion.Proxy;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  *
@@ -19,9 +22,10 @@ import java.net.Socket;
 public class Fuente extends Thread {
 
     private List<Consulta> consultas;
-    /*private List <ClasesdeComunicacion.Proxy> directorio;
-    private static int puertoManejador = 5999;
-    private static Socket socket;*/
+    private static List <ClasesdeComunicacion.Proxy> directorio;
+    private static int puertoManejador = 5998;
+    private static Socket socket;
+    private static List <Socket> sockets;
 
     public Fuente(List<Consulta> ejemploLista) {
         this.consultas = ejemploLista;
@@ -40,6 +44,48 @@ public class Fuente extends Thread {
                 System.out.println("Ya paso"+proy.getNombre());
             }
         }
+    }
+    
+    public void solicitarConexión (){
+        Scanner reader = new Scanner (System.in);
+        int ID;
+        String ipManejador;
+        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
+        ipManejador = reader.nextLine ();
+        
+        System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
+        ID = reader.nextInt();
+                
+        try{
+            socket = new Socket (ipManejador, puertoManejador);      
+            
+            ObjectOutputStream out = new ObjectOutputStream (socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream (socket.getInputStream());
+            
+           
+            out.writeObject(ID);
+                  
+            String mensaje = (String)in.readObject();
+            if (mensaje.equals("El ID es valido\nBienvenido!")){
+                System.out.println (mensaje);  
+                directorio = (List <ClasesdeComunicacion.Proxy>)in.readObject();
+                socket.close();
+                for (ClasesdeComunicacion.Proxy proxy : directorio){
+                    socket = new Socket (proxy.getIP(), proxy.getPuertoClientes());
+                    sockets.add(socket);
+                }
+            }
+            else{
+                System.out.println (mensaje);
+                System.exit(1);
+            }
+            socket.close();
+                    
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
+            System.exit(1);
+        }                     
     }
 
     @Override
