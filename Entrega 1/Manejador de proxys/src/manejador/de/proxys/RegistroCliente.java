@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import ClasesdeComunicacion.Proxy;
+
 /**
  * Hilo que escucha espera nuevos clientes/usuarios
  * Asigna un proxy del directorio al nuevo cliente
@@ -42,7 +44,7 @@ public class RegistroCliente extends Thread{
                     
                     if (!clientes.contains(ID)){
                         out.writeObject ("El ID es valido\nBienvenido!");
-                        Proxy proxy = RegistroProxy.mejorProxy();
+                        ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
                         out.writeObject(proxy);
                     }
                     else

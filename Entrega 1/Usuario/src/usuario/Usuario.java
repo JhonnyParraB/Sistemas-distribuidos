@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+import ClasesdeComunicacion.Proxy;
 /**
  *
  * @author LENOVO PC
@@ -61,9 +62,9 @@ public class Usuario {
             String mensaje = (String)in.readObject();
             if (mensaje.equals("El ID es valido\nBienvenido!")){
                 System.out.println (mensaje);  
-                /*Proxy proxy = (Proxy)in.readObject();
+                ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy)in.readObject();
                 socket.close();
-                socket = new Socket (proxy.getIP(), proxy.getPuerto())*/;                
+                socket = new Socket (proxy.getIP(), proxy.getPuerto());                
             }
             else{
                 System.out.println (mensaje);

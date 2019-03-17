@@ -19,11 +19,11 @@ import java.util.List;
  * @author LENOVO PC
  */
 public class RegistroProxy extends Thread{
-    private static List <Proxy> directorio;
+    private static List <ClasesdeComunicacion.Proxy> directorio;
     private ServerSocket servidor;
 
     public RegistroProxy() {
-        this.directorio = new ArrayList <Proxy>();
+        this.directorio = new ArrayList <ClasesdeComunicacion.Proxy>();
         
     }
 
@@ -42,7 +42,7 @@ public class RegistroProxy extends Thread{
                     System.out.println(IP);
                     puerto = in.readUTF();
                     System.out.println(puerto);
-                    Proxy proxy = new Proxy();
+                    ClasesdeComunicacion.Proxy proxy = new ClasesdeComunicacion.Proxy();
                     proxy.setIP(IP);
                     proxy.setPuerto(Integer.parseInt(puerto));
                     directorio.add(proxy);
@@ -57,14 +57,14 @@ public class RegistroProxy extends Thread{
         }
     }
 
-    public static List<manejador.de.proxys.Proxy> getDirectorio() {
+    public static List<ClasesdeComunicacion.Proxy> getDirectorio() {
         return directorio;
     }
     
-    public static Proxy mejorProxy(){
+    public static ClasesdeComunicacion.Proxy mejorProxy(){
         int min = 1000000;
-        Proxy mejor = null;
-        for (Proxy proxy: directorio ){
+        ClasesdeComunicacion.Proxy mejor = null;
+        for (ClasesdeComunicacion.Proxy proxy: directorio ){
             if (proxy.getNumeroClientes()<=min){
                 min = proxy.getNumeroClientes();      
                 mejor = proxy;
