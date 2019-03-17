@@ -69,10 +69,10 @@ public class Usuario {
                 socket = new Socket (proxy.getIP(), proxy.getPuertoClientes());                
             }
             else{
+                socket.close();
                 System.out.println (mensaje);
                 System.exit(1);
             }
-            socket.close();
                     
         }catch(Exception e){
             System.err.println(e.getMessage());

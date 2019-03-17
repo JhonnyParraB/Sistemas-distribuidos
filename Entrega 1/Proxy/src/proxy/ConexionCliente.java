@@ -14,10 +14,12 @@ import java.util.logging.Logger;
 
 /**
  * Maneja en un hilo las solicitudes de un unico cliente
+ *
  * @author LENOVO PC
  */
-public class ConexionCliente extends Thread{
-    Socket socket;
+public class ConexionCliente extends Thread {
+
+    private Socket socket;
 
     public ConexionCliente(Socket socket) {
         this.socket = socket;
@@ -26,32 +28,28 @@ public class ConexionCliente extends Thread{
     @Override
     public void run() {
         String mensaje;
-        do{            
-            try {
-                DataOutputStream out = new DataOutputStream (socket.getOutputStream());
-                DataInputStream in = new DataInputStream (socket.getInputStream());
+        try {
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            do {
+
                 mensaje = "";
                 mensaje = in.readUTF();
-                
+
                 //Solicitud de proyectos y voto
-                if (mensaje.equals ("1")){
-                    
+                if (mensaje.equals("1")) {
+
                 }
                 //Desconexión
-                if (mensaje.equals ("2")){
-                    
+                if (mensaje.equals("2")) {
+
                 }
-                
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }      
-            
-        }while (true);
-        
+
+            } while (true);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
     }
-    
-    
-    
-    
-    
+
 }
