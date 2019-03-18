@@ -141,6 +141,7 @@ public class Usuario {
         List<ClasesdeComunicacion.Voto> votos = new ArrayList <ClasesdeComunicacion.Voto> ();
         ClasesdeComunicacion.Voto voto = null;
         for (ClasesdeComunicacion.Consulta consulta : consultas) {
+            System.out.println("------------------------------------");
             System.out.println(i + ". " + consulta.getNombre());
             System.out.println(opcionesVotacion);
             System.out.print("Ingrese su voto: ");

@@ -46,6 +46,8 @@ public class ConexionCliente extends Thread {
 
                 if (mensaje.equals("1")) {                
                     out.writeObject(Proxy.getConsultas());
+                    List<ClasesdeComunicacion.Voto> votos;
+                    votos = (List<ClasesdeComunicacion.Voto>) in.readObject();
                 }
                 //Desconexión
                 if (mensaje.equals("2")) {
