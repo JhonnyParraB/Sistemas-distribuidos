@@ -8,7 +8,10 @@ package proxy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,16 +32,19 @@ public class ConexionCliente extends Thread {
     public void run() {
         String mensaje;
         try {
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            DataInputStream in = new DataInputStream(socket.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             do {
 
                 mensaje = "";
-                mensaje = in.readUTF();
+                mensaje = (String) in.readObject();
 
-                //Solicitud de proyectos y voto
                 if (mensaje.equals("1")) {
-
+                    List<Socket> socketsFuente = ManejadorFuentes.getSockets();
+                    for (Socket socket : socketsFuente){
+                        ConexionFuente conexionFuente = new ConexionFuente(socket);
+                        conexionFuente.start();
+                    }
                 }
                 //Desconexión
                 if (mensaje.equals("2")) {

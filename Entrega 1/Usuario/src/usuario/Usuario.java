@@ -16,6 +16,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import ClasesdeComunicacion.Proxy;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author LENOVO PC
@@ -86,9 +89,27 @@ public class Usuario {
         Scanner reader = new Scanner (System.in);
         do{
             System.out.println (menu);
-            System.out.print("Ingrese la opcion: ");
+            System.out.print("Ingrese la opcion: "); 
             opcion = reader.nextInt();
+            if (opcion==1) {
+                solicitarConsultasyProyectos();
+            }
+            
         }while (opcion!=2);
     }   
     
+    private static void solicitarConsultasyProyectos(){
+        
+            ObjectOutputStream out;
+            ObjectInputStream in;
+        try {
+            
+            out = new ObjectOutputStream (socket.getOutputStream());
+            in = new ObjectInputStream (socket.getInputStream());
+            out.writeObject("1");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

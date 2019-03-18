@@ -7,6 +7,8 @@ package proxy;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -25,7 +27,11 @@ public class ConexionFuente extends Thread{
     public void run() {
         String mensaje;
         try {
-
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            
+            out.writeObject("1");
+            
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

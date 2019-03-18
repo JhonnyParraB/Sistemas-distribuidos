@@ -13,12 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author green
  */
-public class LeeFichero{
+public class LeeFichero extends Thread {
 
     public static List<Consulta> leer() {
 
@@ -62,6 +64,39 @@ public class LeeFichero{
         }
         return consultas;
     }
-    
-    
+
+    public static boolean evaluarTiempos(Date fecha) {
+        Date actual = java.util.Calendar.getInstance().getTime();
+        if (fecha.before(actual)) {
+            System.out.println("Ya paso");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static List<Consulta> separarConsultas(List<Consulta> consultas) {
+        List<Consulta> consultasFiltradas = new ArrayList<Consulta>();
+        for (Consulta consulta : consultas) {
+            if (evaluarTiempos(consulta.getFecha())) {
+                consultasFiltradas.add(consulta);
+            }
+        }
+        return consultasFiltradas;
+    }
+
+    @Override
+    public void run() {
+        List<Consulta> consultas = LeeFichero.leer();
+        while (true) {
+            consultas = separarConsultas(consultas);
+            FuenteDeConsultasYProyectos.setConsultas(consultas);
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LeeFichero.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }//To change body of generated methods, choose Tools | Templates.
+    }
+
 }

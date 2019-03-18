@@ -7,12 +7,20 @@ package proxy;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author green
  */
 public class ManejadorFuentes extends Thread{
+    private static List<Socket> sockets;
+
+    public ManejadorFuentes() {
+        this.sockets = new ArrayList<Socket>();
+    }
+    
     
     @Override
     public void run() {
@@ -20,8 +28,9 @@ public class ManejadorFuentes extends Thread{
             ServerSocket socket = new ServerSocket(Proxy.getPuertoFuentes());
             do{
                 Socket socket_fue = socket.accept();
-                ConexionFuente conexionfuente = new ConexionFuente (socket_fue);
-                conexionfuente.start();                
+                sockets.add(socket_fue);
+                
+                
             }while(true);
             
         } catch (Exception e) {
@@ -31,4 +40,10 @@ public class ManejadorFuentes extends Thread{
         }
         
     }
+
+    public static List<Socket> getSockets() {
+        return sockets;
+    }
+    
+    
 }

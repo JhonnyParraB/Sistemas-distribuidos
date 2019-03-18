@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,33 +21,21 @@ import java.util.Scanner;
  */
 public class FuenteDeConsultasYProyectos {
 
-    private static List<Consulta> consultas;
+    private static List<Consulta> consultas = new ArrayList<Consulta>();
     private static List<ClasesdeComunicacion.Proxy> directorio;
     private static int puertoManejador = 5998;
     private static Socket socket;
-    private static List<Socket> sockets = new ArrayList<Socket>();;
+    private static List<Socket> sockets = new ArrayList<Socket>();
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        LeeFichero funcion = new LeeFichero();
-        consultas = funcion.leer();
-        
+        LeeFichero funcion=  new LeeFichero();
+        funcion.start();
         solicitarConexión();
         
-    }
-
-    public static void evaluarTiempos() {
-        Date actual = java.util.Calendar.getInstance().getTime();
-        System.out.println(actual.toString());
-        for (Consulta consulta : consultas) {
-            //imprimimos el objeto pivote
-            if (consulta.getFecha().before(actual)) {
-                System.out.println("Ya paso" + consulta.getNombre());
-            }
-        }
     }
 
     public static void solicitarConexión (){
@@ -75,8 +65,10 @@ public class FuenteDeConsultasYProyectos {
                 for (ClasesdeComunicacion.Proxy proxy : directorio){
                     System.out.println(proxy.getIP());
                     System.out.println(proxy.getPuertoFuentes());
-                    sockets.add(new Socket (proxy.getIP(), proxy.getPuertoFuentes()));
-                    System.out.println("se totea3");
+                    Socket socketp = new Socket (proxy.getIP(), proxy.getPuertoFuentes());
+                    sockets.add(socketp);
+                    ConexionProxy conexionProxy = new ConexionProxy(socketp);
+                    conexionProxy.start();
                 }
             }
             else{
@@ -91,5 +83,16 @@ public class FuenteDeConsultasYProyectos {
             System.exit(1);
         }                     
     }
+
+    public static List<Consulta> getConsultas() {
+        return consultas;
+    }
+
+    public static void setConsultas(List<Consulta> consultas) {
+        FuenteDeConsultasYProyectos.consultas = consultas;
+    }
+    
+    
+    
     
 }
