@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  */
 public class LeeFichero extends Thread {
 
-    public static List<Consulta> leer() {
+    public static List<ClasesdeComunicacion.Consulta> leer() {
 
-        List<Consulta> consultas = new ArrayList<Consulta>();
+        List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<ClasesdeComunicacion.Consulta>();
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -45,7 +45,7 @@ public class LeeFichero extends Thread {
                 Date fecha = formatter.parse(parts[0]);
                 fecha = formatter.parse(parts[0]);
                 String nombre = parts[1];
-                Consulta consulta = new Consulta(fecha, nombre);
+                ClasesdeComunicacion.Consulta consulta = new ClasesdeComunicacion.Consulta(fecha, nombre);
                 consultas.add(consulta);
             }
         } catch (Exception e) {
@@ -75,9 +75,9 @@ public class LeeFichero extends Thread {
         }
     }
 
-    public static List<Consulta> separarConsultas(List<Consulta> consultas) {
-        List<Consulta> consultasFiltradas = new ArrayList<Consulta>();
-        for (Consulta consulta : consultas) {
+    public static List<ClasesdeComunicacion.Consulta> separarConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
+        List<ClasesdeComunicacion.Consulta> consultasFiltradas = new ArrayList<ClasesdeComunicacion.Consulta>();
+        for (ClasesdeComunicacion.Consulta consulta : consultas) {
             if (evaluarTiempos(consulta.getFecha())) {
                 consultasFiltradas.add(consulta);
             }
@@ -87,7 +87,7 @@ public class LeeFichero extends Thread {
 
     @Override
     public void run() {
-        List<Consulta> consultas = LeeFichero.leer();
+        List<ClasesdeComunicacion.Consulta> consultas = LeeFichero.leer();
         while (true) {
             consultas = separarConsultas(consultas);
             FuenteDeConsultasYProyectos.setConsultas(consultas);

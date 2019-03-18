@@ -5,6 +5,7 @@
  */
 package fuente.de.consultas.y.proyectos;
 
+import ClasesdeComunicacion.Consulta;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class FuenteDeConsultasYProyectos {
 
-    private static List<Consulta> consultas = new ArrayList<Consulta>();
+    private static List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<Consulta>();
     private static List<ClasesdeComunicacion.Proxy> directorio;
     private static int puertoManejador = 5998;
     private static Socket socket;
@@ -84,11 +85,11 @@ public class FuenteDeConsultasYProyectos {
         }                     
     }
 
-    public static List<Consulta> getConsultas() {
+    public static List<ClasesdeComunicacion.Consulta> getConsultas() {
         return consultas;
     }
 
-    public static void setConsultas(List<Consulta> consultas) {
+    public static void setConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
         FuenteDeConsultasYProyectos.consultas = consultas;
     }
     

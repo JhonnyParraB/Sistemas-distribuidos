@@ -5,6 +5,7 @@
  */
 package fuente.de.consultas.y.proyectos;
 
+import ClasesdeComunicacion.Consulta;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,7 +33,7 @@ public class ConexionProxy extends Thread{
                 mensaje=(String) in.readObject();
                 System.out.println("Llegada mensaje del proxy"+mensaje);
                 if (mensaje.equals("1")){
-                    List<Consulta> consultas = FuenteDeConsultasYProyectos.getConsultas();
+                    List<ClasesdeComunicacion.Consulta> consultas = FuenteDeConsultasYProyectos.getConsultas();
                     out.writeObject(consultas);
                 }
             }while(true);
