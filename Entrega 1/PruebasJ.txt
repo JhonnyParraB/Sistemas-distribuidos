@@ -26,3 +26,6 @@ proxies o proxys?
 
 
 -Conexion no: mensaje
+
+
+-Está enviando las consultas repetidas!!!

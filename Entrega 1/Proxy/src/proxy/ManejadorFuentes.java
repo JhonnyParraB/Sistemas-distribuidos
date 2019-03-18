@@ -23,7 +23,7 @@ public class ManejadorFuentes extends Thread{
     
 
     public ManejadorFuentes() {
-        this.sockets = new ArrayList<Socket>();
+        sockets = new ArrayList<Socket>();
         mapaFuentes = new HashMap<Integer, Socket>();
     }
     
@@ -52,13 +52,16 @@ public class ManejadorFuentes extends Thread{
         return sockets;
     }
     
-    static void agregarFuente(int ID, Socket socket) {
+    static void agregarFuente(Integer ID, Socket socket) {
         mapaFuentes.put(ID, socket);
     }
 
-    public static Map<Integer, Socket> getMapaFuentes() {
-        return mapaFuentes;
+    
+    
+    public static Socket getSocketFuente (Integer IDFuente){
+        return (Socket)mapaFuentes.get(IDFuente);
     }
+    
     
     
     

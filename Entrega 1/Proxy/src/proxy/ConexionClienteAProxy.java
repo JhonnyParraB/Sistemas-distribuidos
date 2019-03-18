@@ -50,7 +50,7 @@ public class ConexionClienteAProxy extends Thread {
                     votos = (List<ClasesdeComunicacion.Voto>) in.readObject();
                     
                     for (Voto voto: votos){
-                        Socket socketFuente = ManejadorFuentes.getMapaFuentes().get(voto.getConsulta().getIDFuente());
+                        Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
                         new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();
                     }
                 }

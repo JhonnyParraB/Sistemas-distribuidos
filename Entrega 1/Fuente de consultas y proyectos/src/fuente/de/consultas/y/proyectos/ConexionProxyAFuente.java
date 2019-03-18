@@ -23,9 +23,9 @@ public class ConexionProxyAFuente extends Thread{
         ObjectInputStream in;
         try {
             while (true){
-                in = new ObjectInputStream(socket.getInputStream());
-                int ID = (Integer) in.readObject();                
-                Voto voto = (Voto) in.readObject();                
+                in = new ObjectInputStream(socket.getInputStream());              
+                Voto voto = (Voto) in.readObject();  
+                System.out.println("VOTO: "+ voto.getAprobacion());
             }
         } catch (Exception ex) {
             Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);

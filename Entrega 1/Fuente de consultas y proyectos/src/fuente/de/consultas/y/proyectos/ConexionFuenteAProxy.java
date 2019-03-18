@@ -27,9 +27,10 @@ public class ConexionFuenteAProxy extends Thread{
     @Override
     public void run() {
          //To change body of generated methods, choose Tools | Templates.
+        
         if (tipoMensaje.equals("Envio ID")){
+            
             try {
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject(FuenteDeConsultasYProyectos.getID());
             } catch (Exception ex) {
@@ -38,7 +39,6 @@ public class ConexionFuenteAProxy extends Thread{
         }
         if (tipoMensaje.equals("Envio consultas")){
             try {
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject(consultas);
 
