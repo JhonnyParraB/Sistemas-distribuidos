@@ -42,7 +42,10 @@ public class FuenteDeConsultasYProyectos {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        LeeFichero funcion=  new LeeFichero();
+        Scanner reader = new Scanner (System.in);
+        System.out.println ("Ingrese el nombre del archivo que contiene sus consultas:");
+        String nombreArchivo = reader.nextLine ();
+        LeeFichero funcion=  new LeeFichero(nombreArchivo);
         solicitarConexión();
         funcion.start();
         mostrarMenu();

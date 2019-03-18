@@ -23,6 +23,8 @@ import java.util.logging.Logger;
  * @author green
  */
 public class LeeFichero extends Thread {
+    
+    private static String nombreArchivo;
 
     public static List<ClasesdeComunicacion.Consulta> leer() {
 
@@ -34,7 +36,7 @@ public class LeeFichero extends Thread {
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File("Consultas.txt");
+            archivo = new File(nombreArchivo);
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
@@ -123,4 +125,8 @@ public class LeeFichero extends Thread {
         FuenteDeConsultasYProyectos.agregarConteo(consultasNuevas);
     }
 
+        public LeeFichero(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
+    
 }
