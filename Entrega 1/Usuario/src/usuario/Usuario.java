@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 import ClasesdeComunicacion.Proxy;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -108,7 +109,13 @@ public class Usuario {
             in = new ObjectInputStream (socket.getInputStream());
             out.writeObject("1");
             
-        } catch (IOException ex) {
+            List <ClasesdeComunicacion.Consulta> consultas = (List <ClasesdeComunicacion.Consulta>)in.readObject();
+            for (ClasesdeComunicacion.Consulta consulta: consultas){
+                System.out.println (consulta.getNombre());
+            }
+            
+            
+        } catch (Exception ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

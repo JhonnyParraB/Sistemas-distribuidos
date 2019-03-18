@@ -5,13 +5,14 @@
  */
 package ClasesdeComunicacion;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author green
  */
-public class Consulta {
+public class Consulta implements Serializable{
     private Date fecha;
     private String nombre;
 

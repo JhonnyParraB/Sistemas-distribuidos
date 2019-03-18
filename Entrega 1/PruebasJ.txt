@@ -14,3 +14,5 @@ proxies o proxys?
 
 -Nuevo proxy?
 -Mandar el nuevo proxy a las fuentes
+
+-ID's mayores a 0
