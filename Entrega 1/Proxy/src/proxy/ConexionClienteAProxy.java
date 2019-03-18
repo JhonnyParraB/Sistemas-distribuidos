@@ -23,12 +23,12 @@ import java.util.ArrayList;
  *
  * @author LENOVO PC
  */
-public class ConexionCliente extends Thread {
+public class ConexionClienteAProxy extends Thread {
 
     private Socket socket;
     private List<ClasesdeComunicacion.Consulta> consultas = new ArrayList <ClasesdeComunicacion.Consulta>();
 
-    public ConexionCliente(Socket socket) {
+    public ConexionClienteAProxy(Socket socket) {
         this.socket = socket;
     }
 
@@ -48,6 +48,11 @@ public class ConexionCliente extends Thread {
                     out.writeObject(Proxy.getConsultas());
                     List<ClasesdeComunicacion.Voto> votos;
                     votos = (List<ClasesdeComunicacion.Voto>) in.readObject();
+                    
+                    for (Voto voto: votos){
+                        Socket socketFuente = ManejadorFuentes.getMapaFuentes().get(voto.getConsulta().getIDFuente());
+                        new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();
+                    }
                 }
                 //Desconexión
                 if (mensaje.equals("2")) {

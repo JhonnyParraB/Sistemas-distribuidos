@@ -23,3 +23,6 @@ proxies o proxys?
 
 
 -Comprobar votos
+
+
+-Conexion no: mensaje

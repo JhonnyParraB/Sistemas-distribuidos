@@ -8,7 +8,9 @@ package proxy;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,9 +18,13 @@ import java.util.List;
  */
 public class ManejadorFuentes extends Thread{
     private static List<Socket> sockets;
+    private static Map <Integer, Socket> mapaFuentes;
+
+    
 
     public ManejadorFuentes() {
         this.sockets = new ArrayList<Socket>();
+        mapaFuentes = new HashMap<Integer, Socket>();
     }
     
     
@@ -29,7 +35,7 @@ public class ManejadorFuentes extends Thread{
             do{
                 Socket socket_fue = socket.accept();
                 sockets.add(socket_fue);
-                ConexionFuente conexionFuente = new ConexionFuente(socket_fue);
+                ConexionFuenteAProxy conexionFuente = new ConexionFuenteAProxy(socket_fue);
                 conexionFuente.start();
                 
             }while(true);
@@ -45,6 +51,17 @@ public class ManejadorFuentes extends Thread{
     public static List<Socket> getSockets() {
         return sockets;
     }
+    
+    static void agregarFuente(int ID, Socket socket) {
+        mapaFuentes.put(ID, socket);
+    }
+
+    public static Map<Integer, Socket> getMapaFuentes() {
+        return mapaFuentes;
+    }
+    
+    
+    
     
     
 }

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author green
  */
-public class ConexionProxy extends Thread{
+public class ConexionFuenteAProxy extends Thread{
     
     private Socket socket;
     private String tipoMensaje;
@@ -27,6 +27,15 @@ public class ConexionProxy extends Thread{
     @Override
     public void run() {
          //To change body of generated methods, choose Tools | Templates.
+        if (tipoMensaje.equals("Envio ID")){
+            try {
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(FuenteDeConsultasYProyectos.getID());
+            } catch (Exception ex) {
+                Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         if (tipoMensaje.equals("Envio consultas")){
             try {
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -34,18 +43,18 @@ public class ConexionProxy extends Thread{
                 out.writeObject(consultas);
 
             } catch (Exception ex) {
-                Logger.getLogger(ConexionProxy.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public ConexionProxy(Socket socket, String tipoMensaje, List<ClasesdeComunicacion.Consulta> consultas) {
+    public ConexionFuenteAProxy(Socket socket, String tipoMensaje, List<ClasesdeComunicacion.Consulta> consultas) {
         this.socket = socket;
         this.tipoMensaje = tipoMensaje;
         this.consultas = consultas;
     }
     
-    public ConexionProxy(Socket socket, String tipoMensaje) {
+    public ConexionFuenteAProxy(Socket socket, String tipoMensaje) {
         this.socket = socket;
         this.tipoMensaje = tipoMensaje;
     }

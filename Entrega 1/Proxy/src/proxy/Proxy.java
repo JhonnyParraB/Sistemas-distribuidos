@@ -120,4 +120,7 @@ public class Proxy {
     public static void agregarConsultas (List<ClasesdeComunicacion.Consulta> consultasNuevas){
         consultas.addAll(consultasNuevas);
     }
+    
+    
+    
 }

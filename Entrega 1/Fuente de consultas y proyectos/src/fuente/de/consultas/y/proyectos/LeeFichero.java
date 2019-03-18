@@ -100,7 +100,7 @@ public class LeeFichero extends Thread {
             if (!consultasNuevas.isEmpty()){
                 List <Socket> sockets = FuenteDeConsultasYProyectos.getSockets();
                 for (Socket socket : sockets){
-                    ConexionProxy conexionProxy = new ConexionProxy(socket, "Envio consultas", consultasNuevas);
+                    ConexionFuenteAProxy conexionProxy = new ConexionFuenteAProxy(socket, "Envio consultas", consultasNuevas);
                     conexionProxy.start();
                 }
             }

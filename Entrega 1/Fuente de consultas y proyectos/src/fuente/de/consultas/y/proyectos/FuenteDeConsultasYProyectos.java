@@ -69,6 +69,8 @@ public class FuenteDeConsultasYProyectos {
                     System.out.println(proxy.getIP());
                     System.out.println(proxy.getPuertoFuentes());
                     Socket socketp = new Socket (proxy.getIP(), proxy.getPuertoFuentes());
+                    (new ConexionFuenteAProxy(socketp, "Envio ID")).start();
+                    (new ConexionProxyAFuente(socketp)).start();
                     sockets.add(socketp);
                 }
             }

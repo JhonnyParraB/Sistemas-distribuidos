@@ -38,6 +38,15 @@ public class Consulta implements Serializable{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public int getIDFuente() {
+        return IDFuente;
+    }
+
+    public void setIDFuente(int IDFuente) {
+        this.IDFuente = IDFuente;
+    }
+    
     
     
     

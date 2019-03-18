@@ -21,37 +21,39 @@ import java.util.logging.Logger;
  *
  * @author green
  */
-public class ConexionFuente extends Thread {
+public class ConexionFuenteAProxy extends Thread {
 
     private Socket socket;
+    private int ID;
     List<ClasesdeComunicacion.Consulta> consultas;
 
-    public ConexionFuente(Socket socket) {
+    public ConexionFuenteAProxy(Socket socket) {
         this.socket = socket;
     }
 
     @Override
     public void run() {
         
-        ObjectOutputStream out;
         ObjectInputStream in;
         try {
+            in = new ObjectInputStream(socket.getInputStream());
+            int ID = (Integer) in.readObject();
+            System.out.println("AQUIIIIIIIIIIIIIIII"+ID);
             while (true){
-                out = new ObjectOutputStream(socket.getOutputStream());
-                in = new ObjectInputStream(socket.getInputStream());
+                in = new ObjectInputStream(socket.getInputStream());         
                 consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
                 agregarConsultas();
-                /*for(ClasesdeComunicacion.Consulta consulta : consultas){
-                    System.out.println(consulta.getNombre());
-                }*/
             }
         } catch (Exception ex) {
-            Logger.getLogger(ConexionFuente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private synchronized void agregarConsultas(){
         Proxy.agregarConsultas(consultas);
+    }
+    private synchronized void agregarFuente(){
+        ManejadorFuentes.agregarFuente(ID, socket);
     }
 
 }

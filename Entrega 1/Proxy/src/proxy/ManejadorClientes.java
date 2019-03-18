@@ -23,7 +23,7 @@ public class ManejadorClientes extends Thread{
             ServerSocket socket = new ServerSocket(Proxy.getPuertoClientes());
             do{
                 Socket socket_cli = socket.accept();
-                ConexionCliente conexionCliente = new ConexionCliente (socket_cli);
+                ConexionClienteAProxy conexionCliente = new ConexionClienteAProxy (socket_cli);
                 conexionCliente.start();                
             }while(true);
             
