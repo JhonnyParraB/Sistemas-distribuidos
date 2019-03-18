@@ -25,23 +25,7 @@ public class ConexionFuente extends Thread{
     public void run() {
         String mensaje;
         try {
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            do {
 
-                mensaje = "";
-                mensaje = in.readUTF();
-
-                //Solicitud de proyectos y voto
-                if (mensaje.equals("1")) {
-
-                }
-                //Desconexión
-                if (mensaje.equals("2")) {
-
-                }
-
-            } while (true);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

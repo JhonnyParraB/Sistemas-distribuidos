@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class LeeFichero{
 
-    public static Fuente leer() {
+    public static List<Consulta> leer() {
 
-        List<Consulta> consultas = new ArrayList<Consulta>();;
+        List<Consulta> consultas = new ArrayList<Consulta>();
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -60,8 +60,7 @@ public class LeeFichero{
                 e2.printStackTrace();
             }
         }
-        Fuente fuente = new Fuente(consultas);
-        return fuente;
+        return consultas;
     }
     
     
