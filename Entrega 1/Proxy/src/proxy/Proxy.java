@@ -5,12 +5,15 @@
  */
 package proxy;
 
+import ClasesdeComunicacion.Consulta;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +30,7 @@ public class Proxy {
     private static int conexionesActuales = 0;
     private static int puertoClientes;
     private static int puertoFuentes;
+    private static List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<ClasesdeComunicacion.Consulta>();
     
 
     /**
@@ -36,7 +40,6 @@ public class Proxy {
         // TODO code application logic here
         inicializarProxy();
         conectarConManejador();
-
     }
     
     /*
@@ -105,4 +108,16 @@ public class Proxy {
     public static int getPuertoFuentes() {
         return puertoFuentes;
     }   
+
+    public static void setConsultas(List<Consulta> consultas) {
+        Proxy.consultas = consultas;
+    }
+
+    public static List<Consulta> getConsultas() {
+        return consultas;
+    }
+    
+    public static void agregarConsultas (List<ClasesdeComunicacion.Consulta> consultasNuevas){
+        consultas.addAll(consultasNuevas);
+    }
 }

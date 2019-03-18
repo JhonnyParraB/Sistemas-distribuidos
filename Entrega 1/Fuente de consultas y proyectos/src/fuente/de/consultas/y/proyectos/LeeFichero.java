@@ -8,6 +8,7 @@ package fuente.de.consultas.y.proyectos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.net.Socket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,9 +90,20 @@ public class LeeFichero extends Thread {
     @Override
     public void run() {
         List<ClasesdeComunicacion.Consulta> consultas = LeeFichero.leer();
+        List<ClasesdeComunicacion.Consulta> consultasNuevas;
+        List<ClasesdeComunicacion.Consulta> consultasAntiguas;
         while (true) {
-            consultas = separarConsultas(consultas);
-            FuenteDeConsultasYProyectos.setConsultas(consultas);
+            consultasNuevas = separarConsultas(consultas);
+            consultasAntiguas = FuenteDeConsultasYProyectos.getConsultas();
+            FuenteDeConsultasYProyectos.setConsultas(consultasNuevas);
+            consultasNuevas.removeAll(consultasAntiguas);
+            if (!consultasNuevas.isEmpty()){
+                List <Socket> sockets = FuenteDeConsultasYProyectos.getSockets();
+                for (Socket socket : sockets){
+                    ConexionProxy conexionProxy = new ConexionProxy(socket, "Envio consultas", consultasNuevas);
+                    conexionProxy.start();
+                }
+            }
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException ex) {

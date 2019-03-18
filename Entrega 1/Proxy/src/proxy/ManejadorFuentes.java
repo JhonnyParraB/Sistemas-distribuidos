@@ -29,7 +29,8 @@ public class ManejadorFuentes extends Thread{
             do{
                 Socket socket_fue = socket.accept();
                 sockets.add(socket_fue);
-                
+                ConexionFuente conexionFuente = new ConexionFuente(socket_fue);
+                conexionFuente.start();
                 
             }while(true);
             

@@ -21,31 +21,34 @@ import java.util.logging.Logger;
 public class ConexionProxy extends Thread{
     
     private Socket socket;
+    private String tipoMensaje;
+    List<ClasesdeComunicacion.Consulta> consultas;
 
     @Override
     public void run() {
          //To change body of generated methods, choose Tools | Templates.
-        try {
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            String mensaje="";
-            do{
-                mensaje=(String) in.readObject();
-                System.out.println("Llegada mensaje del proxy"+mensaje);
-                if (mensaje.equals("1")){
-                    List<ClasesdeComunicacion.Consulta> consultas = FuenteDeConsultasYProyectos.getConsultas();
-                    out.writeObject(consultas);
-                }
-            }while(true);
-        } catch (Exception ex) {
-            Logger.getLogger(ConexionProxy.class.getName()).log(Level.SEVERE, null, ex);
+        if (tipoMensaje.equals("Envio consultas")){
+            try {
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(consultas);
+
+            } catch (Exception ex) {
+                Logger.getLogger(ConexionProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    public ConexionProxy(Socket socket) {
+    public ConexionProxy(Socket socket, String tipoMensaje, List<ClasesdeComunicacion.Consulta> consultas) {
         this.socket = socket;
+        this.tipoMensaje = tipoMensaje;
+        this.consultas = consultas;
     }
     
+    public ConexionProxy(Socket socket, String tipoMensaje) {
+        this.socket = socket;
+        this.tipoMensaje = tipoMensaje;
+    }
     
     
 }

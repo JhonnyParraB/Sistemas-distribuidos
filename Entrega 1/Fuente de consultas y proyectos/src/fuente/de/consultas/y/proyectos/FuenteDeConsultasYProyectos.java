@@ -37,8 +37,8 @@ public class FuenteDeConsultasYProyectos {
     public static void main(String[] args) {
         // TODO code application logic here
         LeeFichero funcion=  new LeeFichero();
-        funcion.start();
         solicitarConexión();
+        funcion.start();
         
     }
 
@@ -70,8 +70,6 @@ public class FuenteDeConsultasYProyectos {
                     System.out.println(proxy.getPuertoFuentes());
                     Socket socketp = new Socket (proxy.getIP(), proxy.getPuertoFuentes());
                     sockets.add(socketp);
-                    ConexionProxy conexionProxy = new ConexionProxy(socketp);
-                    conexionProxy.start();
                 }
             }
             else{
@@ -101,6 +99,10 @@ public class FuenteDeConsultasYProyectos {
 
     public static void setID(int ID) {
         FuenteDeConsultasYProyectos.ID = ID;
+    }
+
+    public static List<Socket> getSockets() {
+        return sockets;
     }
 
     
