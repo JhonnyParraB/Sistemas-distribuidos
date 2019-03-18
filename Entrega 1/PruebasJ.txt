@@ -16,3 +16,10 @@ proxies o proxys?
 -Mandar el nuevo proxy a las fuentes
 
 -ID's mayores a 0
+
+- Subir los nuevos proyectos automaticamente
+
+-Colocar news en los creates (mains)
+
+
+-Comprobar votos

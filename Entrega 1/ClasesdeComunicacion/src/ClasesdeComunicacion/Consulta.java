@@ -15,10 +15,12 @@ import java.util.Date;
 public class Consulta implements Serializable{
     private Date fecha;
     private String nombre;
+    private int IDFuente;
 
-    public Consulta(Date fecha, String nombre) {
+    public Consulta(Date fecha, String nombre, int IDFuente) {
         this.fecha = fecha;
         this.nombre = nombre;
+        this.IDFuente = IDFuente;
     }
 
     public Date getFecha() {
@@ -36,6 +38,8 @@ public class Consulta implements Serializable{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    
     
     
 }

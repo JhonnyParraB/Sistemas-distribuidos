@@ -27,6 +27,9 @@ public class FuenteDeConsultasYProyectos {
     private static int puertoManejador = 5998;
     private static Socket socket;
     private static List<Socket> sockets = new ArrayList<Socket>();
+    private static List<ConsultaConteo> conteos = new ArrayList<ConsultaConteo> ();  
+    private static int ID;
+
 
     /**
      * @param args the command line arguments
@@ -41,7 +44,6 @@ public class FuenteDeConsultasYProyectos {
 
     public static void solicitarConexión (){
         Scanner reader = new Scanner (System.in);
-        int ID;
         String ipManejador;
         System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
         ipManejador = reader.nextLine ();
@@ -92,6 +94,18 @@ public class FuenteDeConsultasYProyectos {
     public static void setConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
         FuenteDeConsultasYProyectos.consultas = consultas;
     }
+
+    public static int getID() {
+        return ID;
+    }
+
+    public static void setID(int ID) {
+        FuenteDeConsultasYProyectos.ID = ID;
+    }
+
+    
+    
+    
     
     
     

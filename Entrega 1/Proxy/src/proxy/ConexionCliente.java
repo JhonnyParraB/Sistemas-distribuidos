@@ -48,7 +48,7 @@ public class ConexionCliente extends Thread {
                     List<Socket> socketsFuente = ManejadorFuentes.getSockets();
                     List<ConexionFuente> conexionesFuente = new ArrayList <ConexionFuente>();
                     for (Socket socket : socketsFuente){
-                        ConexionFuente conexionFuente = new ConexionFuente(socket);
+                        ConexionFuente conexionFuente = new ConexionFuente(socket, 1, null);
                         conexionesFuente.add(conexionFuente);
                         conexionFuente.start();
                     }
@@ -58,11 +58,19 @@ public class ConexionCliente extends Thread {
                         conexionFuente.join();
                     }
                     //Extrae la información de cada hilo
-                    List <ClasesdeComunicacion.Consulta> consultas = new ArrayList <ClasesdeComunicacion.Consulta>();;
+                    List <ClasesdeComunicacion.Consulta> consultas = new ArrayList <ClasesdeComunicacion.Consulta>();
                     for (ConexionFuente conexionFuente: conexionesFuente){
                         consultas.addAll(conexionFuente.getConsultas());
                     }
                     out.writeObject(consultas);
+                    
+                    List<ClasesdeComunicacion.Voto> votos = (List<ClasesdeComunicacion.Voto>) in.readObject ();
+                    for (Socket socket : socketsFuente){
+                        ConexionFuente conexionFuente = new ConexionFuente(socket, 2, votos);
+                        conexionesFuente.add(conexionFuente);
+                        conexionFuente.start();
+                    }
+                    
                 }
                 //Desconexión
                 if (mensaje.equals("2")) {

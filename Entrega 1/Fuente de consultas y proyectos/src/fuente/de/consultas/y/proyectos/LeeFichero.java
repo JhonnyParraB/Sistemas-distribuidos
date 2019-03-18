@@ -45,8 +45,9 @@ public class LeeFichero extends Thread {
                 Date fecha = formatter.parse(parts[0]);
                 fecha = formatter.parse(parts[0]);
                 String nombre = parts[1];
-                ClasesdeComunicacion.Consulta consulta = new ClasesdeComunicacion.Consulta(fecha, nombre);
+                ClasesdeComunicacion.Consulta consulta = new ClasesdeComunicacion.Consulta(fecha, nombre, FuenteDeConsultasYProyectos.getID());
                 consultas.add(consulta);
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
