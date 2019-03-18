@@ -5,6 +5,7 @@
  */
 package fuente.de.consultas.y.proyectos;
 
+import ClasesdeComunicacion.Consulta;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -70,7 +71,6 @@ public class LeeFichero extends Thread {
     public static boolean evaluarTiempos(Date fecha) {
         Date actual = java.util.Calendar.getInstance().getTime();
         if (fecha.before(actual)) {
-            System.out.println("Ya paso");
             return true;
         } else {
             return false;
@@ -90,14 +90,22 @@ public class LeeFichero extends Thread {
     @Override
     public void run() {
         List<ClasesdeComunicacion.Consulta> consultas = LeeFichero.leer();
+        List<ClasesdeComunicacion.Consulta> consultasNuevasYAntiguas;
         List<ClasesdeComunicacion.Consulta> consultasNuevas;
         List<ClasesdeComunicacion.Consulta> consultasAntiguas;
         while (true) {
-            consultasNuevas = separarConsultas(consultas);
-            consultasAntiguas = FuenteDeConsultasYProyectos.getConsultas();
-            FuenteDeConsultasYProyectos.setConsultas(consultasNuevas);
+            consultasNuevasYAntiguas = separarConsultas(consultas);  
+            consultasAntiguas = FuenteDeConsultasYProyectos.getConsultas();         
+
+            FuenteDeConsultasYProyectos.setConsultas(consultasNuevasYAntiguas);
+            consultasNuevas = (List<Consulta>) ((ArrayList) consultasNuevasYAntiguas).clone();
             consultasNuevas.removeAll(consultasAntiguas);
+            
+            
+            
+
             if (!consultasNuevas.isEmpty()){
+                agregarConteo(consultasNuevas);
                 List <Socket> sockets = FuenteDeConsultasYProyectos.getSockets();
                 for (Socket socket : sockets){
                     ConexionFuenteAProxy conexionProxy = new ConexionFuenteAProxy(socket, "Envio consultas", consultasNuevas);
@@ -105,11 +113,14 @@ public class LeeFichero extends Thread {
                 }
             }
             try {
-                Thread.sleep(60000);
+                Thread.sleep(60000); 
             } catch (InterruptedException ex) {
                 Logger.getLogger(LeeFichero.class.getName()).log(Level.SEVERE, null, ex);
             }
         }//To change body of generated methods, choose Tools | Templates.
+    }
+    private synchronized void agregarConteo(List<ClasesdeComunicacion.Consulta> consultasNuevas){
+        FuenteDeConsultasYProyectos.agregarConteo(consultasNuevas);
     }
 
 }

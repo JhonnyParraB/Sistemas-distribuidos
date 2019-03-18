@@ -6,12 +6,15 @@
 package fuente.de.consultas.y.proyectos;
 
 import ClasesdeComunicacion.Consulta;
+import ClasesdeComunicacion.Voto;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +30,11 @@ public class FuenteDeConsultasYProyectos {
     private static int puertoManejador = 5998;
     private static Socket socket;
     private static List<Socket> sockets = new ArrayList<Socket>();
-    private static List<ConsultaConteo> conteos = new ArrayList<ConsultaConteo> ();  
+    private static Map<String, ConsultaConteo> conteos = new HashMap<String, ConsultaConteo> ();  
     private static int ID;
+    
+    private static final String menu = "1. Recuento de votos\n"
+            + "2. Desconectarse";
 
 
     /**
@@ -39,6 +45,7 @@ public class FuenteDeConsultasYProyectos {
         LeeFichero funcion=  new LeeFichero();
         solicitarConexión();
         funcion.start();
+        mostrarMenu();
         
     }
 
@@ -105,6 +112,42 @@ public class FuenteDeConsultasYProyectos {
 
     public static List<Socket> getSockets() {
         return sockets;
+    }
+    
+    public static void agregarConteo (List<ClasesdeComunicacion.Consulta> consultas){
+        for (Consulta consulta: consultas){
+            ConsultaConteo conteo = new ConsultaConteo(consulta);
+            conteos.put(consulta.getNombre(), conteo);
+        }
+    }
+    
+    public static void contarVoto (Voto voto){
+        if (voto.getAprobacion().equals("Alto")){
+            conteos.get(voto.getConsulta().getNombre()).sumarAlto();
+        }
+        if (voto.getAprobacion().equals("Medio")){
+            conteos.get(voto.getConsulta().getNombre()).sumarMedio();
+        }
+        if (voto.getAprobacion().equals("Bajo")){
+            conteos.get(voto.getConsulta().getNombre()).sumarBajo();
+        }
+    }
+    
+    private static void mostrarMenu() {
+        int opcion;
+        Scanner reader = new Scanner(System.in);
+        do {
+            System.out.println(menu);
+            System.out.print("Ingrese la opcion: ");
+            opcion = reader.nextInt();
+            if (opcion == 1) {
+                for (ConsultaConteo conteo: conteos.values()){
+                      System.out.println(conteo.getConsulta().getNombre());
+                      System.out.println ("Alto: "+conteo.getAlto()+ "   Medio: "+conteo.getMedio()
+                                        + "   Bajo: "+conteo.getBajo());
+                }
+            }
+        } while (opcion != 2);
     }
 
     

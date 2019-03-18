@@ -50,7 +50,11 @@ public class RegistroProxy extends Thread{
                     proxy.setPuertoClientes(puertoClientes);
                     proxy.setPuertoFuentes(puertoFuentes);
                     directorio.add(proxy);
-                    
+                    System.out.println("Nuevo proxy en ejecucion:"
+                            + "\n    Puerto fuentes: "+proxy.getPuertoFuentes()
+                            + "\n    Puerto clientes: " + proxy.getPuertoClientes()
+                            + "\n    IP: " + proxy.getIP()
+                            );                    
                     out.writeUTF ("Proxy preparado!"); 
                     
                     socket_cli.close();

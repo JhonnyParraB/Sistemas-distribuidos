@@ -41,11 +41,14 @@ public class RegistroFuenteConsultasYProyectos extends Thread {
                     
                     if (!fuentes.contains(ID)){
                         out.writeObject ("El ID es valido\nBienvenido!");
+                        System.out.println("Nueva fuente conectada: "+ ID);
                         fuentes.add(ID);
                         out.writeObject(RegistroProxy.getDirectorio());
                     }
-                    else
-                        out.writeObject ("El ID esta siendo usado por otra fuente");                       
+                    else{
+                        System.out.println("Conexion de nueva fuente rechazada: "+ ID);
+                        out.writeObject ("El ID esta siendo usado por otra fuente");        
+                    }
                     
                     socket_cli.close();
             }while (true);

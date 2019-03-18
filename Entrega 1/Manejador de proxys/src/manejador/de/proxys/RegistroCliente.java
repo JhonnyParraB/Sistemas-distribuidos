@@ -40,17 +40,19 @@ public class RegistroCliente extends Thread{
                     
                     int ID;
                     ID = (Integer)in.readObject();
-                    System.out.println(ID);
+                    
                     
                     if (!clientes.contains(ID)){
                         out.writeObject ("El ID es valido\nBienvenido!");
+                        System.out.println("Nuevo cliente conectado: "+ ID);
                         clientes.add(ID);
                         ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
                         out.writeObject(proxy);
                     }
-                    else
-                        out.writeObject ("El ID esta siendo usado por otro usuario");                       
-                    
+                    else{
+                        System.out.println("Conexion de nuevo cliente rechazada: "+ ID);
+                        out.writeObject ("El ID esta siendo usado por otro usuario"); 
+                    }                    
                     socket_cli.close();
             }while (true);
         } catch (Exception e) {

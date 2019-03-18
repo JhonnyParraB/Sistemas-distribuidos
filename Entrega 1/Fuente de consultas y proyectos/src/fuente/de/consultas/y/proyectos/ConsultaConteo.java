@@ -5,6 +5,8 @@
  */
 package fuente.de.consultas.y.proyectos;
 
+import ClasesdeComunicacion.Consulta;
+
 /**
  *
  * @author LENOVO PC
@@ -13,14 +15,60 @@ public class ConsultaConteo {
     private int alto;
     private int medio;
     private int bajo;
-    private String nombre;
+    private Consulta consulta;
 
-    public ConsultaConteo(String nombre) {
+    public ConsultaConteo(Consulta consulta) {
         this.alto = 0;
         this.medio = 0;
         this.bajo = 0;
-        this.nombre = nombre;
-    }    
+        this.consulta = consulta;
+    } 
+    
+    public void sumarAlto(){
+        alto++;
+    }
+    public void sumarMedio(){
+        medio++;
+    }
+    public void sumarBajo(){
+        bajo++;
+    }
+
+    public Consulta getConsulta() {
+        return consulta;
+    }
+
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
+    }
+
+    public int getAlto() {
+        return alto;
+    }
+
+    public void setAlto(int alto) {
+        this.alto = alto;
+    }
+
+    public int getMedio() {
+        return medio;
+    }
+
+    public void setMedio(int medio) {
+        this.medio = medio;
+    }
+
+    public int getBajo() {
+        return bajo;
+    }
+
+    public void setBajo(int bajo) {
+        this.bajo = bajo;
+    }
+    
+    
+    
+    
     
     
 }

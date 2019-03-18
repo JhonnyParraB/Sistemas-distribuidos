@@ -69,8 +69,6 @@ public class Usuario {
             if (mensaje.equals("El ID es valido\nBienvenido!")) {
                 System.out.println(mensaje);
                 ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
-                System.out.println(proxy.getIP());
-                System.out.println(proxy.getPuertoClientes());
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
             } else {

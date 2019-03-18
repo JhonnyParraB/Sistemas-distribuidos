@@ -46,6 +46,18 @@ public class Consulta implements Serializable{
     public void setIDFuente(int IDFuente) {
         this.IDFuente = IDFuente;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Date fecha = ((Consulta) o).getFecha();
+        String nombre = ((Consulta) o).getNombre();
+        int IDFuente = ((Consulta) o).getIDFuente();
+        if ( this.fecha.equals(fecha) && this.nombre.equals(nombre) && this.IDFuente == IDFuente)
+            return true;
+        return false;
+    }
+    
+    
     
     
     
