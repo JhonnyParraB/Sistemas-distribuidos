@@ -107,7 +107,7 @@ public class LeeFichero extends Thread {
             
 
             if (!consultasNuevas.isEmpty()){
-                agregarConteo(consultasNuevas);
+                agregarConteoYVotos(consultasNuevas);
                 List <Socket> sockets = FuenteDeConsultasYProyectos.getSockets();
                 for (Socket socket : sockets){
                     ConexionFuenteAProxy conexionProxy = new ConexionFuenteAProxy(socket, "Envio consultas", consultasNuevas);
@@ -121,8 +121,8 @@ public class LeeFichero extends Thread {
             }
         }//To change body of generated methods, choose Tools | Templates.
     }
-    private synchronized void agregarConteo(List<ClasesdeComunicacion.Consulta> consultasNuevas){
-        FuenteDeConsultasYProyectos.agregarConteo(consultasNuevas);
+    private synchronized void agregarConteoYVotos(List<ClasesdeComunicacion.Consulta> consultasNuevas){
+        FuenteDeConsultasYProyectos.agregarConteoYVotos(consultasNuevas);        
     }
 
         public LeeFichero(String nombreArchivo) {

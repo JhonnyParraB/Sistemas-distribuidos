@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ public class Proxy {
     private static int puertoClientes;
     private static int puertoFuentes;
     private static List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<ClasesdeComunicacion.Consulta>();
+    private static Map<Consulta, List<Integer>> votosConsultas = new HashMap <Consulta, List<Integer>>();
     
 
     /**
@@ -119,6 +122,20 @@ public class Proxy {
     
     public static void agregarConsultas (List<ClasesdeComunicacion.Consulta> consultasNuevas){
         consultas.addAll(consultasNuevas);
+        for (Consulta consulta: consultasNuevas){
+                    votosConsultas.put(consulta, new ArrayList<Integer>());
+        }
+    }
+    
+    public static List<Consulta> consultasParaUsuario (int IDUsuario){
+        List<Consulta> consultasUsuario = new ArrayList <Consulta>();
+        for (Consulta consulta: consultas){
+            if (!votosConsultas.get(consulta).contains(IDUsuario)){
+                consultasUsuario.add(consulta);
+                votosConsultas.get(consulta).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
+            }
+        }
+        return consultasUsuario;
     }
     
     

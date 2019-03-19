@@ -30,71 +30,69 @@ public class FuenteDeConsultasYProyectos {
     private static int puertoManejador = 5998;
     private static Socket socket;
     private static List<Socket> sockets = new ArrayList<Socket>();
-    private static Map<String, ConsultaConteo> conteos = new HashMap<String, ConsultaConteo> ();  
+    private static Map<String, ConsultaConteo> conteos = new HashMap<String, ConsultaConteo>();
+    private static Map<Consulta, List<Integer>> votosConsultas = new HashMap<Consulta, List<Integer>>();
     private static int ID;
-    
+
     private static final String menu = "1. Recuento de votos\n"
             + "2. Desconectarse";
-
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Scanner reader = new Scanner (System.in);
-        System.out.println ("Ingrese el nombre del archivo que contiene sus consultas:");
-        String nombreArchivo = reader.nextLine ();
-        LeeFichero funcion=  new LeeFichero(nombreArchivo);
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Ingrese el nombre del archivo que contiene sus consultas:");
+        String nombreArchivo = reader.nextLine();
+        LeeFichero funcion = new LeeFichero(nombreArchivo);
         solicitarConexión();
         funcion.start();
         mostrarMenu();
-        
+
     }
 
-    public static void solicitarConexión (){
-        Scanner reader = new Scanner (System.in);
+    public static void solicitarConexión() {
+        Scanner reader = new Scanner(System.in);
         String ipManejador;
-        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");
-        ipManejador = reader.nextLine ();
-        
+        System.out.println("Ingrese la IP del manejador de proxies (directorio):");
+        ipManejador = reader.nextLine();
+
         System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
         ID = reader.nextInt();
-                
-        try{
-            socket = new Socket (ipManejador, puertoManejador);      
-            
-            ObjectOutputStream out = new ObjectOutputStream (socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream (socket.getInputStream());
-            
-           
+
+        try {
+            socket = new Socket(ipManejador, puertoManejador);
+
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
             out.writeObject(ID);
-                  
-            String mensaje = (String)in.readObject();
-            if (mensaje.equals("El ID es valido\nBienvenido!")){
-                System.out.println (mensaje);  
-                directorio = (List <ClasesdeComunicacion.Proxy>)in.readObject();
+
+            String mensaje = (String) in.readObject();
+            if (mensaje.equals("El ID es valido\nBienvenido!")) {
+                System.out.println(mensaje);
+                directorio = (List<ClasesdeComunicacion.Proxy>) in.readObject();
                 socket.close();
-                for (ClasesdeComunicacion.Proxy proxy : directorio){
+                for (ClasesdeComunicacion.Proxy proxy : directorio) {
                     System.out.println(proxy.getIP());
                     System.out.println(proxy.getPuertoFuentes());
-                    Socket socketp = new Socket (proxy.getIP(), proxy.getPuertoFuentes());
+                    Socket socketp = new Socket(proxy.getIP(), proxy.getPuertoFuentes());
                     (new ConexionFuenteAProxy(socketp, "Envio ID")).start();
                     (new ConexionProxyAFuente(socketp)).start();
                     sockets.add(socketp);
                 }
-            }
-            else{
+            } else {
                 socket.close();
-                System.out.println (mensaje);
+                System.out.println(mensaje);
                 System.exit(1);
             }
-                    
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
             System.exit(1);
-        }                     
+        }
     }
 
     public static List<ClasesdeComunicacion.Consulta> getConsultas() {
@@ -116,26 +114,28 @@ public class FuenteDeConsultasYProyectos {
     public static List<Socket> getSockets() {
         return sockets;
     }
-    
-    public static void agregarConteo (List<ClasesdeComunicacion.Consulta> consultas){
-        for (Consulta consulta: consultas){
+
+    public static void agregarConteoYVotos(List<ClasesdeComunicacion.Consulta> consultas) {
+        for (Consulta consulta : consultas) {
             ConsultaConteo conteo = new ConsultaConteo(consulta);
             conteos.put(consulta.getNombre(), conteo);
+            votosConsultas.put(consulta, new ArrayList<Integer>());
         }
     }
-    
-    public static void contarVoto (Voto voto){
-        if (voto.getAprobacion().equals("Alto")){
+
+    public static void contarVoto(Voto voto) {
+        if (voto.getAprobacion().equals("Alto")) {
             conteos.get(voto.getConsulta().getNombre()).sumarAlto();
         }
-        if (voto.getAprobacion().equals("Medio")){
+        if (voto.getAprobacion().equals("Medio")) {
             conteos.get(voto.getConsulta().getNombre()).sumarMedio();
         }
-        if (voto.getAprobacion().equals("Bajo")){
+        if (voto.getAprobacion().equals("Bajo")) {
             conteos.get(voto.getConsulta().getNombre()).sumarBajo();
         }
+        votosConsultas.get(voto.getConsulta()).add(voto.getIDUsuario());
     }
-    
+
     private static void mostrarMenu() {
         int opcion;
         Scanner reader = new Scanner(System.in);
@@ -144,20 +144,13 @@ public class FuenteDeConsultasYProyectos {
             System.out.print("Ingrese la opcion: ");
             opcion = reader.nextInt();
             if (opcion == 1) {
-                for (ConsultaConteo conteo: conteos.values()){
-                      System.out.println(conteo.getConsulta().getNombre());
-                      System.out.println ("Alto: "+conteo.getAlto()+ "   Medio: "+conteo.getMedio()
-                                        + "   Bajo: "+conteo.getBajo());
+                for (ConsultaConteo conteo : conteos.values()) {
+                    System.out.println(conteo.getConsulta().getNombre());
+                    System.out.println("Alto: " + conteo.getAlto() + "   Medio: " + conteo.getMedio()
+                            + "   Bajo: " + conteo.getBajo());
                 }
             }
         } while (opcion != 2);
     }
 
-    
-    
-    
-    
-    
-    
-    
 }

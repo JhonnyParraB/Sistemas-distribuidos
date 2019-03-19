@@ -44,8 +44,10 @@ public class ConexionClienteAProxy extends Thread {
                 mensaje = "";
                 mensaje = (String) in.readObject();
 
-                if (mensaje.equals("1")) {                
-                    out.writeObject(Proxy.getConsultas());
+                if (mensaje.equals("1")) {                          
+                    int ID = (Integer) in.readObject();
+                    System.out.println("LLEGO ID: "+ID);
+                    out.writeObject(Proxy.consultasParaUsuario(ID));
                     List<ClasesdeComunicacion.Voto> votos;
                     votos = (List<ClasesdeComunicacion.Voto>) in.readObject();
                     
@@ -53,6 +55,13 @@ public class ConexionClienteAProxy extends Thread {
                         Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
                         new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();
                     }
+                    for (Voto voto: votos){
+                        Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
+                        ObjectInputStream in2 = new ObjectInputStream(socketFuente.getInputStream());
+                        in2.readObject();
+                    }              
+                    out.writeObject("Los votos fueron entregados exitosamente");           
+
                 }
                 //Desconexión
                 if (mensaje.equals("2")) {
@@ -60,8 +69,8 @@ public class ConexionClienteAProxy extends Thread {
                 }
 
             } while (true);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ConexionClienteAProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

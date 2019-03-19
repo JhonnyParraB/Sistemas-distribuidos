@@ -46,6 +46,14 @@ public class ConexionFuenteAProxy extends Thread{
                 Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if (tipoMensaje.equals("Confirmacion voto")){
+            try {
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("Voto recibido");
+            } catch (Exception ex) {
+                Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public ConexionFuenteAProxy(Socket socket, String tipoMensaje, List<ClasesdeComunicacion.Consulta> consultas) {

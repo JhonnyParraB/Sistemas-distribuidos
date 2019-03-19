@@ -107,12 +107,17 @@ public class Usuario {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             out.writeObject("1");
+            out.writeObject(ID);
 
             List<ClasesdeComunicacion.Consulta> consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
             mostrarConsultas(consultas);
             List<ClasesdeComunicacion.Voto> votos = votarConsultas(consultas);
             
             out.writeObject(votos);
+            String mensaje = (String)in.readObject();
+            if (mensaje.equals("Los votos fueron entregados exitosamente")){
+                System.out.println(mensaje);
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
