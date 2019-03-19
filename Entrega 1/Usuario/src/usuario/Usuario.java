@@ -120,7 +120,8 @@ public class Usuario {
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se cayó el proxy");
+            //Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

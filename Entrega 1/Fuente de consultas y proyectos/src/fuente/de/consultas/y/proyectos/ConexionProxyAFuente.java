@@ -28,8 +28,9 @@ public class ConexionProxyAFuente extends Thread{
                 contarVoto (voto);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            System.out.println ("Se cayó uno de los proxys");
+            //Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
 
     public ConexionProxyAFuente(Socket socket) {
