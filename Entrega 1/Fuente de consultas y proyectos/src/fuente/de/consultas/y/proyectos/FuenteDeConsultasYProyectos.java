@@ -133,7 +133,7 @@ public class FuenteDeConsultasYProyectos {
         if (voto.getAprobacion().equals("Bajo")) {
             conteos.get(voto.getConsulta().getNombre()).sumarBajo();
         }
-        votosConsultas.get(voto.getConsulta()).add(voto.getIDUsuario());
+        //votosConsultas.get(voto.getConsulta()).add(voto.getIDUsuario());
     }
 
     private static void mostrarMenu() {
