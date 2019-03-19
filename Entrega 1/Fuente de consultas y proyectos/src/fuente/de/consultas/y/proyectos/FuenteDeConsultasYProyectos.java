@@ -31,7 +31,7 @@ public class FuenteDeConsultasYProyectos {
     private static Socket socket;
     private static List<Socket> sockets = new ArrayList<Socket>();
     private static Map<String, ConsultaConteo> conteos = new HashMap<String, ConsultaConteo>();
-    private static Map<Consulta, List<Integer>> votosConsultas = new HashMap<Consulta, List<Integer>>();
+    private static Map<String, List<Integer>> votosConsultas = new HashMap<String, List<Integer>>();
     private static int ID;
 
     private static final String menu = "1. Recuento de votos\n"
@@ -119,7 +119,7 @@ public class FuenteDeConsultasYProyectos {
         for (Consulta consulta : consultas) {
             ConsultaConteo conteo = new ConsultaConteo(consulta);
             conteos.put(consulta.getNombre(), conteo);
-            votosConsultas.put(consulta, new ArrayList<Integer>());
+            votosConsultas.put(consulta.getNombre(), new ArrayList<Integer>());
         }
     }
 
@@ -133,7 +133,8 @@ public class FuenteDeConsultasYProyectos {
         if (voto.getAprobacion().equals("Bajo")) {
             conteos.get(voto.getConsulta().getNombre()).sumarBajo();
         }
-        //votosConsultas.get(voto.getConsulta()).add(voto.getIDUsuario());
+        
+        votosConsultas.get(voto.getConsulta().getNombre()).add(voto.getIDUsuario());
     }
 
     private static void mostrarMenu() {

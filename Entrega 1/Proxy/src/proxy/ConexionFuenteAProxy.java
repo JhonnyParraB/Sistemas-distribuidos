@@ -37,14 +37,10 @@ public class ConexionFuenteAProxy extends Thread {
         try {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             ID = (Integer) in.readObject();
-            System.out.println("ID recibido: "+ID);
             agregarFuente();
             while (true){
                 in = new ObjectInputStream(socket.getInputStream());  
                 consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
-                for (Consulta consulta: consultas){
-                    System.out.println(consulta.getNombre());
-                }
                 agregarConsultas();
             }
         } catch (Exception ex) {

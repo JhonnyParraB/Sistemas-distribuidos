@@ -46,7 +46,6 @@ public class ConexionClienteAProxy extends Thread {
 
                 if (mensaje.equals("1")) {                          
                     int ID = (Integer) in.readObject();
-                    System.out.println("LLEGO ID: "+ID);
                     out.writeObject(Proxy.consultasParaUsuario(ID));
                     List<ClasesdeComunicacion.Voto> votos;
                     votos = (List<ClasesdeComunicacion.Voto>) in.readObject();
@@ -55,12 +54,12 @@ public class ConexionClienteAProxy extends Thread {
                         Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
                         new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();
                     }
-                    /*for (Voto voto: votos){
-                        Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
-                        ObjectInputStream in2 = new ObjectInputStream(socketFuente.getInputStream());
-                        in2.readObject();
-                    }      */        
-                    out.writeObject("Los votos fueron entregados exitosamente");           
+                    if (!votos.isEmpty()){
+                        out.writeObject("Los votos fueron entregados exitosamente");           
+                    }
+                    else{
+                        out.writeObject("No hay votos que registrar"); 
+                    }
 
                 }
                 //Desconexión

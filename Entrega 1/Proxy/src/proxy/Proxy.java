@@ -33,7 +33,7 @@ public class Proxy {
     private static int puertoClientes;
     private static int puertoFuentes;
     private static List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<ClasesdeComunicacion.Consulta>();
-    private static Map<Consulta, List<Integer>> votosConsultas = new HashMap <Consulta, List<Integer>>();
+    private static Map<String, List<Integer>> votosConsultas = new HashMap <String, List<Integer>>();
     
 
     /**
@@ -123,16 +123,16 @@ public class Proxy {
     public static void agregarConsultas (List<ClasesdeComunicacion.Consulta> consultasNuevas){
         consultas.addAll(consultasNuevas);
         for (Consulta consulta: consultasNuevas){
-                    votosConsultas.put(consulta, new ArrayList<Integer>());
+                    votosConsultas.put(consulta.getNombre(), new ArrayList<Integer>());
         }
     }
     
     public static List<Consulta> consultasParaUsuario (int IDUsuario){
         List<Consulta> consultasUsuario = new ArrayList <Consulta>();
         for (Consulta consulta: consultas){
-            if (!votosConsultas.get(consulta).contains(IDUsuario)){
+            if (!votosConsultas.get(consulta.getNombre()).contains(IDUsuario)){
                 consultasUsuario.add(consulta);
-                votosConsultas.get(consulta).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
+                votosConsultas.get(consulta.getNombre()).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
             }
         }
         return consultasUsuario;
