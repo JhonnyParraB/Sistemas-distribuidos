@@ -18,6 +18,8 @@ import java.util.Scanner;
 import ClasesdeComunicacion.Proxy;
 import ClasesdeComunicacion.Voto;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,6 +38,7 @@ public class Usuario {
             + "2. Desconectarse";
     private static final String opcionesVotacion = "1: Alto         2: Medio        3: Bajo";
     private static int ID;
+    private static String pass;
 
     /**
      * @param args the command line arguments
@@ -53,9 +56,16 @@ public class Usuario {
         Scanner reader = new Scanner(System.in);
         System.out.println("Ingrese la IP del manejador de proxies (directorio):");
         ipManejador = reader.nextLine();
-
+        
         System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
-        ID = reader.nextInt();
+        ID = Integer.parseInt(reader.nextLine());
+        
+        System.out.println("Para acceder al sistema, por favor, ingrese su contraseña:");
+        pass = reader.nextLine();
+
+        
+    
+        
 
         try {
             socket = new Socket(ipManejador, puertoManejador);
@@ -64,6 +74,7 @@ public class Usuario {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             out.writeObject("Conexion");
             out.writeObject(ID);
+            out.writeObject(sha1(pass));
 
             String mensaje = (String) in.readObject();
             if (mensaje.equals("El ID es valido\nBienvenido!")) {
@@ -81,9 +92,8 @@ public class Usuario {
                 System.exit(1);
             }
 
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
+        } catch (Exception ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }
     }
@@ -193,5 +203,15 @@ public class Usuario {
             votos.add(voto);
         }
         return votos;
+    }
+    
+    static String sha1(String input) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(input.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
 }

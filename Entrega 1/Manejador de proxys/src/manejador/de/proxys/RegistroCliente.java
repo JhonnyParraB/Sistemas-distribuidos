@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ClasesdeComunicacion.Proxy;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,11 @@ public class RegistroCliente extends Thread {
     }
 
     public void run() {
+        try {
+            ManejadorDeProxys.quemarUsuarios();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(RegistroCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ServerSocket socket;
         try {
             socket = new ServerSocket(5999);
@@ -44,8 +50,10 @@ public class RegistroCliente extends Thread {
                 if (mensaje.equals("Conexion")) {
                     int ID;
                     ID = (Integer) in.readObject();
+                    String pass = (String) in.readObject();
 
-                    if (!clientes.contains(ID)) {
+                    if (!clientes.contains(ID) &&
+                            ManejadorDeProxys.getUsuariosSistema().get(ID).equals(pass)) {
                         out.writeObject("El ID es valido\nBienvenido!");
                         System.out.println("Nuevo cliente conectado: " + ID);
                         clientes.add(ID);
@@ -53,7 +61,7 @@ public class RegistroCliente extends Thread {
                         out.writeObject(proxy);
                     } else {
                         System.out.println("Conexion de nuevo cliente rechazada: " + ID);
-                        out.writeObject("El ID esta siendo usado por otro usuario");
+                        out.writeObject("La contraseña es incorrecta o el usuario ya está conectado");
                     }
                     socket_cli.close();
                 }
