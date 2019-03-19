@@ -114,6 +114,10 @@ public class FuenteDeConsultasYProyectos {
     public static List<Socket> getSockets() {
         return sockets;
     }
+    
+    public static void eliminarProxyCaido (Socket socket){
+        sockets.remove(socket);
+    }
 
     public static void agregarConteoYVotos(List<ClasesdeComunicacion.Consulta> consultas) {
         for (Consulta consulta : consultas) {
@@ -153,5 +157,15 @@ public class FuenteDeConsultasYProyectos {
             }
         } while (opcion != 2);
     }
+
+    public static Map<String, List<Integer>> getVotosConsultas() {
+        return votosConsultas;
+    }
+
+    public static void setVotosConsultas(Map<String, List<Integer>> votosConsultas) {
+        FuenteDeConsultasYProyectos.votosConsultas = votosConsultas;
+    }
+    
+    
 
 }

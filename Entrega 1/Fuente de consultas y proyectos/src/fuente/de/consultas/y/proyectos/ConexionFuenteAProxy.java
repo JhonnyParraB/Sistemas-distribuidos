@@ -32,6 +32,7 @@ public class ConexionFuenteAProxy extends Thread{
             
             try {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("Envio ID");
                 out.writeObject(FuenteDeConsultasYProyectos.getID());
             } catch (Exception ex) {
                 Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -40,6 +41,7 @@ public class ConexionFuenteAProxy extends Thread{
         if (tipoMensaje.equals("Envio consultas")){
             try {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("Envio consultas");
                 out.writeObject(consultas);
 
             } catch (Exception ex) {
@@ -50,6 +52,16 @@ public class ConexionFuenteAProxy extends Thread{
             try {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("Voto recibido");
+            } catch (Exception ex) {
+                Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        if (tipoMensaje.equals("Reconexion proxys")){
+            try {
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject("Reconexion proxys");
+                out.writeObject(FuenteDeConsultasYProyectos.getVotosConsultas());
             } catch (Exception ex) {
                 Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
             }

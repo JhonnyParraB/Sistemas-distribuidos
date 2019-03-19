@@ -40,11 +40,8 @@ public class RegistroProxy extends Thread{
                     DataOutputStream out = new DataOutputStream (socket_cli.getOutputStream());
                     DataInputStream in = new DataInputStream (socket_cli.getInputStream());
                     IP = in.readUTF();
-                    System.out.println(IP);
                     puertoClientes = in.readInt();
-                    System.out.println(puertoClientes);
                     puertoFuentes = in.readInt();
-                    System.out.println(puertoFuentes);
                     ClasesdeComunicacion.Proxy proxy = new ClasesdeComunicacion.Proxy();
                     proxy.setIP(IP);
                     proxy.setPuertoClientes(puertoClientes);

@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 public class Usuario {
 
     private static int puertoManejador = 5999;
+    private static String ipManejador;
     private static Socket socket;
     private static final String menu = "1. Ver nuevas consultas/proyectos y votarlos\n"
             + "2. Desconectarse";
@@ -50,7 +51,6 @@ public class Usuario {
      */
     private static void solicitarConexión() {
         Scanner reader = new Scanner(System.in);
-        String ipManejador;
         System.out.println("Ingrese la IP del manejador de proxies (directorio):");
         ipManejador = reader.nextLine();
 
@@ -62,7 +62,7 @@ public class Usuario {
 
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
+            out.writeObject("Conexion");
             out.writeObject(ID);
 
             String mensaje = (String) in.readObject();
@@ -71,11 +71,40 @@ public class Usuario {
                 ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
+                System.out.println("Binding a proxy con IP: "
+                    + proxy.getIP()
+                    + " y Puerto clientes: "
+                    + proxy.getPuertoClientes());
             } else {
                 socket.close();
                 System.out.println(mensaje);
                 System.exit(1);
             }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
+            System.exit(1);
+        }
+    }
+
+    private static void solicitarReconexión() {
+
+        try {
+            socket = new Socket(ipManejador, puertoManejador);
+
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+            out.writeObject("Reconexion");
+
+            ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
+            socket.close();
+            socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
+            System.out.println("Binding a proxy con IP: "
+                    + proxy.getIP()
+                    + " y Puerto clientes: "
+                    + proxy.getPuertoClientes());
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -112,16 +141,17 @@ public class Usuario {
             List<ClasesdeComunicacion.Consulta> consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
             mostrarConsultas(consultas);
             List<ClasesdeComunicacion.Voto> votos = votarConsultas(consultas);
-            
+
             out.writeObject(votos);
-            String mensaje = (String)in.readObject();
-            if (mensaje.equals("Los votos fueron entregados exitosamente")){
+            String mensaje = (String) in.readObject();
+            if (mensaje.equals("Los votos fueron entregados exitosamente")) {
                 System.out.println(mensaje);
             }
 
         } catch (Exception ex) {
-            System.out.println("Se cayó el proxy");
-            //Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se cayó el proxy...Intentando reconectar con otro proxy");
+            solicitarReconexión();
+            System.out.println("Reconectado!");
         }
     }
 
@@ -141,8 +171,8 @@ public class Usuario {
     private static List<ClasesdeComunicacion.Voto> votarConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
         Scanner reader = new Scanner(System.in);
         int votoAprobacion;
-        int i=1;
-        List<ClasesdeComunicacion.Voto> votos = new ArrayList <ClasesdeComunicacion.Voto> ();
+        int i = 1;
+        List<ClasesdeComunicacion.Voto> votos = new ArrayList<ClasesdeComunicacion.Voto>();
         ClasesdeComunicacion.Voto voto = null;
         for (ClasesdeComunicacion.Consulta consulta : consultas) {
             System.out.println("------------------------------------");
@@ -150,18 +180,18 @@ public class Usuario {
             System.out.println(opcionesVotacion);
             System.out.print("Ingrese su voto: ");
             votoAprobacion = reader.nextInt();
-            if (votoAprobacion == 1){
-                voto = new Voto (consulta, ID, "Alto");
+            if (votoAprobacion == 1) {
+                voto = new Voto(consulta, ID, "Alto");
             }
-            if (votoAprobacion == 2){
-                voto = new Voto (consulta, ID, "Medio");
+            if (votoAprobacion == 2) {
+                voto = new Voto(consulta, ID, "Medio");
             }
-            if (votoAprobacion == 3){
-                voto = new Voto (consulta, ID, "Bajo");
+            if (votoAprobacion == 3) {
+                voto = new Voto(consulta, ID, "Bajo");
             }
             i++;
             votos.add(voto);
         }
-        return votos;        
+        return votos;
     }
 }

@@ -13,7 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,13 +37,27 @@ public class ConexionFuenteAProxy extends Thread {
     public void run() {
             
         try {
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            ID = (Integer) in.readObject();
-            agregarFuente();
+            
             while (true){
-                in = new ObjectInputStream(socket.getInputStream());  
-                consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
-                agregarConsultas();
+                
+                String mensaje ="";
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                
+                mensaje = (String) in.readObject();
+                if(mensaje.equals("Envio ID")){
+                    ID = (Integer) in.readObject();
+                    agregarFuente();
+                }
+                
+                if(mensaje.equals("Envio consultas")){
+                    consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
+                    agregarConsultas();
+                }
+                if(mensaje.equals("Reconexion proxys")){
+                    Map <String, List<Integer>> votosConsultasReconexion = new HashMap <String, List<Integer>>();
+                    votosConsultasReconexion = (Map<String, List<Integer>>) in.readObject();
+                    agregarVotosConsultasReconexion(votosConsultasReconexion);
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,6 +69,9 @@ public class ConexionFuenteAProxy extends Thread {
     }
     private synchronized void agregarFuente(){
         ManejadorFuentes.agregarFuente(ID, socket);
+    }
+    private synchronized void agregarVotosConsultasReconexion (Map<String, List<Integer>> votosConsultasReconexion){
+        Proxy.agregarVotosConsultasReconexion(votosConsultasReconexion);
     }
 
 }

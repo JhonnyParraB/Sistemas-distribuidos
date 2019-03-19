@@ -15,55 +15,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ClasesdeComunicacion.Proxy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Hilo que escucha espera nuevos clientes/usuarios
- * Asigna un proxy del directorio al nuevo cliente
- * Valida el ID del cliente
+ * Hilo que escucha espera nuevos clientes/usuarios Asigna un proxy del
+ * directorio al nuevo cliente Valida el ID del cliente
+ *
  * @author LENOVO PC
  */
-public class RegistroCliente extends Thread{
-    private static List <Integer> clientes;
+public class RegistroCliente extends Thread {
+
+    private static List<Integer> clientes;
 
     public RegistroCliente() {
-        clientes = new ArrayList <Integer>();
+        clientes = new ArrayList<Integer>();
     }
-    
+
     public void run() {
         ServerSocket socket;
         try {
-            socket = new ServerSocket(5999);           
-            do{
-                    Socket socket_cli = socket.accept();                
-                    ObjectOutputStream out = new ObjectOutputStream (socket_cli.getOutputStream());
-                    ObjectInputStream in = new ObjectInputStream (socket_cli.getInputStream());
-                    
+            socket = new ServerSocket(5999);
+            do {
+                Socket socket_cli = socket.accept();
+                ObjectOutputStream out = new ObjectOutputStream(socket_cli.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket_cli.getInputStream());
+                String mensaje = (String) in.readObject();
+                if (mensaje.equals("Conexion")) {
                     int ID;
-                    ID = (Integer)in.readObject();
-                    
-                    
-                    if (!clientes.contains(ID)){
-                        out.writeObject ("El ID es valido\nBienvenido!");
-                        System.out.println("Nuevo cliente conectado: "+ ID);
+                    ID = (Integer) in.readObject();
+
+                    if (!clientes.contains(ID)) {
+                        out.writeObject("El ID es valido\nBienvenido!");
+                        System.out.println("Nuevo cliente conectado: " + ID);
                         clientes.add(ID);
                         ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
                         out.writeObject(proxy);
+                    } else {
+                        System.out.println("Conexion de nuevo cliente rechazada: " + ID);
+                        out.writeObject("El ID esta siendo usado por otro usuario");
                     }
-                    else{
-                        System.out.println("Conexion de nuevo cliente rechazada: "+ ID);
-                        out.writeObject ("El ID esta siendo usado por otro usuario"); 
-                    }                    
                     socket_cli.close();
-            }while (true);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+                }
+                if (mensaje.equals("Reconexion")){
+                    ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
+                    out.writeObject(proxy);
+                    socket_cli.close();
+                }
+            } while (true);
+        } catch (Exception ex) {
+            Logger.getLogger(RegistroCliente.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }
     }
 
-        
-    
-    
-    
-    
 }

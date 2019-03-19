@@ -29,6 +29,11 @@ public class ConexionProxyAFuente extends Thread{
             }
         } catch (Exception ex) {
             System.out.println ("Se cayó uno de los proxys");
+            FuenteDeConsultasYProyectos.eliminarProxyCaido(socket);
+            for (Socket socket: FuenteDeConsultasYProyectos.getSockets() ){
+                (new ConexionFuenteAProxy(socket, "Reconexion proxys")).start();
+            }
+            System.out.println ("Solucionado");
             //Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }

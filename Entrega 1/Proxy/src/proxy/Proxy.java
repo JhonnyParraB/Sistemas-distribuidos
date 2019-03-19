@@ -86,8 +86,7 @@ public class Proxy {
             System.exit(1);
         }
         
-        
-       
+               
         
     }
     
@@ -127,6 +126,10 @@ public class Proxy {
         }
     }
     
+    public static void agregarVotosConsultasReconexion (Map<String, List<Integer>> votosConsultasReconexion){
+        votosConsultas.putAll(votosConsultasReconexion);
+    }
+    
     public static List<Consulta> consultasParaUsuario (int IDUsuario){
         List<Consulta> consultasUsuario = new ArrayList <Consulta>();
         for (Consulta consulta: consultas){
@@ -136,8 +139,5 @@ public class Proxy {
             }
         }
         return consultasUsuario;
-    }
-    
-    
-    
+    }      
 }

@@ -1,4 +1,4 @@
-
+ENVIAR MENSAJE SI TODOS LOS PROXYS SE HAN CAIDO
 
 
 
@@ -14,20 +14,17 @@
 proxies o proxys?
 
 
--Nuevo proxy?
+-NUEVO PROXY!
 -Mandar el nuevo proxy a las fuentes
 
 -ID's mayores a 0
 
-- Subir los nuevos proyectos automaticamente
+
 
 -Colocar news en los creates (mains)
 
 
--Comprobar votos
 
 
--Conexion no: mensaje
 
 
--Está enviando las consultas repetidas!!!
