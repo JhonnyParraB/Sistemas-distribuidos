@@ -8,6 +8,10 @@ package proxy;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +20,14 @@ import java.util.logging.Logger;
  * @author LENOVO PC
  */
 public class ManejadorClientes extends Thread{
-
+    private static List<Socket> sockets;
+    private static Map <Integer, Socket> mapaClientes;
+    
+     public ManejadorClientes() {
+        sockets = new ArrayList<Socket>();
+        mapaClientes = new HashMap<Integer, Socket>();
+    }
+    
     @Override
     public void run() {
         try {
@@ -33,6 +44,14 @@ public class ManejadorClientes extends Thread{
             System.exit(1);
         }
         
+    }
+    
+    public static void agregarCliente (int ID, Socket socket){
+        mapaClientes.put(ID, socket);
+    }
+    
+    public static Socket getSocketCliente (Integer IDCliente){
+        return (Socket)mapaClientes.get(IDCliente);
     }
     
 }

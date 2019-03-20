@@ -62,7 +62,7 @@ public class ConexionFuenteAProxy extends Thread {
                 if(mensaje.equals("Voto recibido")){
                     Voto voto = (Voto) in.readObject();
                     agregarVoto(voto);
-                    (new ConexionProxyACliente(socket, "Confirmacion voto")).start();
+                    (new ConexionProxyACliente(ManejadorClientes.getSocketCliente(voto.getIDUsuario()), "Confirmacion voto")).start();
                 }
             }
         } catch (Exception ex) {

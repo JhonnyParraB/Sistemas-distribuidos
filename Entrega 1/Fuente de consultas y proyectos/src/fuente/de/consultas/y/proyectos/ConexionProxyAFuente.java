@@ -35,7 +35,7 @@ public class ConexionProxyAFuente extends Thread{
                 (new ConexionFuenteAProxy(socket, "Reconexion proxys")).start();
             }
             System.out.println ("Solucionado");
-            //Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
 

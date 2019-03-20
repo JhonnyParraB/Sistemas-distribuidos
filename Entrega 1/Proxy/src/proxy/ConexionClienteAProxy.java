@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class ConexionClienteAProxy extends Thread {
 
     private Socket socket;
+    private int ID;
     private List<ClasesdeComunicacion.Consulta> consultas = new ArrayList <ClasesdeComunicacion.Consulta>();
 
     public ConexionClienteAProxy(Socket socket) {
@@ -36,37 +37,42 @@ public class ConexionClienteAProxy extends Thread {
     public void run() {
         String mensaje;
         try {
-            
-            do {
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            do {            
                 mensaje = "";
                 mensaje = (String) in.readObject();
-
-                if (mensaje.equals("1")) {                          
+                if (mensaje.equals("0")){
+                    ID = (Integer) in.readObject();
+                    agregarCliente();
+                }
+                if (mensaje.equals("1")){
                     int ID = (Integer) in.readObject();
                     out.writeObject(Proxy.consultasParaUsuario(ID));
-                    Voto voto = (Voto) in.readObject();
-                    
-                    Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
-                    new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();
-                    
-                
-                    //out.writeObject("El voto se ha enviado correctamente");           
- 
-       
-                }
-                //Desconexión
-                if (mensaje.equals("2")) {
-
                 }
 
+                if (mensaje.equals("2")) {                          
+                    int ID = (Integer) in.readObject();
+                    List <Consulta> consultas = Proxy.consultasParaUsuario(ID);
+                    out.writeObject(consultas);
+                    if (!consultas.isEmpty()){
+                        Voto voto = (Voto) in.readObject();
+                        Socket socketFuente = ManejadorFuentes.getSocketFuente(voto.getConsulta().getIDFuente());
+                        new ConexionProxyAFuente(socketFuente, "Envio voto", voto).start();   
+                    }
+                }
+                if (mensaje.equals("3")) {
+
+                }
             } while (true);
         } catch (Exception ex) {
             Logger.getLogger(ConexionClienteAProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    private synchronized void agregarCliente (){
+        ManejadorClientes.agregarCliente(ID, socket);
+        System.out.println ("CLIENTE REGISTRADO: "+ ID);
     }
 
 }

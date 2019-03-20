@@ -35,12 +35,16 @@ public class Usuario {
     private static int puertoManejador = 5999;
     private static String ipManejador;
     private static Socket socket;
-    private static final String menu = "1. Ver nuevas consultas/proyectos\n"
+    private static final String menu = "--Menu principal--\n"
+            + "1. Ver nuevas consultas/proyectos\n"
             + "2. Votar una consulta/proyecto\n"
             + "3. Desconectarse";
     private static final String opcionesVotacion = "1: Alto         2: Medio        3: Bajo";
     private static int ID;
     private static String pass;
+    
+    private static ObjectOutputStream out;
+    private static ObjectInputStream in;
 
     /**
      * @param args the command line arguments
@@ -68,8 +72,8 @@ public class Usuario {
         try {
             socket = new Socket(ipManejador, puertoManejador);
 
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             out.writeObject("Conexion");
             out.writeObject(ID);
             out.writeObject(sha1(pass));
@@ -80,6 +84,12 @@ public class Usuario {
                 ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+                out.writeObject("0");
+                out.writeObject(ID);
+       
+                
                 System.out.println("Binding a proxy con IP: "
                         + proxy.getIP()
                         + " y Puerto clientes: "
@@ -101,14 +111,16 @@ public class Usuario {
         try {
             socket = new Socket(ipManejador, puertoManejador);
 
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
             out.writeObject("Reconexion");
 
             ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
             socket.close();
             socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Binding a proxy con IP: "
                     + proxy.getIP()
                     + " y Puerto clientes: "
@@ -128,6 +140,9 @@ public class Usuario {
             System.out.println(menu);
             System.out.print("Ingrese la opcion: ");
             opcion = reader.nextInt();
+            if (opcion == 1) {
+                solicitarConsultasyMostrarlas();
+            }
             if (opcion == 2) {
                 solicitarConsultasyProyectosYVotar();
             }
@@ -135,27 +150,48 @@ public class Usuario {
         } while (opcion != 3);
     }
 
-    private static void solicitarConsultasyProyectosYVotar() {
+    private static void solicitarConsultasyMostrarlas() {
 
-        ObjectOutputStream out;
-        ObjectInputStream in;
         try {
 
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
             out.writeObject("1");
             out.writeObject(ID);
 
             List<ClasesdeComunicacion.Consulta> consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
             mostrarConsultas(consultas);
-            Voto voto = votarConsulta(consultas);
-            out.writeObject(voto);
-            String mensaje = (String) in.readObject();
-            if (mensaje.equals("El voto se ha enviado correctamente")) {
-                System.out.println(mensaje);
+            
+            out.reset();
+
+        } catch (Exception ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se cayó el proxy...Intentando reconectar con otro proxy");
+            solicitarReconexión();
+            System.out.println("Reconectado!");
+        }
+    }
+
+    private static void solicitarConsultasyProyectosYVotar() {
+
+        try {
+
+            out.writeObject("2");
+            out.writeObject(ID);
+
+            List<ClasesdeComunicacion.Consulta> consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
+
+            mostrarConsultas(consultas);
+            if (!consultas.isEmpty()){
+                Voto voto = votarConsulta(consultas);
+                out.writeObject(voto);
+                ObjectInputStream in2 = new ObjectInputStream (socket.getInputStream());
+                String mensaje = (String) in2.readObject();
+                if (mensaje.equals("El voto se ha enviado correctamente")) {
+                    System.out.println(mensaje);
+                }
             }
 
         } catch (Exception ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Se cayó el proxy...Intentando reconectar con otro proxy");
             solicitarReconexión();
             System.out.println("Reconectado!");
@@ -178,12 +214,11 @@ public class Usuario {
     private static Voto votarConsulta(List<ClasesdeComunicacion.Consulta> consultas) {
         Scanner reader = new Scanner(System.in);
         int votoAprobacion;
-        int i = 1;
         ClasesdeComunicacion.Voto voto = null;
         System.out.println("Seleccione la consulta que desea votar: ");
         int consultaElegida = reader.nextInt();
         Consulta consulta = consultas.get(consultaElegida - 1);
-        System.out.println("Votando consulta/proyecto \"" + consulta.getNombre() + "\"" );
+        System.out.println("Votando consulta/proyecto \"" + consulta.getNombre() + "\"");
 
         System.out.println(opcionesVotacion);
         System.out.print("Ingrese su voto: ");

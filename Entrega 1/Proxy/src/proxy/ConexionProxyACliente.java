@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fuente.de.consultas.y.proyectos;
+package proxy;
 
 import ClasesdeComunicacion.Consulta;
 import ClasesdeComunicacion.Voto;
