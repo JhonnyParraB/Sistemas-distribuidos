@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class RegistroProxy extends Thread{
     private static List <ClasesdeComunicacion.Proxy> directorio;
+
     private ServerSocket servidor;
 
     public RegistroProxy() {
@@ -64,6 +65,10 @@ public class RegistroProxy extends Thread{
 
     public static List<ClasesdeComunicacion.Proxy> getDirectorio() {
         return directorio;
+    }
+    
+    public static void eliminarProxy (ClasesdeComunicacion.Proxy proxy){
+        directorio.remove(proxy);
     }
     
     public static ClasesdeComunicacion.Proxy mejorProxy(){

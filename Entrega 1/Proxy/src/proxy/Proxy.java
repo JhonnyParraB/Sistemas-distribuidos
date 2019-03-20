@@ -77,9 +77,8 @@ public class Proxy {
             socket.close();
                     
         }catch(Exception e){
-            System.err.println(e.getMessage());
-            System.out.println("Es posible que no haya un directorio de proxys en la IP indicada");
-            System.exit(1);
+            System.out.println("Error: es posible que no haya un directorio de proxys en la IP indicada");
+            System.exit(0);
         }
         
                
@@ -88,7 +87,6 @@ public class Proxy {
     
     private static void inicializarProxy (){
         Scanner reader = new Scanner (System.in);
-        System.out.println ("--Creacion del proxy--");
         System.out.print ("Ingrese la IP del manejador de proxys (directorio): ");             
         ipManejador = reader.nextLine ();
         System.out.print ("Ingrese el puerto en el que el proxy se comunicara con los clientes: ");

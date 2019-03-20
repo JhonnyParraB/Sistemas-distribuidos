@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author green
  */
-public class LeeFichero extends Thread {
+public class InyectorConsultas extends Thread {
     
     private static String nombreArchivo;
 
@@ -41,7 +41,6 @@ public class LeeFichero extends Thread {
             br = new BufferedReader(fr);
 
             // Lectura del fichero
-            System.out.println("Leyendo el contendio del archivo.txt");
             String linea;
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             while ((linea = br.readLine()) != null) {
@@ -91,7 +90,7 @@ public class LeeFichero extends Thread {
 
     @Override
     public void run() {
-        List<ClasesdeComunicacion.Consulta> consultas = LeeFichero.leer();
+        List<ClasesdeComunicacion.Consulta> consultas = InyectorConsultas.leer();
         List<ClasesdeComunicacion.Consulta> consultasNuevasYAntiguas;
         List<ClasesdeComunicacion.Consulta> consultasNuevas;
         List<ClasesdeComunicacion.Consulta> consultasAntiguas;
@@ -117,7 +116,7 @@ public class LeeFichero extends Thread {
             try {
                 Thread.sleep(60000); 
             } catch (InterruptedException ex) {
-                Logger.getLogger(LeeFichero.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InyectorConsultas.class.getName()).log(Level.SEVERE, null, ex);
             }
         }//To change body of generated methods, choose Tools | Templates.
     }
@@ -125,7 +124,7 @@ public class LeeFichero extends Thread {
         FuenteDeConsultasYProyectos.agregarConteoYVotos(consultasNuevas);        
     }
 
-        public LeeFichero(String nombreArchivo) {
+        public InyectorConsultas(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
     }
     

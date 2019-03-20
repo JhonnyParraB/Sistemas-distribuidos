@@ -33,7 +33,7 @@ public class ManejadorDeProxys {
         registradorClientes.start();
         registradorProxies.start();
         registradorFuentes.start();
-        System.out.println("Manejador de proxies iniciado en la dirección IP "+
+        System.out.println("Manejador de proxys iniciado en la dirección IP "+
                 InetAddress.getLocalHost().getHostAddress());  
     }
     

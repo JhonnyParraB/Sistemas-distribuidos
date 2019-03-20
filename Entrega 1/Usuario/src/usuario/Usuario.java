@@ -37,11 +37,11 @@ public class Usuario {
     private static Socket socket;
     private static final String menu = "--Menu principal--\n"
             + "1. Ver nuevas consultas/proyectos\n"
-            + "2. Votar una consulta/proyecto\n"
-            + "3. Desconectarse";
+            + "2. Votar una consulta/proyecto";
     private static final String opcionesVotacion = "1: Alto         2: Medio        3: Bajo";
     private static int ID;
     private static String pass;
+    private static Proxy proxy;
     
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
@@ -60,13 +60,13 @@ public class Usuario {
      */
     private static void solicitarConexión() {
         Scanner reader = new Scanner(System.in);
-        System.out.println("Ingrese la IP del manejador de proxys (directorio):");
+        System.out.print("Ingrese la IP del manejador de proxys (directorio): ");
         ipManejador = reader.nextLine();
 
-        System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
+        System.out.print("Para acceder al sistema, por favor, ingrese su ID: ");
         ID = Integer.parseInt(reader.nextLine());
 
-        System.out.println("Para acceder al sistema, por favor, ingrese su contraseña:");
+        System.out.print("Para acceder al sistema, por favor, ingrese su contraseña: ");
         pass = reader.nextLine();
 
         try {
@@ -81,7 +81,7 @@ public class Usuario {
             String mensaje = (String) in.readObject();
             if (mensaje.equals("El ID es valido\nBienvenido!")) {
                 System.out.println(mensaje);
-                ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
+                proxy = (ClasesdeComunicacion.Proxy) in.readObject();
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -101,12 +101,12 @@ public class Usuario {
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(1);
+            System.out.println("Error: es posible que no haya un directorio de proxys en la IP indicada");
+            System.exit(0);
         }
     }
 
-    private static void solicitarReconexión() {
+    private static void solicitarReconexion() {
 
         try {
             socket = new Socket(ipManejador, puertoManejador);
@@ -115,8 +115,9 @@ public class Usuario {
             in = new ObjectInputStream(socket.getInputStream());
 
             out.writeObject("Reconexion");
+            out.writeObject(proxy);
 
-            ClasesdeComunicacion.Proxy proxy = (ClasesdeComunicacion.Proxy) in.readObject();
+            proxy = (ClasesdeComunicacion.Proxy) in.readObject();
             socket.close();
             socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -127,9 +128,8 @@ public class Usuario {
                     + proxy.getPuertoClientes());
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
             System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
-            System.exit(1);
+            System.exit(0);
         }
     }
 
@@ -137,9 +137,13 @@ public class Usuario {
         int opcion;
         Scanner reader = new Scanner(System.in);
         do {
+            System.out.println();
+            System.out.println();
             System.out.println(menu);
             System.out.print("Ingrese la opcion: ");
             opcion = reader.nextInt();
+            System.out.println();
+            System.out.println();
             if (opcion == 1) {
                 solicitarConsultasyMostrarlas();
             }
@@ -164,8 +168,8 @@ public class Usuario {
 
         } catch (Exception ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Se cayó el proxy...Intentando reconectar con otro proxy");
-            solicitarReconexión();
+            System.out.println("Se cayo el proxy...Intentando reconectar con otro proxy");
+            solicitarReconexion();
             System.out.println("Reconectado!");
         }
     }
@@ -193,7 +197,7 @@ public class Usuario {
         } catch (Exception ex) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Se cayó el proxy...Intentando reconectar con otro proxy");
-            solicitarReconexión();
+            solicitarReconexion();
             System.out.println("Reconectado!");
         }
     }
@@ -215,7 +219,7 @@ public class Usuario {
         Scanner reader = new Scanner(System.in);
         int votoAprobacion;
         ClasesdeComunicacion.Voto voto = null;
-        System.out.println("Seleccione la consulta que desea votar: ");
+        System.out.print("Seleccione la consulta que desea votar: ");
         int consultaElegida = reader.nextInt();
         Consulta consulta = consultas.get(consultaElegida - 1);
         System.out.println("Votando consulta/proyecto \"" + consulta.getNombre() + "\"");

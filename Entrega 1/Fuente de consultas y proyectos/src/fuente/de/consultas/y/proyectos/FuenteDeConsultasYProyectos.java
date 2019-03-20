@@ -34,8 +34,7 @@ public class FuenteDeConsultasYProyectos {
     private static Map<String, List<Integer>> votosConsultas = new HashMap<String, List<Integer>>();
     private static int ID;
 
-    private static final String menu = "1. Recuento de votos\n"
-            + "2. Desconectarse";
+    private static final String menu = "--Menu principal--\n1. Recuento de votos";
 
     /**
      * @param args the command line arguments
@@ -46,7 +45,7 @@ public class FuenteDeConsultasYProyectos {
         solicitarConexión();
         System.out.print("Ingrese el nombre del archivo que contiene sus consultas/proyectos: ");
         String nombreArchivo = reader.nextLine();
-        LeeFichero funcion = new LeeFichero(nombreArchivo);
+        InyectorConsultas funcion = new InyectorConsultas(nombreArchivo);
         funcion.start();
         mostrarMenu();
 
@@ -75,8 +74,6 @@ public class FuenteDeConsultasYProyectos {
                 directorio = (List<ClasesdeComunicacion.Proxy>) in.readObject();
                 socket.close();
                 for (ClasesdeComunicacion.Proxy proxy : directorio) {
-                    System.out.println(proxy.getIP());
-                    System.out.println(proxy.getPuertoFuentes());
                     Socket socketp = new Socket(proxy.getIP(), proxy.getPuertoFuentes());
                     (new ConexionFuenteAProxy(socketp, "Envio ID")).start();
                     (new ConexionProxyAFuente(socketp)).start();
@@ -85,7 +82,7 @@ public class FuenteDeConsultasYProyectos {
             } else {
                 socket.close();
                 System.out.println(mensaje);
-                System.exit(1);
+                System.exit(0);
             }
 
         } catch (Exception e) {
@@ -144,9 +141,16 @@ public class FuenteDeConsultasYProyectos {
         int opcion;
         Scanner reader = new Scanner(System.in);
         do {
+            
+            System.out.println();
+            System.out.println();
             System.out.println(menu);
+            
+            
             System.out.print("Ingrese la opcion: ");
             opcion = reader.nextInt();
+            System.out.println();
+            System.out.println();
             if (opcion == 1) {
                 for (ConsultaConteo conteo : conteos.values()) {
                     System.out.println(conteo.getConsulta().getNombre());

@@ -66,6 +66,8 @@ public class RegistroCliente extends Thread {
                     socket_cli.close();
                 }
                 if (mensaje.equals("Reconexion")){
+                    Proxy proxyEliminado = (Proxy) in.readObject();           
+                    eliminarProxy(proxyEliminado);
                     ClasesdeComunicacion.Proxy proxy = RegistroProxy.mejorProxy();
                     out.writeObject(proxy);
                     socket_cli.close();
@@ -75,6 +77,10 @@ public class RegistroCliente extends Thread {
             Logger.getLogger(RegistroCliente.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(1);
         }
+    }
+    
+    private static synchronized void eliminarProxy(Proxy proxy){
+        RegistroProxy.eliminarProxy(proxy);
     }
 
 }
