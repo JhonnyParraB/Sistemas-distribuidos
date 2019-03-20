@@ -6,6 +6,7 @@
 package proxy;
 
 import ClasesdeComunicacion.Consulta;
+import ClasesdeComunicacion.Voto;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -135,9 +136,12 @@ public class Proxy {
         for (Consulta consulta: consultas){
             if (!votosConsultas.get(consulta.getNombre()).contains(IDUsuario)){
                 consultasUsuario.add(consulta);
-                votosConsultas.get(consulta.getNombre()).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
+                //votosConsultas.get(consulta.getNombre()).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
             }
         }
         return consultasUsuario;
     }      
+    public static void agregarVoto (Voto voto){
+        votosConsultas.get(voto.getConsulta().getNombre()).add(voto.getIDUsuario());
+    }
 }

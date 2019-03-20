@@ -26,6 +26,7 @@ public class ConexionProxyAFuente extends Thread{
                 in = new ObjectInputStream(socket.getInputStream());              
                 Voto voto = (Voto) in.readObject();  
                 contarVoto (voto);
+                (new ConexionFuenteAProxy(socket, "Confirmacion voto", voto)).start();
             }
         } catch (Exception ex) {
             System.out.println ("Se cayó uno de los proxys");

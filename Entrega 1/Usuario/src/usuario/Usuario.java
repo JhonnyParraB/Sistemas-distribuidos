@@ -5,6 +5,7 @@
  */
 package usuario;
 
+import ClasesdeComunicacion.Consulta;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,8 +35,9 @@ public class Usuario {
     private static int puertoManejador = 5999;
     private static String ipManejador;
     private static Socket socket;
-    private static final String menu = "1. Ver nuevas consultas/proyectos y votarlos\n"
-            + "2. Desconectarse";
+    private static final String menu = "1. Ver nuevas consultas/proyectos\n"
+            + "2. Votar una consulta/proyecto\n"
+            + "3. Desconectarse";
     private static final String opcionesVotacion = "1: Alto         2: Medio        3: Bajo";
     private static int ID;
     private static String pass;
@@ -56,16 +58,12 @@ public class Usuario {
         Scanner reader = new Scanner(System.in);
         System.out.println("Ingrese la IP del manejador de proxies (directorio):");
         ipManejador = reader.nextLine();
-        
+
         System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
         ID = Integer.parseInt(reader.nextLine());
-        
+
         System.out.println("Para acceder al sistema, por favor, ingrese su contraseña:");
         pass = reader.nextLine();
-
-        
-    
-        
 
         try {
             socket = new Socket(ipManejador, puertoManejador);
@@ -83,9 +81,9 @@ public class Usuario {
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
                 System.out.println("Binding a proxy con IP: "
-                    + proxy.getIP()
-                    + " y Puerto clientes: "
-                    + proxy.getPuertoClientes());
+                        + proxy.getIP()
+                        + " y Puerto clientes: "
+                        + proxy.getPuertoClientes());
             } else {
                 socket.close();
                 System.out.println(mensaje);
@@ -130,11 +128,11 @@ public class Usuario {
             System.out.println(menu);
             System.out.print("Ingrese la opcion: ");
             opcion = reader.nextInt();
-            if (opcion == 1) {
+            if (opcion == 2) {
                 solicitarConsultasyProyectosYVotar();
             }
 
-        } while (opcion != 2);
+        } while (opcion != 3);
     }
 
     private static void solicitarConsultasyProyectosYVotar() {
@@ -150,11 +148,10 @@ public class Usuario {
 
             List<ClasesdeComunicacion.Consulta> consultas = (List<ClasesdeComunicacion.Consulta>) in.readObject();
             mostrarConsultas(consultas);
-            List<ClasesdeComunicacion.Voto> votos = votarConsultas(consultas);
-
-            out.writeObject(votos);
+            Voto voto = votarConsulta(consultas);
+            out.writeObject(voto);
             String mensaje = (String) in.readObject();
-            if (mensaje.equals("Los votos fueron entregados exitosamente")) {
+            if (mensaje.equals("El voto se ha enviado correctamente")) {
                 System.out.println(mensaje);
             }
 
@@ -168,7 +165,7 @@ public class Usuario {
     private static void mostrarConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
         if (!consultas.isEmpty()) {
             int i = 1;
-            System.out.println("Consultas disponibles para votar:");
+            System.out.println("Consultas disponibles para ser votadas:");
             for (ClasesdeComunicacion.Consulta consulta : consultas) {
                 System.out.println(i + ". " + consulta.getNombre());
                 i++;
@@ -178,33 +175,31 @@ public class Usuario {
         }
     }
 
-    private static List<ClasesdeComunicacion.Voto> votarConsultas(List<ClasesdeComunicacion.Consulta> consultas) {
+    private static Voto votarConsulta(List<ClasesdeComunicacion.Consulta> consultas) {
         Scanner reader = new Scanner(System.in);
         int votoAprobacion;
         int i = 1;
-        List<ClasesdeComunicacion.Voto> votos = new ArrayList<ClasesdeComunicacion.Voto>();
         ClasesdeComunicacion.Voto voto = null;
-        for (ClasesdeComunicacion.Consulta consulta : consultas) {
-            System.out.println("------------------------------------");
-            System.out.println(i + ". " + consulta.getNombre());
-            System.out.println(opcionesVotacion);
-            System.out.print("Ingrese su voto: ");
-            votoAprobacion = reader.nextInt();
-            if (votoAprobacion == 1) {
-                voto = new Voto(consulta, ID, "Alto");
-            }
-            if (votoAprobacion == 2) {
-                voto = new Voto(consulta, ID, "Medio");
-            }
-            if (votoAprobacion == 3) {
-                voto = new Voto(consulta, ID, "Bajo");
-            }
-            i++;
-            votos.add(voto);
+        System.out.println("Seleccione la consulta que desea votar: ");
+        int consultaElegida = reader.nextInt();
+        Consulta consulta = consultas.get(consultaElegida - 1);
+        System.out.println("Votando consulta/proyecto \"" + consulta.getNombre() + "\"" );
+
+        System.out.println(opcionesVotacion);
+        System.out.print("Ingrese su voto: ");
+        votoAprobacion = reader.nextInt();
+        if (votoAprobacion == 1) {
+            voto = new Voto(consulta, ID, "Alto");
         }
-        return votos;
+        if (votoAprobacion == 2) {
+            voto = new Voto(consulta, ID, "Medio");
+        }
+        if (votoAprobacion == 3) {
+            voto = new Voto(consulta, ID, "Bajo");
+        }
+        return voto;
     }
-    
+
     static String sha1(String input) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("SHA1");
         byte[] result = mDigest.digest(input.getBytes());

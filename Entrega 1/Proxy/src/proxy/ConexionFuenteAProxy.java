@@ -6,6 +6,7 @@
 package proxy;
 
 import ClasesdeComunicacion.Consulta;
+import ClasesdeComunicacion.Voto;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -58,6 +59,11 @@ public class ConexionFuenteAProxy extends Thread {
                     votosConsultasReconexion = (Map<String, List<Integer>>) in.readObject();
                     agregarVotosConsultasReconexion(votosConsultasReconexion);
                 }
+                if(mensaje.equals("Voto recibido")){
+                    Voto voto = (Voto) in.readObject();
+                    agregarVoto(voto);
+                    (new ConexionProxyACliente(socket, "Confirmacion voto")).start();
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,6 +78,9 @@ public class ConexionFuenteAProxy extends Thread {
     }
     private synchronized void agregarVotosConsultasReconexion (Map<String, List<Integer>> votosConsultasReconexion){
         Proxy.agregarVotosConsultasReconexion(votosConsultasReconexion);
+    }
+    private synchronized void agregarVoto (Voto voto){
+        Proxy.agregarVoto(voto);
     }
 
 }

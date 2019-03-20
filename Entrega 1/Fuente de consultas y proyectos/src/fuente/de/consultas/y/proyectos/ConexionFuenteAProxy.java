@@ -6,6 +6,7 @@
 package fuente.de.consultas.y.proyectos;
 
 import ClasesdeComunicacion.Consulta;
+import ClasesdeComunicacion.Voto;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,7 +23,8 @@ public class ConexionFuenteAProxy extends Thread{
     
     private Socket socket;
     private String tipoMensaje;
-    List<ClasesdeComunicacion.Consulta> consultas;
+    private List<ClasesdeComunicacion.Consulta> consultas;
+    private Voto voto;
 
     @Override
     public void run() {
@@ -52,6 +54,7 @@ public class ConexionFuenteAProxy extends Thread{
             try {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 out.writeObject("Voto recibido");
+                out.writeObject(voto);
             } catch (Exception ex) {
                 Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -66,6 +69,7 @@ public class ConexionFuenteAProxy extends Thread{
                 Logger.getLogger(ConexionFuenteAProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
     }
 
     public ConexionFuenteAProxy(Socket socket, String tipoMensaje, List<ClasesdeComunicacion.Consulta> consultas) {
@@ -77,6 +81,12 @@ public class ConexionFuenteAProxy extends Thread{
     public ConexionFuenteAProxy(Socket socket, String tipoMensaje) {
         this.socket = socket;
         this.tipoMensaje = tipoMensaje;
+    }
+    
+    public ConexionFuenteAProxy(Socket socket, String tipoMensaje, Voto voto) {
+        this.socket = socket;
+        this.tipoMensaje = tipoMensaje;
+        this.voto = voto;
     }
     
     
