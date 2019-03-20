@@ -152,10 +152,12 @@ public class FuenteDeConsultasYProyectos {
             System.out.println();
             System.out.println();
             if (opcion == 1) {
+                int i = 1;
                 for (ConsultaConteo conteo : conteos.values()) {
-                    System.out.println(conteo.getConsulta().getNombre());
+                    System.out.println(i+". "+conteo.getConsulta().getNombre());
                     System.out.println("Alto: " + conteo.getAlto() + "   Medio: " + conteo.getMedio()
                             + "   Bajo: " + conteo.getBajo());
+                    i++;
                 }
             }
         } while (opcion != 2);

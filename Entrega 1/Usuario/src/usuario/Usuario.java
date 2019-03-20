@@ -167,7 +167,6 @@ public class Usuario {
             out.reset();
 
         } catch (Exception ex) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Se cayo el proxy...Intentando reconectar con otro proxy");
             solicitarReconexion();
             System.out.println("Reconectado!");

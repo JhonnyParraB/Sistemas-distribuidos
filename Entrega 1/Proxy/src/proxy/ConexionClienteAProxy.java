@@ -72,7 +72,7 @@ public class ConexionClienteAProxy extends Thread {
     }
     private synchronized void agregarCliente (){
         ManejadorClientes.agregarCliente(ID, socket);
-        System.out.println ("CLIENTE REGISTRADO: "+ ID);
+        System.out.println ("Binding de cliente: "+ ID);
     }
 
 }
