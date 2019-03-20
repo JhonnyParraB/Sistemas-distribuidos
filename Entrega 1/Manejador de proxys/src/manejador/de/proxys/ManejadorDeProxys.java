@@ -27,9 +27,7 @@ public class ManejadorDeProxys {
         RegistroProxy registradorProxies = new RegistroProxy ();
         RegistroCliente registradorClientes = new RegistroCliente();
         RegistroFuenteConsultasYProyectos registradorFuentes = new RegistroFuenteConsultasYProyectos();
-        
-
-        
+              
         registradorClientes.start();
         registradorProxies.start();
         registradorFuentes.start();
