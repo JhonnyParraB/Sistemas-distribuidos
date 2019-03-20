@@ -34,11 +34,8 @@ public class RegistroCliente extends Thread {
     }
 
     public void run() {
-        try {
-            ManejadorDeProxys.quemarUsuarios();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(RegistroCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        ManejadorDeProxys.leerInformacionUsuarios();       
         ServerSocket socket;
         try {
             socket = new ServerSocket(5999);
@@ -53,6 +50,7 @@ public class RegistroCliente extends Thread {
                     String pass = (String) in.readObject();
 
                     if (!clientes.contains(ID) &&
+                            (ManejadorDeProxys.getUsuariosSistema().get(ID)!=null) &&
                             ManejadorDeProxys.getUsuariosSistema().get(ID).equals(pass)) {
                         out.writeObject("El ID es valido\nBienvenido!");
                         System.out.println("Nuevo cliente conectado: " + ID);

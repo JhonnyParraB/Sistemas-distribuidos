@@ -80,7 +80,7 @@ public class Usuario {
 
             String mensaje = (String) in.readObject();
             if (mensaje.equals("El ID es valido\nBienvenido!")) {
-                System.out.println(mensaje);
+                System.out.println("Autenticacion completada con exito");
                 proxy = (ClasesdeComunicacion.Proxy) in.readObject();
                 socket.close();
                 socket = new Socket(proxy.getIP(), proxy.getPuertoClientes());
@@ -95,13 +95,13 @@ public class Usuario {
                         + " y Puerto clientes: "
                         + proxy.getPuertoClientes());
             } else {
-                socket.close();
                 System.out.println(mensaje);
-                System.exit(1);
+                System.exit(0);
             }
 
         } catch (Exception ex) {
             System.out.println("Error: es posible que no haya un directorio de proxys en la IP indicada");
+            System.err.println(ex.getMessage());            
             System.exit(0);
         }
     }
