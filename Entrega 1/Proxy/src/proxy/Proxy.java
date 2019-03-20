@@ -35,6 +35,7 @@ public class Proxy {
     private static int puertoFuentes;
     private static List<ClasesdeComunicacion.Consulta> consultas = new ArrayList<ClasesdeComunicacion.Consulta>();
     private static Map<String, List<Integer>> votosConsultas = new HashMap <String, List<Integer>>();
+    private static String ipManejador;
     
 
     /**
@@ -52,13 +53,7 @@ public class Proxy {
         El puerto está quemado
     */
     private static void conectarConManejador(){
-        Scanner reader = new Scanner (System.in);
-        String ipManejador;
-        
-        
-        System.out.println ("Ingrese la IP del manejador de proxies (directorio):");             
-        ipManejador = reader.nextLine ();
-        
+        Scanner reader = new Scanner (System.in);       
         
         
         Socket socket;
@@ -83,7 +78,7 @@ public class Proxy {
                     
         }catch(Exception e){
             System.err.println(e.getMessage());
-            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
+            System.out.println("Es posible que no haya un directorio de proxys en la IP indicada");
             System.exit(1);
         }
         
@@ -94,9 +89,11 @@ public class Proxy {
     private static void inicializarProxy (){
         Scanner reader = new Scanner (System.in);
         System.out.println ("--Creacion del proxy--");
-        System.out.println ("Ingrese el puerto en el que el proxy se comunicara con los clientes:");
+        System.out.print ("Ingrese la IP del manejador de proxys (directorio): ");             
+        ipManejador = reader.nextLine ();
+        System.out.print ("Ingrese el puerto en el que el proxy se comunicara con los clientes: ");
         puertoClientes = reader.nextInt();
-        System.out.println ("Ingrese el puerto en el que el proxy se comunicara con las fuentes:");
+        System.out.print ("Ingrese el puerto en el que el proxy se comunicara con las fuentes: ");
         puertoFuentes = reader.nextInt();
         ManejadorClientes manejadorClientes = new ManejadorClientes();
         ManejadorFuentes manejadorFuentes = new ManejadorFuentes();
@@ -136,7 +133,6 @@ public class Proxy {
         for (Consulta consulta: consultas){
             if (!votosConsultas.get(consulta.getNombre()).contains(IDUsuario)){
                 consultasUsuario.add(consulta);
-                //votosConsultas.get(consulta.getNombre()).add(IDUsuario); // ESTA LINEA SE DEBE BORRAR
             }
         }
         return consultasUsuario;

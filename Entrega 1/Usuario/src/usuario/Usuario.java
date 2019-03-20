@@ -60,7 +60,7 @@ public class Usuario {
      */
     private static void solicitarConexión() {
         Scanner reader = new Scanner(System.in);
-        System.out.println("Ingrese la IP del manejador de proxies (directorio):");
+        System.out.println("Ingrese la IP del manejador de proxys (directorio):");
         ipManejador = reader.nextLine();
 
         System.out.println("Para acceder al sistema, por favor, ingrese su ID:");

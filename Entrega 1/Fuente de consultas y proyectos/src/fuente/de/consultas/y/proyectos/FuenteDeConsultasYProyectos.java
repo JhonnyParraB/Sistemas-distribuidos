@@ -43,10 +43,10 @@ public class FuenteDeConsultasYProyectos {
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner reader = new Scanner(System.in);
-        System.out.println("Ingrese el nombre del archivo que contiene sus consultas:");
+        solicitarConexión();
+        System.out.print("Ingrese el nombre del archivo que contiene sus consultas/proyectos: ");
         String nombreArchivo = reader.nextLine();
         LeeFichero funcion = new LeeFichero(nombreArchivo);
-        solicitarConexión();
         funcion.start();
         mostrarMenu();
 
@@ -55,10 +55,10 @@ public class FuenteDeConsultasYProyectos {
     public static void solicitarConexión() {
         Scanner reader = new Scanner(System.in);
         String ipManejador;
-        System.out.println("Ingrese la IP del manejador de proxies (directorio):");
+        System.out.print("Ingrese la IP del manejador de proxys (directorio): ");
         ipManejador = reader.nextLine();
 
-        System.out.println("Para acceder al sistema, por favor, ingrese su ID:");
+        System.out.print("Para acceder al sistema, por favor, ingrese su ID: ");
         ID = reader.nextInt();
 
         try {
@@ -89,9 +89,8 @@ public class FuenteDeConsultasYProyectos {
             }
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.out.println("Es posible que no haya un directorio de proxies en la IP indicada");
-            System.exit(1);
+            System.out.println("Error: es posible que no haya un directorio de proxies en la IP indicada");
+            System.exit(0);
         }
     }
 

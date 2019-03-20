@@ -40,7 +40,6 @@ public class ManejadorClientes extends Thread{
             
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            System.out.println("AQUI");
             System.exit(1);
         }
         
