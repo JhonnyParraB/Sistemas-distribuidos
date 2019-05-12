@@ -1,0 +1,1 @@
+javac rmiinterface/RMIInterface.java cliente/Cliente.java

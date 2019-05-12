@@ -5,17 +5,44 @@
  */
 package coordinador;
 
-/**
- *
- * @author green
- */
-public class Coordinador {
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+import rmiinterface.RMIInterface;
+
+public class Coordinador extends UnicastRemoteObject implements RMIInterface{
+
+    private static final long serialVersionUID = 1L;
+
+    protected Coordinador() throws RemoteException {
+
+        super();
+
     }
-    
+
+    @Override
+    public String helloTo(String name) throws RemoteException{
+
+        System.err.println(name + " is trying to contact!");
+        return "Server says hello to " + name;
+
+    }
+
+    public static void main(String[] args){
+
+        try {
+
+            Naming.rebind("//localhost/MyServer", new Coordinador());            
+            System.err.println("Server ready");
+
+        } catch (Exception e) {
+
+            System.err.println("Server exception: " + e.toString());
+            e.printStackTrace();
+
+        }
+
+    }
+
 }
