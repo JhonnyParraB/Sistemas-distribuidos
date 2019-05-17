@@ -13,11 +13,13 @@ import java.rmi.server.UnicastRemoteObject;
 
 import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
+import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
 
     private static final long serialVersionUID = 1L;
     private static RMIInterfaceBanco look_up_banco;
+    private static RMIInterfaceServidor look_up_servidor;
 
     protected Coordinador() throws RemoteException {
 
@@ -49,9 +51,11 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
             registryClientes.rebind("//127.0.0.1/Coordinador", new Coordinador());
             
             Registry registryBanco = LocateRegistry.getRegistry(1235);
+            Registry registryServidor = LocateRegistry.getRegistry(1236);
             
             System.out.println("Coordinador preparado");
             look_up_banco = (RMIInterfaceBanco) registryBanco.lookup("//127.0.0.1/Banco");
+            look_up_servidor = (RMIInterfaceServidor) registryServidor.lookup("//127.0.0.1/Servidor");
 
         } catch (Exception e) {
 
