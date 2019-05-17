@@ -1,0 +1,5 @@
+Papas 10
+Carne 6
+Celulares 2
+Televisores 3
+Cereal 14
