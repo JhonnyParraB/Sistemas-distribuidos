@@ -156,6 +156,7 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
                 String lines[] = linea.split(" ");
                 if (lines[0].equals(nombre_usuario_encriptado) && lines[1].equals(contrasena_encriptado) && lines[2].equals(numero_tarjeta+"")) {
                     valido = true;
+                    return valido;
                 }
             }
         } catch (Exception e) {
@@ -171,9 +172,8 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
+            return valido;
         }
-
-        return valido;
     }
 
     public static long recuperarNumerotarjetas() {
