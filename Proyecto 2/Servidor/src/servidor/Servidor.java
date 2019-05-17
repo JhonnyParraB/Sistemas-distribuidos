@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import servidor.rmiinterface_servidor.RMIInterfaceServidor;
+import rmiinterface_servidor.RMIInterfaceServidor;
 
 /**
  *
