@@ -130,10 +130,10 @@ public class Cliente {
             System.out.println("<< Bienvenido a la tienda virtual >>");
             System.out.println("<<     Productos de la tienda     >>");
             if (productos != null) {
-                System.out.println("<< Mercado >>");
+                System.out.println("<< Alimentos >>");
                 int i = 1 ;
                 for (Producto producto : productos) {
-                    if (producto.getTipo().equals("Mercado")) {
+                    if (producto.getTipo().equals("Alimento")) {
                         System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
                         i++;
                     }
@@ -174,7 +174,7 @@ public class Cliente {
 
             int opcion = -1;
             boolean mostrarOpciones = true;
-            while (opcion != 4) {
+            while (opcion != 5) {
                 if (mostrarOpciones) {
                     System.out.println ("================================");
                     System.out.println("<<       MENU DE COMPRA      >>");
@@ -205,7 +205,6 @@ public class Cliente {
                         System.out.println("Opcion incorrecta, inténtelo nuevamente.");
                         mostrarOpciones = false;
                 }
-
             }
 
         } else {
@@ -221,5 +220,4 @@ public class Cliente {
         //Lectura
         //Escritura
     }
-
 }
