@@ -5,6 +5,7 @@
  */
 package banco;
 
+import rmiinterface.RMIInterfaceBanco;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -15,7 +16,6 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
 
-    int ids = 0;
     long numeroTarjetas = 10000000;
     /**
      * @param args the command line arguments
@@ -31,25 +31,20 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
         try {
 
             Naming.rebind("//127.0.0.1/Banco", new Banco());
-            System.err.println("Banco preparado");
+            System.out.println("Banco preparado");
 
         } catch (Exception e) {
 
-            System.err.println("Error al iniciar el coordinador: " + e.toString());
+            System.out.println("Error al iniciar el banco: " + e.toString());
             e.printStackTrace();
-
         }
     }
 
     @Override
-    public boolean registrarUsuario(String contrasena) throws RemoteException {
+    public long registrarUsuario(String nombre_usuario, String contrasena) throws RemoteException {
         
-        long saldo;
-        ids++;
-        numeroTarjetas++;
-        saldo = 50000;
-        
-        return true; 
+        System.out.println("Asignando número de tarjeta a un nuevo usuario");    
+        return 10000; 
         //escribir archivo
         
         

@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 import javax.swing.JOptionPane;
 import cliente.Cliente;
 import java.util.Scanner;
-import rmiinterface.RMIInterfaceCoordinador;
+import rmiinterface_coordinador.RMIInterfaceCoordinador;
 
 /**
  *
@@ -22,6 +22,7 @@ import rmiinterface.RMIInterfaceCoordinador;
 public class Cliente {
 
     private static RMIInterfaceCoordinador look_up_coordinador;
+    Scanner in = new Scanner (System.in);
 
     /**
      * @param args the command line arguments
@@ -30,13 +31,8 @@ public class Cliente {
         // TODO code application logic here
         look_up_coordinador = (RMIInterfaceCoordinador) Naming.lookup("//127.0.0.1/Coordinador");
         
-        Scanner in = new Scanner (System.in);
-        System.out.println("Ingrese a:");
-        int a = in.nextInt();
-        System.out.println("Ingrese b:");
-        int b = in.nextInt();
-        int respuesta = look_up_coordinador.sumar(a, b);
-        System.out.println("La respuesta es "+respuesta);
+        
+        
         
         
         
@@ -44,10 +40,14 @@ public class Cliente {
     
     public void registro(RMIInterfaceCoordinador look_up_coordinador) throws RemoteException{
         String contrasena;
-        Scanner in = new Scanner (System.in);
+        String nombre_usuario;
+        
+        
         System.out.println("-------------Registro-------------\n");
+        System.out.println("Ingrese el nombre de usuario:\n");
+        nombre_usuario = in.nextLine();
         System.out.println("Ingrese la contraseña:\n");
         contrasena = in.nextLine();
-        look_up_coordinador.registrarUsuarioBanco(contrasena);
+        System.out.println ("Este es su número de tarjeta: "+ look_up_coordinador.registrarUsuarioBanco(nombre_usuario, contrasena));
     }
 }

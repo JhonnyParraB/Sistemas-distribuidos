@@ -9,7 +9,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import rmiinterfacebanco.RMIInterfaceBanco;
+import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface.RMIInterfaceCoordinador;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
@@ -31,15 +31,10 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     }
     
     @Override
-    public boolean registrarUsuarioBanco(String contrasena) throws RemoteException{
+    public long registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException{
 
         System.err.println("Registrando un usuario ...");
-        if (look_up_banco.registrarUsuario(contrasena)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return look_up_banco.registrarUsuario(nombre_usuario, contrasena);
     }
     
     
@@ -49,12 +44,12 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         try {
 
             Naming.rebind("//127.0.0.1/Coordinador", new Coordinador());            
-            System.err.println("Coordinador preparado");
+            System.out.println("Coordinador preparado");
             look_up_banco = (RMIInterfaceBanco) Naming.lookup("//127.0.0.1/Banco");
 
         } catch (Exception e) {
 
-            System.err.println("Error al iniciar el coordinador: " + e.toString());
+            System.out.println("Error al iniciar el coordinador: " + e.toString());
             e.printStackTrace();
 
         }

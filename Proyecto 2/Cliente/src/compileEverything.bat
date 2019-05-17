@@ -1,1 +1,1 @@
-javac rmiinterface/RMIInterface.java cliente/Cliente.java
+javac rmiinterface_coordinador/RMIInterfaceCoordinador.java cliente/Cliente.java

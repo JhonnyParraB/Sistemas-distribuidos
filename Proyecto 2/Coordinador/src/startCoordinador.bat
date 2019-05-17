@@ -1,3 +1,3 @@
 cd src
-start rmiregistry
+%start rmiregistry%
 java coordinador.Coordinador

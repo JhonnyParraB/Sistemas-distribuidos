@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package banco;
+package rmiinterface_banco;
 
+import rmiinterface.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -14,6 +15,6 @@ import java.rmi.RemoteException;
  */
 public interface RMIInterfaceBanco extends Remote{
     
-    public boolean registrarUsuario(String contrasena) throws RemoteException;
+    public long registrarUsuario(String nombre_usuario, String contrasena) throws RemoteException;
     
 }
