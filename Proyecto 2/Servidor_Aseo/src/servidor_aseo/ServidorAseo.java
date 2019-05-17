@@ -5,7 +5,7 @@
  */
 package servidor_aseo;
 
-import rmiinterface_servidor_aseo.Producto;
+import rmiinterface_servidor.Producto;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import rmiinterface_servidor_aseo.RMIInterfaceServidorAseo;
+import rmiinterface_servidor.RMIInterfaceServidor;
 
 /**
  *
  * @author green
  */
-public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceServidorAseo {
+public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceServidor {
 
     private static Map<String, Integer> productos;
     /**
@@ -39,7 +39,7 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
         // TODO code application logic here
 
         try {
-            Registry registry = LocateRegistry.createRegistry(1236);
+            Registry registry = LocateRegistry.createRegistry(1237);
             registry.rebind("//127.0.0.1/ServidorAseo", new ServidorAseo());
             System.out.println("Servidor de aseo preparado");
             productos = leerProductos();

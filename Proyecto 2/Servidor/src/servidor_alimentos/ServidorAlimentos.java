@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servidor;
+package servidor_alimentos;
 
 import rmiinterface_servidor.Producto;
 import java.io.BufferedReader;
@@ -23,13 +23,13 @@ import rmiinterface_servidor.RMIInterfaceServidor;
  *
  * @author green
  */
-public class Servidor extends UnicastRemoteObject implements RMIInterfaceServidor {
+public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfaceServidor {
 
     private static Map<String, Integer> productos;
     /**
      * @param args the command line arguments
      */
-    protected Servidor() throws RemoteException {
+    protected ServidorAlimentos() throws RemoteException {
 
         super();
 
@@ -40,13 +40,13 @@ public class Servidor extends UnicastRemoteObject implements RMIInterfaceServido
 
         try {
             Registry registry = LocateRegistry.createRegistry(1236);
-            registry.rebind("//127.0.0.1/Servidor", new Servidor());
-            System.out.println("Servidor preparado");
+            registry.rebind("//127.0.0.1/ServidorAlimentos", new ServidorAlimentos());
+            System.out.println("Servidor alimentos preparado");
             productos = leerProductos();
 
         } catch (Exception e) {
 
-            System.out.println("Error al iniciar el servidor: " + e.toString());
+            System.out.println("Error al iniciar el servidor alimentos: " + e.toString());
             e.printStackTrace();
         }
 

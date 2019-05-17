@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rmiinterface_servidor_aseo;
+package rmiinterface_servidor;
 
 import java.io.Serializable;
 
