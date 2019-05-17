@@ -154,7 +154,7 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String lines[] = linea.split(" ");
-                if (lines[0].equals(nombre_usuario_encriptado) && lines[1].equals(contrasena_encriptado)) {
+                if (lines[0].equals(nombre_usuario_encriptado) && lines[1].equals(contrasena_encriptado) && lines[2].equals(numero_tarjeta+"")) {
                     valido = true;
                 }
             }
