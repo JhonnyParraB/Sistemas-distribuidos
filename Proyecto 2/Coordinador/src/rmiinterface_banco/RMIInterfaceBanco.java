@@ -5,7 +5,6 @@
  */
 package rmiinterface_banco;
 
-import rmiinterface.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

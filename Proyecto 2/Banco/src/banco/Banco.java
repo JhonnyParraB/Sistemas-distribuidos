@@ -5,9 +5,11 @@
  */
 package banco;
 
-import rmiinterface.RMIInterfaceBanco;
+import rmiinterface_banco.RMIInterfaceBanco;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
@@ -30,7 +32,8 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
         // TODO code application logic here
         try {
 
-            Naming.rebind("//127.0.0.1/Banco", new Banco());
+            Registry registry= LocateRegistry.createRegistry(1235);
+            registry.rebind("//127.0.0.1/Banco", new Banco());
             System.out.println("Banco preparado");
 
         } catch (Exception e) {

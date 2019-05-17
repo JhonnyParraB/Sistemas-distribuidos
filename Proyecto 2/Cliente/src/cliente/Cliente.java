@@ -12,6 +12,8 @@ import java.rmi.RemoteException;
 
 import javax.swing.JOptionPane;
 import cliente.Cliente;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Scanner;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 
@@ -22,31 +24,36 @@ import rmiinterface_coordinador.RMIInterfaceCoordinador;
 public class Cliente {
 
     private static RMIInterfaceCoordinador look_up_coordinador;
-    Scanner in = new Scanner (System.in);
+    private static Scanner in = new Scanner (System.in);
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         // TODO code application logic here
-        look_up_coordinador = (RMIInterfaceCoordinador) Naming.lookup("//127.0.0.1/Coordinador");
+        
+        System.setProperty("java.security.policy", "./client.policy");
+        
+        Registry registry= LocateRegistry.getRegistry(1234);
+        look_up_coordinador = (RMIInterfaceCoordinador) registry.lookup("//127.0.0.1/Coordinador");
         
         
+        registrar();
         
         
         
         
     }
     
-    public void registro(RMIInterfaceCoordinador look_up_coordinador) throws RemoteException{
+    private static void registrar() throws RemoteException{
         String contrasena;
         String nombre_usuario;
         
         
         System.out.println("-------------Registro-------------\n");
-        System.out.println("Ingrese el nombre de usuario:\n");
+        System.out.println("Ingrese el nombre de usuario:");
         nombre_usuario = in.nextLine();
-        System.out.println("Ingrese la contraseña:\n");
+        System.out.println("Ingrese la contraseña:");
         contrasena = in.nextLine();
         System.out.println ("Este es su número de tarjeta: "+ look_up_coordinador.registrarUsuarioBanco(nombre_usuario, contrasena));
     }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rmiinterface;
+package rmiinterface_coordinador;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -12,8 +12,9 @@ import java.rmi.RemoteException;
  *
  * @author green
  */
-public interface RMIInterfaceBanco extends Remote{
+public interface RMIInterfaceCoordinador extends Remote{
     
-    public long registrarUsuario(String nombre_usuario, String contrasena) throws RemoteException;
+    public int sumar(int a, int b) throws RemoteException;
+    public long registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException;
     
 }
