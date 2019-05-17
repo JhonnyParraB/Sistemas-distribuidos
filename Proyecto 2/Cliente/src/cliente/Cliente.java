@@ -14,7 +14,9 @@ import javax.swing.JOptionPane;
 import cliente.Cliente;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Scanner;
+import rmiinterface_coordinador.Producto;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 
 /**
@@ -70,6 +72,7 @@ public class Cliente {
                     registrar();
                     break;
                 case INICIAR_COMPRA:
+                    comprar();
                     break;
                 case CONSULTAR_SALDO:
                     break;
@@ -101,6 +104,41 @@ public class Cliente {
         
         System.out.println ("Recuerde que inicia con un saldo inicial de "+ SALDO_INICIAL);
         
+    }
+    
+    private static void comprar() throws RemoteException{
+        
+        String nombre_usuario;        
+        String contrasena;
+        long numero_tarjeta;
+        
+        
+        System.out.println("-------------Compra-------------\n");
+        System.out.println("Ingrese el nombre de usuario:");
+        nombre_usuario = in.next();
+        System.out.println("Ingrese el numero de tarjeta:");
+        numero_tarjeta = in.nextLong();
+        System.out.println("Ingrese la clave:");
+        contrasena = in.next();
+                   
+        boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
+        if (usuarioRegistrado){
+            List<Producto> productos = look_up_coordinador.obtenerProductos ();
+            System.out.println ("<< Bienvenido a la tienda virtual >>");
+            System.out.println ("Productos: ");
+            if (productos!= null){
+                System.out.println("Aquí están los productos");
+                for (Producto producto: productos){
+                    System.out.println (producto.getNombre() +"   "+ producto.getPrecio());
+                }
+            }
+            
+            
+        }
+        else{
+            System.out.println ("El usuario no está registrado, no se pudo iniciar la transacción.");
+        }
+          
     }
     
     

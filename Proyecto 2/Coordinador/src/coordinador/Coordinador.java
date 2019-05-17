@@ -10,9 +10,12 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
+import rmiinterface_coordinador.Producto;
 import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
@@ -65,5 +68,32 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         }
 
     }
+
+    @Override
+    public boolean validarUsuario(String nombre_usuario, long numero_tarjeta, String contrasena) throws RemoteException {
+        return look_up_banco.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    //Pregunta a todos los servidores cuales son sus productos y los entrega al cliente
+
+    @Override
+    public List<Producto> obtenerProductos() throws RemoteException {
+        List<Producto> productos = new ArrayList<>();
+        Producto producto = new Producto ();
+        producto.setNombre("Manzana");
+        producto.setPrecio(5000);
+        
+        productos.add(producto);
+        return productos;    
+    }
+    
+    
+    
+    
+    
+    
+    
 
 }
