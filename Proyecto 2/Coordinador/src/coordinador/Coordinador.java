@@ -84,10 +84,13 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         Producto producto = new Producto ();
         producto.setNombre("Manzana");
         producto.setPrecio(5000);
+        producto.setTipo("Mercado");
         
         productos.add(producto);
         return productos;    
     }
+    
+    
     
     
     

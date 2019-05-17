@@ -17,6 +17,7 @@ public class Producto implements Serializable{
     
     private String nombre;
     private long precio;
+    private String tipo;
     
 
     public String getNombre() {
@@ -34,6 +35,18 @@ public class Producto implements Serializable{
     public void setPrecio(long precio) {
         this.precio = precio;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    
+    
+    
     
     
     
