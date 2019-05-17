@@ -21,33 +21,33 @@ import rmiinterface.RMIInterfaceCoordinador;
  */
 public class Cliente {
 
-    private static RMIInterfaceCoordinador look_up;
+    private static RMIInterfaceCoordinador look_up_coordinador;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         // TODO code application logic here
-        look_up = (RMIInterfaceCoordinador) Naming.lookup("//127.0.0.1/Coordinador");
+        look_up_coordinador = (RMIInterfaceCoordinador) Naming.lookup("//127.0.0.1/Coordinador");
         
         Scanner in = new Scanner (System.in);
         System.out.println("Ingrese a:");
         int a = in.nextInt();
         System.out.println("Ingrese b:");
         int b = in.nextInt();
-        int respuesta = look_up.sumar(a, b);
+        int respuesta = look_up_coordinador.sumar(a, b);
         System.out.println("La respuesta es "+respuesta);
         
         
         
     }
     
-    public void registro(RMIInterfaceCoordinador look_up) throws RemoteException{
+    public void registro(RMIInterfaceCoordinador look_up_coordinador) throws RemoteException{
         String contrasena;
         Scanner in = new Scanner (System.in);
         System.out.println("-------------Registro-------------\n");
         System.out.println("Ingrese la contraseña:\n");
         contrasena = in.nextLine();
-        look_up.registrarUsuarioBanco(contrasena);
+        look_up_coordinador.registrarUsuarioBanco(contrasena);
     }
 }

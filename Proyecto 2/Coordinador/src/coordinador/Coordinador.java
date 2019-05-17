@@ -15,7 +15,7 @@ import rmiinterface.RMIInterfaceCoordinador;
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
 
     private static final long serialVersionUID = 1L;
-    private static RMIInterfaceBanco look_up;
+    private static RMIInterfaceBanco look_up_banco;
 
     protected Coordinador() throws RemoteException {
 
@@ -34,7 +34,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     public boolean registrarUsuarioBanco(String contrasena) throws RemoteException{
 
         System.err.println("Registrando un usuario ...");
-        if (look_up.registrarUsuario(contrasena)){
+        if (look_up_banco.registrarUsuario(contrasena)){
             return true;
         }
         else{
@@ -50,7 +50,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
 
             Naming.rebind("//127.0.0.1/Coordinador", new Coordinador());            
             System.err.println("Coordinador preparado");
-            look_up = (RMIInterfaceBanco) Naming.lookup("//127.0.0.1/Banco");
+            look_up_banco = (RMIInterfaceBanco) Naming.lookup("//127.0.0.1/Banco");
 
         } catch (Exception e) {
 
