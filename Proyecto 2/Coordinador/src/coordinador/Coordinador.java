@@ -22,23 +22,22 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterface{
     }
 
     @Override
-    public String helloTo(String name) throws RemoteException{
+    public int sumar(int a, int b) throws RemoteException{
 
-        System.err.println(name + " is trying to contact!");
-        return "Server says hello to " + name;
-
+        System.err.println("Haciendo suma");
+        return a+b;
     }
 
     public static void main(String[] args){
 
         try {
 
-            Naming.rebind("//localhost/MyServer", new Coordinador());            
-            System.err.println("Server ready");
+            Naming.rebind("//127.0.0.1/Coordinador", new Coordinador());            
+            System.err.println("Coordinador preparado");
 
         } catch (Exception e) {
 
-            System.err.println("Server exception: " + e.toString());
+            System.err.println("Error al iniciar el coordinador: " + e.toString());
             e.printStackTrace();
 
         }

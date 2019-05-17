@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 
 import javax.swing.JOptionPane;
 import cliente.Cliente;
+import java.util.Scanner;
 import rmiinterface.RMIInterface;
 
 /**
@@ -27,11 +28,15 @@ public class Cliente {
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         // TODO code application logic here
-        look_up = (RMIInterface) Naming.lookup("//localhost/MyServer");
-        String txt = JOptionPane.showInputDialog("What is your name?");
-
-        String response = look_up.helloTo(txt);
-        JOptionPane.showMessageDialog(null, response);
+        look_up = (RMIInterface) Naming.lookup("//127.0.0.1/Coordinador");
+        
+        Scanner in = new Scanner (System.in);
+        System.out.println("Ingrese a:");
+        int a = in.nextInt();
+        System.out.println("Ingrese b:");
+        int b = in.nextInt();
+        int respuesta = look_up.sumar(a, b);
+        System.out.println("La respuesta es "+respuesta);
     }
 
 }
