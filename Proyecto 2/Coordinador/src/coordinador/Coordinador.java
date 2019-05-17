@@ -9,11 +9,13 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import rmiinterface.RMIInterface;
+import rmiinterfacebanco.RMIInterfaceBanco;
+import rmiinterface.RMIInterfaceCoordinador;
 
-public class Coordinador extends UnicastRemoteObject implements RMIInterface{
+public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
 
     private static final long serialVersionUID = 1L;
+    private static RMIInterfaceBanco look_up;
 
     protected Coordinador() throws RemoteException {
 
@@ -27,6 +29,20 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterface{
         System.err.println("Haciendo suma");
         return a+b;
     }
+    
+    @Override
+    public boolean registrarUsuarioBanco(String contrasena) throws RemoteException{
+
+        System.err.println("Registrando un usuario ...");
+        if (look_up.registrarUsuario(contrasena)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    
 
     public static void main(String[] args){
 
@@ -34,6 +50,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterface{
 
             Naming.rebind("//127.0.0.1/Coordinador", new Coordinador());            
             System.err.println("Coordinador preparado");
+            look_up = (RMIInterfaceBanco) Naming.lookup("//127.0.0.1/Banco");
 
         } catch (Exception e) {
 

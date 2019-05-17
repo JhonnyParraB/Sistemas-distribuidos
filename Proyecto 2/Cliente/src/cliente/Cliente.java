@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 import javax.swing.JOptionPane;
 import cliente.Cliente;
 import java.util.Scanner;
-import rmiinterface.RMIInterface;
+import rmiinterface.RMIInterfaceCoordinador;
 
 /**
  *
@@ -21,14 +21,14 @@ import rmiinterface.RMIInterface;
  */
 public class Cliente {
 
-    private static RMIInterface look_up;
+    private static RMIInterfaceCoordinador look_up;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
         // TODO code application logic here
-        look_up = (RMIInterface) Naming.lookup("//127.0.0.1/Coordinador");
+        look_up = (RMIInterfaceCoordinador) Naming.lookup("//127.0.0.1/Coordinador");
         
         Scanner in = new Scanner (System.in);
         System.out.println("Ingrese a:");
@@ -37,6 +37,17 @@ public class Cliente {
         int b = in.nextInt();
         int respuesta = look_up.sumar(a, b);
         System.out.println("La respuesta es "+respuesta);
+        
+        
+        
     }
-
+    
+    public void registro(RMIInterfaceCoordinador look_up) throws RemoteException{
+        String contrasena;
+        Scanner in = new Scanner (System.in);
+        System.out.println("-------------Registro-------------\n");
+        System.out.println("Ingrese la contraseña:\n");
+        contrasena = in.nextLine();
+        look_up.registrarUsuarioBanco(contrasena);
+    }
 }
