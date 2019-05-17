@@ -8,23 +8,46 @@ package servidor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import servidor.rmiinterface_servidor.RMIInterfaceServidor;
 
 /**
  *
  * @author green
  */
-public class Servidor {
+public class Servidor extends UnicastRemoteObject implements RMIInterfaceServidor {
 
+    private static Map<String, Integer> productos;
     /**
      * @param args the command line arguments
      */
+    protected Servidor() throws RemoteException {
+
+        super();
+
+    }
+
     public static void main(String[] args) {
         // TODO code application logic here
-        Map<String, Integer> productos = leerProductos();
+
+        try {
+            Registry registry = LocateRegistry.createRegistry(1236);
+            registry.rebind("//127.0.0.1/Servidor", new Servidor());
+            System.out.println("Servidor preparado");
+            productos = leerProductos();
+
+        } catch (Exception e) {
+
+            System.out.println("Error al iniciar el servidor: " + e.toString());
+            e.printStackTrace();
+        }
 
     }
 
