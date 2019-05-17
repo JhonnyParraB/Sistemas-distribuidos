@@ -15,6 +15,6 @@ import java.rmi.RemoteException;
 public interface RMIInterfaceCoordinador extends Remote{
     
     public int sumar(int a, int b) throws RemoteException;
-    public boolean registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException;
+    public long registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException;
     
 }

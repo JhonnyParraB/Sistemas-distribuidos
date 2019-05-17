@@ -36,8 +36,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     public long registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException{
 
         System.out.println("Registrando un usuario ...");
-        return 5;
-        //return look_up_banco.registrarUsuario(nombre_usuario, contrasena);
+        return look_up_banco.registrarUsuario(nombre_usuario, contrasena);
     }
     
     
