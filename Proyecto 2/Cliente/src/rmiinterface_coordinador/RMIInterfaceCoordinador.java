@@ -6,6 +6,7 @@
 package rmiinterface_coordinador;
 
 import clasesrmi.Producto;
+import clasesrmi.Transaccion;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -21,5 +22,6 @@ public interface RMIInterfaceCoordinador extends Remote{
     public boolean validarUsuario (String nombre_usuario, long numero_tarjeta, String contrasena) throws RemoteException;
 
     public List<Producto> obtenerProductos() throws RemoteException;
+    public boolean finalizarTransaccion (Transaccion transaccion) throws RemoteException;
     
 }

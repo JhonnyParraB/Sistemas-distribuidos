@@ -16,11 +16,14 @@ import java.util.List;
 import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 import clasesrmi.Producto;
+import clasesrmi.Transaccion;
 import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
 
     private static final long serialVersionUID = 1L;
+    
+    private static List<Transaccion> transaccionesConsumadas;
     private static RMIInterfaceBanco look_up_banco;
     private static RMIInterfaceServidor look_up_servidor_alimentos;
     private static RMIInterfaceServidor look_up_servidor_aseo;
@@ -28,6 +31,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     protected Coordinador() throws RemoteException {
 
         super();
+        transaccionesConsumadas = new ArrayList<>();
 
     }
 
@@ -88,6 +92,14 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         productos.addAll(look_up_servidor_alimentos.obtenerProductos());
         productos.addAll(look_up_servidor_aseo.obtenerProductos());
         return productos;    
+    }
+
+    @Override
+    public boolean finalizarTransaccion(Transaccion transaccion) {
+        
+        
+        
+        return true;
     }
     
     

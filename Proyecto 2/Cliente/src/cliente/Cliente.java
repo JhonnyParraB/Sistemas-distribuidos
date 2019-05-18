@@ -190,6 +190,7 @@ public class Cliente {
                         eliminarProducto();
                         break;
                     case CONFIRMAR_COMPRA:
+                        confirmarCompra();
                         break;
                     case CANCELAR_COMPRA:
                         break;
@@ -317,6 +318,41 @@ public class Cliente {
             System.out.println("No hay productos en el carrito");
         }
 
+    }
+    
+    private static void confirmarCompra() throws RemoteException{
+        if (carrito.getProductosCarrito().size() > 0){
+            System.out.println("<< Carrito de compras >>");
+            int i = 1;
+            for (ProductoCarrito productoCarrito : carrito.getProductosCarrito()) {
+                System.out.println(i + ". " + productoCarrito.getProducto().getNombre() + "    " + productoCarrito.getCantidad() + "   $" + productoCarrito.subtotal());
+                i++;
+            }
+            System.out.println("Total carrito: " + carrito.total());
+            
+            System.out.println("¿Está seguro de realizar la compra? (s/n)");
+            String opcion;
+            boolean valido = false;
+            do {
+                opcion = in.nextLine();
+                if (opcion.equals("s") || opcion.equals("n")) 
+                    valido = true;
+                else
+                    valido = false;
+                
+            } while (!valido);
+            
+            if (opcion.equals("s")){
+                look_up_coordinador.finalizarTransaccion(transaccion);
+            }
+            else{
+                return;
+            }
+            
+        }
+        else{
+            System.out.println("No hay productos en el carrito");
+        }
     }
 
 }
