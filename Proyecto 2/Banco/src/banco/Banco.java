@@ -20,6 +20,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import jdk.internal.util.xml.impl.Parser;
 
 /**
  *
@@ -45,9 +46,9 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
 
     public static void main(String[] args) {
         // TODO code application logic here
-        
+
         System.out.println(numeroTarjetas);
-        
+
         try {
 
             Registry registry = LocateRegistry.createRegistry(1235);
@@ -154,9 +155,8 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String lines[] = linea.split(" ");
-                if (lines[0].equals(nombre_usuario_encriptado) && lines[1].equals(contrasena_encriptado) && lines[2].equals(numero_tarjeta+"")) {
+                if (lines[0].equals(nombre_usuario_encriptado) && lines[1].equals(contrasena_encriptado) && lines[2].equals(numero_tarjeta + "")) {
                     valido = true;
-                    return valido;
                 }
             }
         } catch (Exception e) {
@@ -232,6 +232,46 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
 
         return numeroTarjeta;
 
+    }
+
+    @Override
+    public boolean verificarSaldo(long numTarjeta, long costoCompra) throws RemoteException {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        boolean valido = false;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("RegistroBanco.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String lines[] = linea.split(" ");
+                if (lines[2].equals(numTarjeta+"") && costoCompra  > Integer.parseInt(lines[3])) {
+                    valido = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+            return valido;
+        }
     }
 
 }
