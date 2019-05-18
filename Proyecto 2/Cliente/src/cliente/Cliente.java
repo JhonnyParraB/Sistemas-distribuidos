@@ -158,7 +158,7 @@ public class Cliente {
 
             int opcion = -1;
             boolean mostrarOpciones = true;
-            while (opcion != 4) {
+            while (opcion != 5) {
                 if (mostrarOpciones) {
                     System.out.println ("================================");
                     System.out.println("<<       MENU DE COMPRA      >>");
@@ -189,7 +189,6 @@ public class Cliente {
                         System.out.println("Opcion incorrecta, inténtelo nuevamente.");
                         mostrarOpciones = false;
                 }
-
             }
 
         } else {
@@ -212,5 +211,4 @@ public class Cliente {
         //Lectura
         //Escritura
     }
-
 }
