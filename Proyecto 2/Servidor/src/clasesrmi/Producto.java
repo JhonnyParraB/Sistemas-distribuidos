@@ -11,16 +11,16 @@ import java.io.Serializable;
  *
  * @author LENOVO PC
  */
-public class Producto implements Serializable{
-    
+public class Producto implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     private String nombre;
     private String tipo;
     private long precio;
     private int cantidad;
 
-    public Producto(String nombre, String tipo ,long precio, int cantidad) {
+    public Producto(String nombre, String tipo, long precio, int cantidad) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.precio = precio;
@@ -29,8 +29,7 @@ public class Producto implements Serializable{
 
     public Producto() {
     }
-    
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -62,5 +61,14 @@ public class Producto implements Serializable{
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this.nombre.equals(((Producto) obj).getNombre()) && this.tipo.equals(((Producto) obj).getTipo()) && this.precio == ((Producto) obj).getPrecio()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

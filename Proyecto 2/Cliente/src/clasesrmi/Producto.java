@@ -72,6 +72,17 @@ public class Producto implements Serializable{
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this.nombre.equals(((Producto) obj).getNombre()) && this.tipo.equals(((Producto) obj).getTipo()) && this.precio == ((Producto) obj).getPrecio() ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
     
     
     
