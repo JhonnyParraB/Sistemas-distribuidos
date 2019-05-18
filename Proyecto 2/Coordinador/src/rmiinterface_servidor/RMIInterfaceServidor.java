@@ -9,6 +9,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 import clasesrmi.Producto;
+import clasesrmi.Transaccion;
 
 /**
  *
@@ -17,5 +18,8 @@ import clasesrmi.Producto;
 public interface RMIInterfaceServidor extends Remote{
     
    public List<Producto> obtenerProductos () throws RemoteException;
+   public boolean prepararCommit (Transaccion transaccion) throws RemoteException;
+   public boolean commit () throws RemoteException;
+   public boolean abortar () throws RemoteException;
     
 }

@@ -6,9 +6,12 @@
 package servidor_alimentos;
 
 import clasesrmi.Producto;
+import clasesrmi.Transaccion;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -26,6 +29,7 @@ import rmiinterface_servidor.RMIInterfaceServidor;
 public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfaceServidor {
 
     private List<Producto> productosServidor;
+
     /**
      * @param args the command line arguments
      */
@@ -69,7 +73,7 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
             String linea;
             while ((linea = br.readLine()) != null) {
                 String lines[] = linea.split(" ");
-                Producto producto = new Producto(lines[0], "Alimento" ,Long.parseLong(lines[2]), Integer.parseInt(lines[1]));
+                Producto producto = new Producto(lines[0], "Alimento", Long.parseLong(lines[2]), Integer.parseInt(lines[1]));
                 productos.add(producto);
             }
         } catch (Exception e) {
@@ -89,6 +93,61 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
         }
         productosServidor = productos;
         return productos;
+    }
+
+    @Override
+    public boolean prepararCommit(Transaccion transaccion) throws RemoteException {
+        for (Producto productot : transaccion.getConjuntoEscritura()) {
+            if (productot.getCantidad() < 0) {
+                return false;
+            }
+        }
+
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("ProductosCopia.txt", true);
+            pw = new PrintWriter(fichero);
+            
+            for (Producto productot : transaccion.getConjuntoEscritura()) {
+                pw.println(productot.getNombre()+" "+productot.getCantidad()+" "+productot.getPrecio());
+             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Nuevamente aprovechamos el finally para 
+                // asegurarnos que se cierra el fichero.
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return true;
+
+    }
+
+    @Override
+    public boolean commit() throws RemoteException {
+        File fichero = new File("Productos.txt");
+        fichero.delete();
+        
+        File f1 = new File("ProductosCopia.txt");
+        File f2 = new File("Productos.txt");
+        f1.renameTo(f2);
+        
+        return true;
+
+    }
+
+    @Override
+    public boolean abortar() throws RemoteException {
+        File fichero = new File("ProductosCopia.txt");
+        fichero.delete();
+        return true;
     }
 
 }
