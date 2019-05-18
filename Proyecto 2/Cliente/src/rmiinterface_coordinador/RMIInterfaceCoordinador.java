@@ -5,6 +5,7 @@
  */
 package rmiinterface_coordinador;
 
+import clasesrmi.Producto;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;

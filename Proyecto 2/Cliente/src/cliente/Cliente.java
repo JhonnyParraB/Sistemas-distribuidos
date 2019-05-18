@@ -16,7 +16,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Scanner;
-import rmiinterface_coordinador.Producto;
+import clasesrmi.Producto;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 
 /**
@@ -130,10 +130,10 @@ public class Cliente {
             System.out.println("<< Bienvenido a la tienda virtual >>");
             System.out.println("<<     Productos de la tienda     >>");
             if (productos != null) {
-                System.out.println("<< Mercado >>");
+                System.out.println("<< Alimento >>");
                 int i = 1 ;
                 for (Producto producto : productos) {
-                    if (producto.getTipo().equals("Mercado")) {
+                    if (producto.getTipo().equals("Alimento")) {
                         System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
                         i++;
                     }
@@ -142,7 +142,7 @@ public class Cliente {
                 System.out.println("<< Aseo >>");
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Aseo")) {
-                        System.out.println(producto.getNombre() + "   " + producto.getPrecio());
+                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
                         i++;
                     }
                 }
@@ -150,22 +150,6 @@ public class Cliente {
                 System.out.println("<< Ropa >>");
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Ropa")) {
-                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
-                        i++;
-                    }
-                }
-                
-                System.out.println("<< Salud >>");
-                for (Producto producto : productos) {
-                    if (producto.getTipo().equals("Salud")) {
-                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
-                        i++;
-                    }
-                }
-                
-                System.out.println("<< Utiles escolares >>");
-                for (Producto producto : productos) {
-                    if (producto.getTipo().equals("Utiles escolares")) {
                         System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
                         i++;
                     }
@@ -215,8 +199,15 @@ public class Cliente {
     
     
     private static void agregarProducto (){
+        int numeroProducto, cantidadProducto;
+        boolean valido = false;
+        do{
         System.out.println ("Ingrese el número del producto que desea agregar al carrito de compras:");
-        
+        numeroProducto = in.nextInt();
+            if (numeroProducto<1 || numeroProducto>productos.size()){
+                valido = true;
+            }
+        }while(valido == false);
         System.out.println ("Ingrese la cantidad: ");
         //Lectura
         //Escritura

@@ -7,6 +7,8 @@ package rmiinterface_servidor;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
+import clasesrmi.Producto;
 
 /**
  *
@@ -14,6 +16,6 @@ import java.rmi.RemoteException;
  */
 public interface RMIInterfaceServidor extends Remote{
     
-   
+   public List<Producto> obtenerProductos () throws RemoteException;
     
 }

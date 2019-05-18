@@ -1,5 +1,5 @@
-Papas 10
-Carne 6
-Celulares 2
-Televisores 3
-Cereal 14
+Papas 10 600
+Carne 6 32000
+Mani 2 11000
+Yuca 3 1000
+Cereal 14 6500

@@ -5,7 +5,7 @@
  */
 package servidor_aseo;
 
-import rmiinterface_servidor.Producto;
+import clasesrmi.Producto;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,7 +25,7 @@ import rmiinterface_servidor.RMIInterfaceServidor;
  */
 public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceServidor {
 
-    private static Map<String, Integer> productos;
+    private List<Producto> productosServidor;
     /**
      * @param args the command line arguments
      */
@@ -42,7 +42,6 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
             Registry registry = LocateRegistry.createRegistry(1237);
             registry.rebind("//127.0.0.1/ServidorAseo", new ServidorAseo());
             System.out.println("Servidor de aseo preparado");
-            productos = leerProductos();
 
         } catch (Exception e) {
 
@@ -91,6 +90,45 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
     
     public List<Producto> obtenerProductosYPrecios (){
         return null;
+    }
+
+    public List<Producto> obtenerProductos() throws RemoteException {
+        List<Producto> productos = new ArrayList<Producto>();
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("Productos.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String lines[] = linea.split(" ");
+                Producto producto = new Producto(lines[0], "Aseo" ,Long.parseLong(lines[2]), Integer.parseInt(lines[1]));
+                productos.add(producto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+                return productos;
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        productosServidor = productos;
+        return productos;
     }
 
 }

@@ -5,7 +5,7 @@
  */
 package servidor_alimentos;
 
-import rmiinterface_servidor.Producto;
+import clasesrmi.Producto;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,7 +25,7 @@ import rmiinterface_servidor.RMIInterfaceServidor;
  */
 public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfaceServidor {
 
-    private static Map<String, Integer> productos;
+    private List<Producto> productosServidor;
     /**
      * @param args the command line arguments
      */
@@ -42,7 +42,6 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
             Registry registry = LocateRegistry.createRegistry(1236);
             registry.rebind("//127.0.0.1/ServidorAlimentos", new ServidorAlimentos());
             System.out.println("Servidor alimentos preparado");
-            productos = leerProductos();
 
         } catch (Exception e) {
 
@@ -52,8 +51,9 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
 
     }
 
-    public static Map<String, Integer> leerProductos() {
-        Map<String, Integer> productos = new HashMap<String, Integer>();
+    @Override
+    public List<Producto> obtenerProductos() throws RemoteException {
+        List<Producto> productos = new ArrayList<Producto>();
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -69,7 +69,8 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
             String linea;
             while ((linea = br.readLine()) != null) {
                 String lines[] = linea.split(" ");
-                productos.put(lines[0], Integer.parseInt(lines[1]));
+                Producto producto = new Producto(lines[0], "Alimento" ,Long.parseLong(lines[2]), Integer.parseInt(lines[1]));
+                productos.add(producto);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,11 +87,8 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
                 e2.printStackTrace();
             }
         }
+        productosServidor = productos;
         return productos;
-    }
-    
-    public List<Producto> obtenerProductosYPrecios (){
-        return null;
     }
 
 }

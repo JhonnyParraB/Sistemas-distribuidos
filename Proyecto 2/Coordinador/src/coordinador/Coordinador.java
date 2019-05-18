@@ -15,7 +15,7 @@ import java.util.List;
 
 import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
-import rmiinterface_coordinador.Producto;
+import clasesrmi.Producto;
 import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
@@ -84,12 +84,9 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     @Override
     public List<Producto> obtenerProductos() throws RemoteException {
         List<Producto> productos = new ArrayList<>();
-        Producto producto = new Producto ();
-        producto.setNombre("Manzana");
-        producto.setPrecio(5000);
-        producto.setTipo("Mercado");
         
-        productos.add(producto);
+        productos.addAll(look_up_servidor_alimentos.obtenerProductos());
+        productos.addAll(look_up_servidor_aseo.obtenerProductos());
         return productos;    
     }
     
