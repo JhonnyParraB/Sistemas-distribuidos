@@ -17,6 +17,7 @@ import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Scanner;
 import clasesrmi.Producto;
+import clasesrmi.Transaccion;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 
 /**
@@ -27,8 +28,11 @@ public class Cliente {
 
     private static RMIInterfaceCoordinador look_up_coordinador;
     private static Scanner in = new Scanner(System.in);
-    
+
     private static List<Producto> productos;
+
+    private static Transaccion transaccion;
+    private static CarritoDeCompras carrito;
 
     private static final int REGISTRO = 1;
     private static final int INICIAR_COMPRA = 2;
@@ -37,7 +41,7 @@ public class Cliente {
     private static final int SALIR = 5;
 
     private static final int AGREGAR_PRODUCTO = 1;
-    private static final int MODIFICAR_CANTIDADES = 2;
+    private static final int MODIFICAR_CANTIDAD = 2;
     private static final int ELIMINAR_PRODUCTO = 3;
     private static final int CONFIRMAR_COMPRA = 4;
     private static final int CANCELAR_COMPRA = 5;
@@ -127,30 +131,32 @@ public class Cliente {
         boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
         if (usuarioRegistrado) {
             productos = look_up_coordinador.obtenerProductos();
+            transaccion = new Transaccion();
+            carrito = new CarritoDeCompras();
             System.out.println("<< Bienvenido a la tienda virtual >>");
             System.out.println("<<     Productos de la tienda     >>");
             if (productos != null) {
                 System.out.println("<< Alimento >>");
-                int i = 1 ;
+                int i = 1;
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Alimento")) {
-                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
+                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
                         i++;
                     }
                 }
-                
+
                 System.out.println("<< Aseo >>");
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Aseo")) {
-                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
+                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
                         i++;
                     }
                 }
-                
+
                 System.out.println("<< Ropa >>");
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Ropa")) {
-                        System.out.println(i+". "+producto.getNombre() + "   " + producto.getPrecio());
+                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
                         i++;
                     }
                 }
@@ -160,14 +166,14 @@ public class Cliente {
             boolean mostrarOpciones = true;
             while (opcion != 5) {
                 if (mostrarOpciones) {
-                    System.out.println ("================================");
+                    System.out.println("================================");
                     System.out.println("<<       MENU DE COMPRA      >>");
                     System.out.println("1. Agregar producto al carrito de compras");
                     System.out.println("2. Modificar cantidades de un producto del carrito de compras");
                     System.out.println("3. Eliminar producto del carrito de compras");
                     System.out.println("4. << CONFIRMAR COMPRA >>");
                     System.out.println("5. << CANCELAR COMPRA >>");
-                    System.out.println ("================================");
+                    System.out.println("================================");
                 }
                 System.out.print("Opción: ");
                 opcion = in.nextInt();
@@ -177,9 +183,11 @@ public class Cliente {
                     case AGREGAR_PRODUCTO:
                         agregarProducto();
                         break;
-                    case MODIFICAR_CANTIDADES:
+                    case MODIFICAR_CANTIDAD:
+                        modificarCantidad();
                         break;
                     case ELIMINAR_PRODUCTO:
+                        eliminarProducto();
                         break;
                     case CONFIRMAR_COMPRA:
                         break;
@@ -195,20 +203,120 @@ public class Cliente {
             System.out.println("El usuario no está registrado, no se pudo iniciar la transacción.");
         }
     }
-    
-    
-    private static void agregarProducto (){
+
+    private static void agregarProducto() {
         int numeroProducto, cantidadProducto;
-        boolean valido = false;
-        do{
-        System.out.println ("Ingrese el número del producto que desea agregar al carrito de compras:");
-        numeroProducto = in.nextInt();
-            if (numeroProducto<1 || numeroProducto>productos.size()){
-                valido = true;
+        boolean valido = true;
+        do {
+            System.out.println("Ingrese el número del producto que desea agregar al carrito de compras:");
+            numeroProducto = in.nextInt();
+            valido = true;
+            if (numeroProducto < 1 || numeroProducto > productos.size()) {
+                valido = false;
             }
-        }while(valido == false);
-        System.out.println ("Ingrese la cantidad: ");
+        } while (!valido);
+        if (!carrito.productoAgregado(productos.get(numeroProducto - 1))) {
+            System.out.println("Ingrese la cantidad: ");
+            cantidadProducto = in.nextInt();
+
+            transaccion.agregarLectura(productos.get(numeroProducto - 1));
+            transaccion.agregarEscritura(new Producto(productos.get(numeroProducto - 1), cantidadProducto));
+
+            carrito.agregarProducto(productos.get(numeroProducto - 1), cantidadProducto);
+
+            for (Producto producto : transaccion.getConjuntoLectura()) {
+                System.out.println("<<R>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+            for (Producto producto : transaccion.getConjuntoEscritura()) {
+                System.out.println("<<W>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+        } else {
+            System.out.println("Este producto ya está en el carrito");
+        }
         //Lectura
         //Escritura
     }
+
+    private static void modificarCantidad() {
+
+        if (carrito.getProductosCarrito().size() > 0) {
+            int numeroProducto, cantidadNueva;
+            System.out.println("<< Carrito de compras >>");
+            int i = 1;
+            for (ProductoCarrito productoCarrito : carrito.getProductosCarrito()) {
+                System.out.println(i + ". " + productoCarrito.getProducto().getNombre() + "    " + productoCarrito.getCantidad() + "   $" + productoCarrito.subtotal());
+                i++;
+            }
+            System.out.println("Total carrito: $" + carrito.total());
+
+            boolean valido = true;
+            do {
+                System.out.println("Ingrese el número del producto que desea modificar:");
+                numeroProducto = in.nextInt();
+                valido = true;
+                if (numeroProducto < 1 || numeroProducto > carrito.getProductosCarrito().size()) {
+                    valido = false;
+                }
+            } while (!valido);
+
+            System.out.println("Ingrese la nueva cantidad:");
+            cantidadNueva = in.nextInt();
+
+            transaccion.modificarEscritura(new Producto(carrito.getProductosCarrito().get(numeroProducto - 1).getProducto(), cantidadNueva));
+            carrito.modificarCantidad(numeroProducto - 1, cantidadNueva);
+
+            for (Producto producto : transaccion.getConjuntoLectura()) {
+                System.out.println("<<R>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+            for (Producto producto : transaccion.getConjuntoEscritura()) {
+                System.out.println("<<W>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+        } else {
+            System.out.println("No hay productos en el carrito");
+        }
+
+    }
+
+    private static void eliminarProducto() {
+        if (carrito.getProductosCarrito().size() > 0) {
+            int numeroProducto, cantidadNueva;
+            System.out.println("<< Carrito de compras >>");
+            int i = 1;
+            for (ProductoCarrito productoCarrito : carrito.getProductosCarrito()) {
+                System.out.println(i + ". " + productoCarrito.getProducto().getNombre() + "    " + productoCarrito.getCantidad() + "   $" + productoCarrito.subtotal());
+                i++;
+            }
+            System.out.println("Total carrito: " + carrito.total());
+
+            boolean valido = true;
+            do {
+                System.out.println("Ingrese el número del producto que desea eliminar:");
+                numeroProducto = in.nextInt();
+                valido = true;
+                if (numeroProducto < 1 || numeroProducto > carrito.getProductosCarrito().size()) {
+                    valido = false;
+                }
+            } while (!valido);
+
+            transaccion.eliminarEscrituraYLectura(carrito.getProductosCarrito().get(numeroProducto - 1).getProducto());
+            carrito.eliminarProducto(numeroProducto - 1);
+
+            for (Producto producto : transaccion.getConjuntoLectura()) {
+                System.out.println("<<R>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+            for (Producto producto : transaccion.getConjuntoEscritura()) {
+                System.out.println("<<W>>" + producto.getNombre());
+                System.out.println(producto.getCantidad());
+            }
+        } else {
+            System.out.println("No hay productos en el carrito");
+        }
+
+    }
+
 }

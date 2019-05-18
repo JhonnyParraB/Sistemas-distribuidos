@@ -26,6 +26,15 @@ public class Producto implements Serializable{
         this.precio = precio;
         this.cantidad = cantidad;
     }
+    
+    //ESTE CONSTRUCTOR GENERA UNA COPIA DE UN PRODUCTO CON LA ESCRITURA DE UN PEDIDO
+    public Producto(Producto producto, int cantidadPedida){
+        this.nombre = producto.getNombre();
+        this.tipo = producto.getTipo();
+        this.precio = producto.getPrecio();
+        this.cantidad = producto.getCantidad() - cantidadPedida;
+  
+    }
 
     public Producto() {
     }
