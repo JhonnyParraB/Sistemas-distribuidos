@@ -17,6 +17,7 @@ import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 import clasesrmi.Producto;
 import clasesrmi.Transaccion;
+import java.util.LinkedList;
 import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador{
@@ -95,19 +96,50 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     }
 
     @Override
-    public boolean finalizarTransaccion(Transaccion transaccion) {
+    public synchronized boolean finalizarTransaccion(Transaccion transaccion) {
+        Transaccion ti;
         
+        //Validación hacia atrás
+        //Las transacciones que fueron consumadas antes de la transacción que se está validando no son validadas
+        for (int i = transaccionesConsumadas.size()-1; i>=0; i--){
+            ti = transaccionesConsumadas.get(i);
+            if (ti.getTiempoFinal().after(transaccion.getTiempoInicio()))
+                if (!interseccion(ti.getConjuntoEscritura(), transaccion.getConjuntoLectura()).isEmpty())
+                    return false;
+            else
+                break;             
+        }
         
+        /*
+        Transaccion parteAlimentos = new Transaccion();
+        Transaccion parteAseo = new Transaccion();
+        Transaccion parteRopa = new Transaccion();
+        for (Producto producto: transaccion.getConjuntoEscritura()){
+            if (producto.getTipo().equals("Aseo"))
+                parteAseo.agregarEscritura(producto);
+            if (producto.getTipo().equals("Alimento"))
+                parteAlimentos.agregarEscritura(producto);
+            if (producto.getTipo().equals("Ropa"))
+                parteRopa.agregarEscritura(producto);
+                
+        }*/
         
+        transaccion.consumarTransaccion();
+        transaccionesConsumadas.add(transaccion);
         return true;
     }
     
-    
-    
-    
-    
-    
-    
+    private <T> List<T> interseccion(List<T> list1, List<T> list2) {
+        List<T> list = new ArrayList<T>();
+
+        for (T t : list1) {
+            if(list2.contains(t)) {
+                list.add(t);
+            }
+        }
+
+        return list;
+    }
     
     
 

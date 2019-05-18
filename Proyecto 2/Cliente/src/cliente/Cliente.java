@@ -343,7 +343,10 @@ public class Cliente {
             } while (!valido);
             
             if (opcion.equals("s")){
-                look_up_coordinador.finalizarTransaccion(transaccion);
+                if (look_up_coordinador.finalizarTransaccion(transaccion))
+                    System.out.println("Compra realizada con éxito");
+                else
+                    System.out.println("Hubo un error al efectuar la transacción");
             }
             else{
                 return;

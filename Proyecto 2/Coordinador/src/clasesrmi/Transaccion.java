@@ -101,6 +101,10 @@ public class Transaccion implements Serializable{
         conjuntoLectura.remove(i); 
     }
     
+    public void consumarTransaccion (){
+        tiempoFinal = new Date();
+    }
+    
     
     
     
