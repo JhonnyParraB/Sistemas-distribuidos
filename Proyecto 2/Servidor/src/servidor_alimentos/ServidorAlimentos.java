@@ -8,9 +8,13 @@ package servidor_alimentos;
 import clasesrmi.Producto;
 import clasesrmi.Transaccion;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -97,21 +101,29 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
 
     @Override
     public boolean prepararCommit(Transaccion transaccion) throws RemoteException {
+        List<String> productosModificar = new ArrayList<String>();
+        
         for (Producto productot : transaccion.getConjuntoEscritura()) {
             if (productot.getCantidad() < 0) {
                 return false;
             }
         }
 
+        for (Producto productot : transaccion.getConjuntoEscritura()) {
+            productosModificar.add(productot.getNombre());
+        }
+
+        generarCopia("Productos.txt", "ProductosCopia.txt", productosModificar);
+
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
             fichero = new FileWriter("ProductosCopia.txt", true);
             pw = new PrintWriter(fichero);
-            
+
             for (Producto productot : transaccion.getConjuntoEscritura()) {
-                pw.println(productot.getNombre()+" "+productot.getCantidad()+" "+productot.getPrecio());
-             }
+                pw.println(productot.getNombre() + " " + productot.getCantidad() + " " + productot.getPrecio());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,11 +146,11 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
     public boolean commit() throws RemoteException {
         File fichero = new File("Productos.txt");
         fichero.delete();
-        
+
         File f1 = new File("ProductosCopia.txt");
         File f2 = new File("Productos.txt");
         f1.renameTo(f2);
-        
+
         return true;
 
     }
@@ -148,6 +160,39 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
         File fichero = new File("ProductosCopia.txt");
         fichero.delete();
         return true;
+    }
+
+    public void generarCopia(String sourceFile, String destinationFile, List<String> productos) {
+        File inputFile = new File(sourceFile);
+        File tempFile = new File(destinationFile);
+        boolean contiene = false;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                contiene = false;
+                String trimmedLine = currentLine.trim();
+                for (String producto : productos) {
+                    if (trimmedLine.contains(producto)) {
+                        contiene = true;
+                    }
+                }
+                if (contiene == true) {
+                    continue;
+                }
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+            System.out.println("LLego hasta la duplicacion del archivo");
+        } catch (IOException e) {
+            System.err.println("Hubo un error de entrada/salida!!!"+e);
+        }
     }
 
 }

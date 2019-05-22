@@ -8,9 +8,11 @@ package servidor_aseo;
 import clasesrmi.Producto;
 import clasesrmi.Transaccion;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -137,11 +139,19 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
 
     @Override
     public boolean prepararCommit(Transaccion transaccion) throws RemoteException {
+        List<String> productosModificar = new ArrayList<String>();
+        
         for (Producto productot : transaccion.getConjuntoEscritura()) {
             if (productot.getCantidad() < 0) {
                 return false;
             }
         }
+
+        for (Producto productot : transaccion.getConjuntoEscritura()) {
+            productosModificar.add(productot.getNombre());
+        }
+
+        generarCopia("Productos.txt", "ProductosCopia.txt", productosModificar);
 
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -167,6 +177,7 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
             }
         }
         return true;
+
     }
 
     @Override
@@ -179,6 +190,7 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
         f1.renameTo(f2);
 
         return true;
+
     }
 
     @Override
@@ -186,6 +198,38 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
         File fichero = new File("ProductosCopia.txt");
         fichero.delete();
         return true;
+    }
+
+    public void generarCopia(String sourceFile, String destinationFile, List<String> productos) {
+        File inputFile = new File(sourceFile);
+        File tempFile = new File(destinationFile);
+        boolean contiene = false;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                contiene = false;
+                String trimmedLine = currentLine.trim();
+                for (String producto : productos) {
+                    if (trimmedLine.contains(producto)) {
+                        contiene = true;
+                    }
+                }
+                if (contiene == true) {
+                    continue;
+                }
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Hubo un error de entrada/salida!!!");
+        }
     }
 
 }

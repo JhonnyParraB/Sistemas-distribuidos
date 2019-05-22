@@ -94,9 +94,11 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     @Override
     public synchronized boolean finalizarTransaccion(Transaccion transaccion) throws RemoteException {
         Transaccion ti;
-        boolean validarAlimentos, validarAseo, validarRopa;
+        boolean validarAlimentos = false, validarAseo = false;
 
-        /*if (look_up_banco.verificarSaldo(numeroTarjeta, valorTotal)) {*/
+        if (look_up_banco.verificarSaldo(transaccion.getNumero_tarjeta(), transaccion.getPrecio_total())) {
+            return false;
+        }
         //Validación hacia atrás
         //Las transacciones que fueron consumadas antes de la transacción que se está validando no son validadas
         for (int i = transaccionesConsumadas.size() - 1; i >= 0; i--) {
@@ -112,7 +114,6 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
 
         Transaccion parteAlimentos = new Transaccion();
         Transaccion parteAseo = new Transaccion();
-        Transaccion parteRopa = new Transaccion();
         for (Producto producto : transaccion.getConjuntoEscritura()) {
             if (producto.getTipo().equals("Aseo")) {
                 parteAseo.agregarEscritura(producto);
@@ -120,36 +121,62 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
             if (producto.getTipo().equals("Alimento")) {
                 parteAlimentos.agregarEscritura(producto);
             }
-            if (producto.getTipo().equals("Ropa")) {
-                parteRopa.agregarEscritura(producto);
-            }
 
         }
 
         /**/
-        validarAlimentos = look_up_servidor_alimentos.prepararCommit(parteAlimentos);
-        validarAseo = look_up_servidor_aseo.prepararCommit(parteAseo);
-        /*validarRopa = look_up_servidor_ropa.prepararCommit(parteAseo);*/
-        if (validarAlimentos && validarAseo /*&& validarRopa */) {
-            if (look_up_servidor_alimentos.commit() && look_up_servidor_aseo.commit() /*&& look_up_servidor_ropa.commit()*/) {
-                transaccion.consumarTransaccion();
-                transaccionesConsumadas.add(transaccion);
-                return true;
+        if (!parteAseo.getConjuntoEscritura().isEmpty() && !parteAlimentos.getConjuntoEscritura().isEmpty()) {
+            validarAlimentos = look_up_servidor_alimentos.prepararCommit(parteAlimentos);
+            validarAseo = look_up_servidor_aseo.prepararCommit(parteAseo);
+
+            if (validarAlimentos && validarAseo) {
+                if (look_up_servidor_alimentos.commit() && look_up_servidor_aseo.commit()) {
+                    transaccion.consumarTransaccion();
+                    transaccionesConsumadas.add(transaccion);
+                    return true;
+                }
+            } else {
+                if (validarAlimentos) {
+                    look_up_servidor_alimentos.abortar();
+                }
+                if (validarAseo) {
+                    look_up_servidor_aseo.abortar();
+                }
+
+                return false;
             }
-        } else {
-            if (validarAlimentos) {
-                look_up_servidor_alimentos.abortar();
-            }
-            if (validarAseo) {
-                look_up_servidor_aseo.abortar();
-            }
-            /*if (validarRopa)
-                look_up_servidor_ropa.abortar();*/
-            return false;
         }
-        /*} else {
-            return false;
-        }*/
+
+        if (!parteAseo.getConjuntoEscritura().isEmpty() && parteAlimentos.getConjuntoEscritura().isEmpty()) {
+            validarAseo = look_up_servidor_aseo.prepararCommit(parteAseo);
+
+            if (validarAseo) {
+                if (look_up_servidor_aseo.commit()) {
+                    transaccion.consumarTransaccion();
+                    transaccionesConsumadas.add(transaccion);
+                    return true;
+                }
+            } else {
+                look_up_servidor_aseo.abortar();
+                return false;
+            }
+        }
+
+        if (parteAseo.getConjuntoEscritura().isEmpty() && !parteAlimentos.getConjuntoEscritura().isEmpty()) {
+            validarAlimentos = look_up_servidor_alimentos.prepararCommit(parteAlimentos);
+
+            if (validarAlimentos) {
+                if (look_up_servidor_alimentos.commit()) {
+                    transaccion.consumarTransaccion();
+                    transaccionesConsumadas.add(transaccion);
+                    return true;
+                }
+            } else {
+                look_up_servidor_alimentos.abortar();
+                return false;
+            }
+        }
+
         return false;  // no se donde mter el return
     }
 

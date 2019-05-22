@@ -1,5 +1,5 @@
 Shampoo 10 6000
 Escoba 6 3000
 Clorox(1L) 2 65000
-Servilleta(Paquete) 3 12000
 Jabon 14 32000
+Servilleta(Paquete) 2 12000

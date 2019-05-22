@@ -1,5 +1,5 @@
-Papas 10 600
 Carne 6 32000
 Mani 2 11000
 Yuca 3 1000
-Cereal 14 6500
+Papas 0 600
+Cereal 12 6500

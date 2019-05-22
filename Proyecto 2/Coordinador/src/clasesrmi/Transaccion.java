@@ -27,7 +27,8 @@ public class Transaccion implements Serializable{
     private Date tiempoFinal;
     private List<Producto> conjuntoLectura;
     private List<Producto> conjuntoEscritura;
-    
+    private long numero_tarjeta;
+    private long precio_total;
 
 
     public Transaccion() {
@@ -73,6 +74,22 @@ public class Transaccion implements Serializable{
 
     public void setConjuntoEscritura(List<Producto> conjuntoEscritura) {
         this.conjuntoEscritura = conjuntoEscritura;
+    }
+
+    public long getNumero_tarjeta() {
+        return numero_tarjeta;
+    }
+
+    public void setNumero_tarjeta(long numero_tarjeta) {
+        this.numero_tarjeta = numero_tarjeta;
+    }
+
+    public long getPrecio_total() {
+        return precio_total;
+    }
+
+    public void setPrecio_total(long precio_total) {
+        this.precio_total = precio_total;
     }
     
     public void modificarEscritura (Producto producto ){
