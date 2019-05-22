@@ -1,6 +1,6 @@
-Papas 0 600
-Yuca 0 1000
-Cereal 11 6500
-Mani 0 11000
-Carne 5 32000
-Carne 5 32000
+Mani 41 11000
+Carne 38 7000
+Espinacas 80 4500
+Yuca 60 1500
+Papas 62 1000
+Cereal 9 11500

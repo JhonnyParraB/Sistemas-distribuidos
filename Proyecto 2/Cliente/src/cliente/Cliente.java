@@ -409,7 +409,7 @@ public class Cliente {
                 if (look_up_coordinador.finalizarTransaccion(transaccion))
                     System.out.println("Compra realizada con éxito");
                 else
-                    System.out.println("Hubo un error al efectuar la transacción");
+                    System.out.println("No se pudo procesar la transacción");
             }
             else{
                 return;
