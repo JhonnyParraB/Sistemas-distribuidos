@@ -33,6 +33,7 @@ public class Cliente {
 
     private static Transaccion transaccion;
     private static CarritoDeCompras carrito;
+    private static long numTarjetaTransaccion;
 
     private static final int REGISTRO = 1;
     private static final int INICIAR_COMPRA = 2;
@@ -130,6 +131,7 @@ public class Cliente {
 
         boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
         if (usuarioRegistrado) {
+            numTarjetaTransaccion = numero_tarjeta;
             productos = look_up_coordinador.obtenerProductos();
             transaccion = new Transaccion();
             carrito = new CarritoDeCompras();
@@ -193,6 +195,7 @@ public class Cliente {
                         confirmarCompra();
                         break;
                     case CANCELAR_COMPRA:
+                        carrito.vaciarCarrito();
                         break;
                     default:
                         System.out.println("Opcion incorrecta, inténtelo nuevamente.");
@@ -343,6 +346,8 @@ public class Cliente {
             } while (!valido);
             
             if (opcion.equals("s")){
+                transaccion.setPrecio_total(carrito.total());
+                transaccion.setNumero_tarjeta(numTarjetaTransaccion);
                 carrito.vaciarCarrito();
                 if (look_up_coordinador.finalizarTransaccion(transaccion))
                     System.out.println("Compra realizada con éxito");
