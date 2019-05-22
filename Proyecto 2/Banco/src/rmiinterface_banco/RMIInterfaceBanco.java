@@ -18,7 +18,7 @@ public interface RMIInterfaceBanco extends Remote{
     public boolean validarUsuario (String nombre_usuario, long numero_tarjeta, String contrasena) throws RemoteException;
     public boolean verificarSaldo (long numTarjeta, long costoCompra) throws RemoteException;
     public boolean disminuirSaldo (long numTarjeta, long costoCompra) throws RemoteException;
-    public long consultarSaldo (long numTarjeta);
-    public boolean aumentarSaldo (long numTarjeta, long monto);
+    public long consultarSaldo (long numTarjeta) throws RemoteException;
+    public boolean aumentarSaldo (long numTarjeta, long monto) throws RemoteException;
     
 }

@@ -195,4 +195,14 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         return list;
     }
 
+    @Override
+    public long consultarSaldo(long numTarjeta) {
+        return look_up_banco.consultarSaldo(numTarjeta);
+    }
+
+    @Override
+    public boolean aumentarSaldo(long numTarjeta, long monto) {
+       return look_up_banco.aumentarSaldo(numTarjeta, monto);
+    }
+
 }

@@ -24,4 +24,7 @@ public interface RMIInterfaceCoordinador extends Remote{
     public List<Producto> obtenerProductos() throws RemoteException;
     public boolean finalizarTransaccion (Transaccion transaccion) throws RemoteException;
     
+    public long consultarSaldo (long numTarjeta) throws RemoteException;
+    public boolean aumentarSaldo (long numTarjeta, long monto) throws RemoteException;
+    
 }

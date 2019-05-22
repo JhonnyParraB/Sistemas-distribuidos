@@ -84,8 +84,10 @@ public class Cliente {
                     comprar();
                     break;
                 case CONSULTAR_SALDO:
+                    consultarSaldo();
                     break;
                 case INGRESAR_DINERO:
+                    ingresarDinero();                    
                     break;
                 case SALIR:
                     break;
@@ -96,6 +98,66 @@ public class Cliente {
         }
 
     }
+    
+    public static void consultarSaldo() throws RemoteException{
+        String nombre_usuario;
+        String contrasena;
+        long numero_tarjeta;
+
+        System.out.println("-------------Consultar saldo-------------\n");
+        System.out.println("Ingrese el nombre de usuario:");
+        nombre_usuario = in.next();
+        System.out.println("Ingrese el numero de tarjeta:");
+        numero_tarjeta = in.nextLong();
+        System.out.println("Ingrese la clave:");
+        contrasena = in.next();
+        
+        
+
+        boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
+        if (usuarioRegistrado){
+            System.out.println("El saldo de su cuenta es: $"+ look_up_coordinador.consultarSaldo(numero_tarjeta));
+        }
+        else{
+            System.out.println ("El usuario no está registrado en el sistema.");
+        }
+        
+    }
+    
+    public static void ingresarDinero() throws RemoteException{
+        String nombre_usuario;
+        String contrasena;
+        long numero_tarjeta;
+        long monto;
+
+        System.out.println("-------------Consultar saldo-------------\n");
+        System.out.println("Ingrese el nombre de usuario:");
+        nombre_usuario = in.next();
+        System.out.println("Ingrese el numero de tarjeta:");
+        numero_tarjeta = in.nextLong();
+        System.out.println("Ingrese la clave:");
+        contrasena = in.next();
+        
+        System.out.println("Ingrese el monto:");
+        monto = in.nextLong();
+        
+        
+
+        boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
+        if (usuarioRegistrado){
+            if (look_up_coordinador.aumentarSaldo(numero_tarjeta, monto))
+                System.out.println("El dinero ha sido ingresado.");
+            else
+                System.out.println("Hubo un error al intentar ingresar el dinero.");
+            
+        }
+        else{
+            System.out.println ("El usuario no está registrado en el sistema.");
+        }
+        
+    }
+    
+    
 
     private static void registrar() throws RemoteException {
         String contrasena;
@@ -111,7 +173,7 @@ public class Cliente {
         System.out.println("Bienvenido, su nombre de usuario y contraseña ha sido registrado.");
         System.out.println("El número de tarjeta es: " + numeroTarjeta);
 
-        System.out.println("Recuerde que inicia con un saldo inicial de " + SALDO_INICIAL);
+        System.out.println("Recuerde que inicia con un saldo inicial de $" + SALDO_INICIAL);
 
     }
 
@@ -128,6 +190,8 @@ public class Cliente {
         numero_tarjeta = in.nextLong();
         System.out.println("Ingrese la clave:");
         contrasena = in.next();
+        
+        
 
         boolean usuarioRegistrado = look_up_coordinador.validarUsuario(nombre_usuario, numero_tarjeta, contrasena);
         if (usuarioRegistrado) {
@@ -142,7 +206,7 @@ public class Cliente {
                 int i = 1;
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Alimento")) {
-                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
+                        System.out.format("%4d.%30s%20s%d\n", i, producto.getNombre(),"$", producto.getPrecio());
                         i++;
                     }
                 }
@@ -150,23 +214,16 @@ public class Cliente {
                 System.out.println("<< Aseo >>");
                 for (Producto producto : productos) {
                     if (producto.getTipo().equals("Aseo")) {
-                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
+                        System.out.format("%4d.%30s%20s%d\n", i, producto.getNombre(),"$", producto.getPrecio());
                         i++;
                     }
                 }
 
-                System.out.println("<< Ropa >>");
-                for (Producto producto : productos) {
-                    if (producto.getTipo().equals("Ropa")) {
-                        System.out.println(i + ". " + producto.getNombre() + "   $" + producto.getPrecio());
-                        i++;
-                    }
-                }
             }
 
             int opcion = -1;
             boolean mostrarOpciones = true;
-            while (opcion != 5) {
+            while (opcion != CANCELAR_COMPRA && opcion != CONFIRMAR_COMPRA) {
                 if (mostrarOpciones) {
                     System.out.println("================================");
                     System.out.println("<<       MENU DE COMPRA      >>");
