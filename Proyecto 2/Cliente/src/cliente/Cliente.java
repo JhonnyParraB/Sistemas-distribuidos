@@ -291,7 +291,7 @@ public class Cliente {
                 System.out.println(i + ". " + productoCarrito.getProducto().getNombre() + "    " + productoCarrito.getCantidad() + "   $" + productoCarrito.subtotal());
                 i++;
             }
-            System.out.println("Total carrito: " + carrito.total());
+            System.out.println("Total carrito: $" + carrito.total());
 
             boolean valido = true;
             do {
@@ -343,6 +343,7 @@ public class Cliente {
             } while (!valido);
             
             if (opcion.equals("s")){
+                carrito.vaciarCarrito();
                 if (look_up_coordinador.finalizarTransaccion(transaccion))
                     System.out.println("Compra realizada con éxito");
                 else

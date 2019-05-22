@@ -46,8 +46,6 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        System.out.println(numeroTarjetas);
-
         try {
 
             Registry registry = LocateRegistry.createRegistry(1235);

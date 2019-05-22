@@ -97,60 +97,56 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
         boolean validarAlimentos, validarAseo, validarRopa;
 
         /*if (look_up_banco.verificarSaldo(numeroTarjeta, valorTotal)) {*/
-
-            //Validación hacia atrás
-            //Las transacciones que fueron consumadas antes de la transacción que se está validando no son validadas
-            for (int i = transaccionesConsumadas.size() - 1; i >= 0; i--) {
-                ti = transaccionesConsumadas.get(i);
-                if (ti.getTiempoFinal().after(transaccion.getTiempoInicio())) {
-                    if (!interseccion(ti.getConjuntoEscritura(), transaccion.getConjuntoLectura()).isEmpty()) {
-                        return false;
-                    } else {
-                        break;
-                    }
+        //Validación hacia atrás
+        //Las transacciones que fueron consumadas antes de la transacción que se está validando no son validadas
+        for (int i = transaccionesConsumadas.size() - 1; i >= 0; i--) {
+            ti = transaccionesConsumadas.get(i);
+            if (ti.getTiempoFinal().after(transaccion.getTiempoInicio())) {
+                if (!interseccion(ti.getConjuntoEscritura(), transaccion.getConjuntoLectura()).isEmpty()) {
+                    return false;
+                } else {
+                    break;
                 }
             }
+        }
 
-            Transaccion parteAlimentos = new Transaccion();
-            Transaccion parteAseo = new Transaccion();
-            Transaccion parteRopa = new Transaccion();
-            for (Producto producto : transaccion.getConjuntoEscritura()) {
-                if (producto.getTipo().equals("Aseo")) {
-                    parteAseo.agregarEscritura(producto);
-                }
-                if (producto.getTipo().equals("Alimento")) {
-                    parteAlimentos.agregarEscritura(producto);
-                }
-                if (producto.getTipo().equals("Ropa")) {
-                    parteRopa.agregarEscritura(producto);
-                }
-
+        Transaccion parteAlimentos = new Transaccion();
+        Transaccion parteAseo = new Transaccion();
+        Transaccion parteRopa = new Transaccion();
+        for (Producto producto : transaccion.getConjuntoEscritura()) {
+            if (producto.getTipo().equals("Aseo")) {
+                parteAseo.agregarEscritura(producto);
+            }
+            if (producto.getTipo().equals("Alimento")) {
+                parteAlimentos.agregarEscritura(producto);
+            }
+            if (producto.getTipo().equals("Ropa")) {
+                parteRopa.agregarEscritura(producto);
             }
 
-            /**/
-            validarAlimentos = look_up_servidor_alimentos.prepararCommit(parteAlimentos);
-            validarAseo = look_up_servidor_aseo.prepararCommit(parteAseo);
-            /*validarRopa = look_up_servidor_ropa.prepararCommit(parteAseo);*/
-            if (validarAlimentos && validarAseo /*&& validarRopa */) {
-                look_up_servidor_alimentos.commit();
-                look_up_servidor_aseo.commit();
-                /*look_up_servidor_ropa.commit();*/
-                if (look_up_servidor_alimentos.commit() && look_up_servidor_aseo.commit() /*&& look_up_servidor_ropa.commit()*/){
-                    transaccion.consumarTransaccion();
-                    transaccionesConsumadas.add(transaccion);
-                    return true;
-                }
-            } else {
-                if (validarAlimentos) {
-                    look_up_servidor_alimentos.abortar();
-                }
-                if (validarAseo) {
-                    look_up_servidor_aseo.abortar();
-                }
-                /*if (validarRopa)
+        }
+
+        /**/
+        validarAlimentos = look_up_servidor_alimentos.prepararCommit(parteAlimentos);
+        validarAseo = look_up_servidor_aseo.prepararCommit(parteAseo);
+        /*validarRopa = look_up_servidor_ropa.prepararCommit(parteAseo);*/
+        if (validarAlimentos && validarAseo /*&& validarRopa */) {
+            if (look_up_servidor_alimentos.commit() && look_up_servidor_aseo.commit() /*&& look_up_servidor_ropa.commit()*/) {
+                transaccion.consumarTransaccion();
+                transaccionesConsumadas.add(transaccion);
+                return true;
+            }
+        } else {
+            if (validarAlimentos) {
+                look_up_servidor_alimentos.abortar();
+            }
+            if (validarAseo) {
+                look_up_servidor_aseo.abortar();
+            }
+            /*if (validarRopa)
                 look_up_servidor_ropa.abortar();*/
-                return false;
-            }
+            return false;
+        }
         /*} else {
             return false;
         }*/

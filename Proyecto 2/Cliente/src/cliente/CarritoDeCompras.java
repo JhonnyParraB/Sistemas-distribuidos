@@ -60,5 +60,8 @@ public class CarritoDeCompras {
         return false;
     }
     
+    public void vaciarCarrito(){
+        productosCarrito.clear();
+    }
     
 }
