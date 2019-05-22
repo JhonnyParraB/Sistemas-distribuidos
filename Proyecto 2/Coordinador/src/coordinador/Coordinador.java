@@ -17,7 +17,10 @@ import rmiinterface_banco.RMIInterfaceBanco;
 import rmiinterface_coordinador.RMIInterfaceCoordinador;
 import clasesrmi.Producto;
 import clasesrmi.Transaccion;
+import java.rmi.NotBoundException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rmiinterface_servidor.RMIInterfaceServidor;
 
 public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoordinador {
@@ -45,7 +48,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
 
     @Override
     public long registrarUsuarioBanco(String nombre_usuario, String contrasena) throws RemoteException {
-
+        intentarReconexion();
         System.out.println("Registrando un usuario ...");
         return look_up_banco.registrarUsuario(nombre_usuario, contrasena);
     }
@@ -84,6 +87,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     //Pregunta a todos los servidores cuales son sus productos y los entrega al cliente
     @Override
     public List<Producto> obtenerProductos() throws RemoteException {
+        intentarReconexion();
         List<Producto> productos = new ArrayList<>();
 
         productos.addAll(look_up_servidor_alimentos.obtenerProductos());
@@ -93,6 +97,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
 
     @Override
     public synchronized boolean finalizarTransaccion(Transaccion transaccion) throws RemoteException {
+        intentarReconexion();
         Transaccion ti;
         boolean validarAlimentos = false, validarAseo = false;
 
@@ -204,5 +209,43 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
     public boolean aumentarSaldo(long numTarjeta, long monto) {
        return look_up_banco.aumentarSaldo(numTarjeta, monto);
     }
+    
+    
+    public void intentarReconexion() {
+        boolean existeConexionAlimentos = false;
+        boolean existeConexionAseo = false;
+        while (!existeConexionAlimentos || !existeConexionAseo) {
+            try {
+                existeConexionAlimentos = look_up_servidor_alimentos.existeConexion();
+                existeConexionAseo = look_up_servidor_aseo.existeConexion();
+            } catch (RemoteException e) {
+                try {
+                    
+                    if (!existeConexionAlimentos){
+                        existeConexionAseo = look_up_servidor_aseo.existeConexion();
+                        System.out.println("Intentando reconectar con servidor de alimentos...");
+                        Registry registryServidorAlimentos = LocateRegistry.getRegistry(1236);
+                        look_up_servidor_alimentos = (RMIInterfaceServidor) registryServidorAlimentos.lookup("//127.0.0.1/ServidorAlimentos");
+                        
+                    }
+                    if (!existeConexionAseo){
+                        System.out.println("Intentando reconectar con servidor de aseo...");
+                        Registry registryServidorAseo = LocateRegistry.getRegistry(1237);
+                        look_up_servidor_aseo = (RMIInterfaceServidor) registryServidorAseo.lookup("//127.0.0.1/ServidorAseo");
+                    }                    
+                    
+
+                } catch ( NotBoundException | RemoteException s) {
+                    System.out.println("No se pudo reconectar, intentando de nuevo en 3 segundos.");
+                    try {
+                        Thread.sleep(3*1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Coordinador.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+
 
 }

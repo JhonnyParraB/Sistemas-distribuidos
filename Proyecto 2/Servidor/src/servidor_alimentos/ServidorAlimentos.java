@@ -195,4 +195,9 @@ public class ServidorAlimentos extends UnicastRemoteObject implements RMIInterfa
         }
     }
 
+    @Override
+    public boolean existeConexion() throws RemoteException {
+        return true;
+    }
+
 }

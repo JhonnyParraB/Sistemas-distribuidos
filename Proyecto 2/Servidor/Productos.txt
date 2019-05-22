@@ -2,5 +2,5 @@ Mani 41 11000
 Carne 38 7000
 Espinacas 80 4500
 Yuca 60 1500
-Papas 62 1000
 Cereal 9 11500
+Papas 42 1000

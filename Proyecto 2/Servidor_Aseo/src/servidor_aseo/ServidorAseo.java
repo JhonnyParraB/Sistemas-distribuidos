@@ -232,4 +232,11 @@ public class ServidorAseo extends UnicastRemoteObject implements RMIInterfaceSer
         }
     }
 
+    @Override
+    public boolean existeConexion() throws RemoteException {
+        return true;
+    }
+    
+    
+
 }

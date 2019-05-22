@@ -21,5 +21,7 @@ public interface RMIInterfaceServidor extends Remote{
    public boolean prepararCommit (Transaccion transaccion) throws RemoteException;
    public boolean commit () throws RemoteException;
    public boolean abortar () throws RemoteException;
+   
+   public boolean existeConexion () throws RemoteException;
     
 }
