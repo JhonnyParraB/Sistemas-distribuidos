@@ -1,5 +1,6 @@
-Carne 6 32000
-Mani 2 11000
-Yuca 3 1000
 Papas 0 600
-Cereal 12 6500
+Yuca 0 1000
+Cereal 11 6500
+Mani 0 11000
+Carne 5 32000
+Carne 5 32000

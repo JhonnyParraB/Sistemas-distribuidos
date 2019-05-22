@@ -331,7 +331,7 @@ public class Cliente {
                 System.out.println(i + ". " + productoCarrito.getProducto().getNombre() + "    " + productoCarrito.getCantidad() + "   $" + productoCarrito.subtotal());
                 i++;
             }
-            System.out.println("Total carrito: " + carrito.total());
+            System.out.println("Total carrito: $" + carrito.total());
             
             System.out.println("¿Está seguro de realizar la compra? (s/n)");
             String opcion;

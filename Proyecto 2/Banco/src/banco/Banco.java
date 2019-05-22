@@ -6,6 +6,7 @@
 package banco;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,6 +18,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Base64;
+import java.util.List;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -250,7 +252,7 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String lines[] = linea.split(" ");
-                if (lines[2].equals(numTarjeta+"") && costoCompra  > Integer.parseInt(lines[3])) {
+                if (lines[2].equals(numTarjeta + "") && costoCompra > Long.parseLong(lines[3])) {
                     valido = true;
                 }
             }
@@ -269,6 +271,124 @@ public class Banco extends UnicastRemoteObject implements RMIInterfaceBanco {
             }
             return valido;
         }
+    }
+
+    @Override
+    public boolean disminuirSaldo(long numTarjeta, long costoCompra) throws RemoteException {
+        return generarCopia(numTarjeta, costoCompra);
+    }
+
+    public boolean generarCopia(long numeroTarjeta, long costoCompra) {
+        boolean successful = false;
+        try {
+            File inputFile = new File("RegistroBanco.txt");
+            File tempFile = new File("RegistroBancoCopia.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if (trimmedLine.contains(Long.toString(numeroTarjeta))) {
+                    String lines[] = trimmedLine.split(" ");
+                    long saldo = Long.parseLong(lines[3]);
+                    saldo = saldo - costoCompra;
+                    writer.write(lines[0] + " " + lines[1] + " " + lines[2] + " " + Long.toString(saldo) + System.getProperty("line.separator"));
+                    continue;
+                }
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+
+            inputFile.delete();
+            File f2 = new File("RegistroBanco.txt");
+            successful = tempFile.renameTo(f2);
+
+        } catch (IOException e) {
+            System.err.println("Hubo un error de entrada/salida!!!" + e);
+        }
+        return successful;
+    }
+
+    @Override
+    public long consultarSaldo(long numTarjeta) {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        long saldo = 0;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("RegistroBanco.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String lines[] = linea.split(" ");
+                if (lines[2].equals(numTarjeta + "")) {
+                    saldo = Long.parseLong(lines[3]);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+            return saldo;
+        }
+    }
+
+    @Override
+    public boolean aumentarSaldo(long numTarjeta, long monto) {
+               boolean successful = false;
+        try {
+            File inputFile = new File("RegistroBanco.txt");
+            File tempFile = new File("RegistroBancoCopia.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if (trimmedLine.contains(Long.toString(numTarjeta))) {
+                    String lines[] = trimmedLine.split(" ");
+                    long saldo = Long.parseLong(lines[3]);
+                    saldo = saldo + monto;
+                    writer.write(lines[0] + " " + lines[1] + " " + lines[2] + " " + Long.toString(saldo) + System.getProperty("line.separator"));
+                    continue;
+                }
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close();
+            reader.close();
+
+            inputFile.delete();
+            File f2 = new File("RegistroBanco.txt");
+            successful = tempFile.renameTo(f2);
+
+        } catch (IOException e) {
+            System.err.println("Hubo un error de entrada/salida!!!" + e);
+        }
+        return successful;
     }
 
 }

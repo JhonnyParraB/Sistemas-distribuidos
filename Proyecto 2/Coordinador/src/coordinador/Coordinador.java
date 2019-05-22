@@ -133,6 +133,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
                 if (look_up_servidor_alimentos.commit() && look_up_servidor_aseo.commit()) {
                     transaccion.consumarTransaccion();
                     transaccionesConsumadas.add(transaccion);
+                    look_up_banco.disminuirSaldo(transaccion.getNumero_tarjeta(),transaccion.getPrecio_total());
                     return true;
                 }
             } else {
@@ -154,6 +155,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
                 if (look_up_servidor_aseo.commit()) {
                     transaccion.consumarTransaccion();
                     transaccionesConsumadas.add(transaccion);
+                    look_up_banco.disminuirSaldo(transaccion.getNumero_tarjeta(),transaccion.getPrecio_total());
                     return true;
                 }
             } else {
@@ -169,6 +171,7 @@ public class Coordinador extends UnicastRemoteObject implements RMIInterfaceCoor
                 if (look_up_servidor_alimentos.commit()) {
                     transaccion.consumarTransaccion();
                     transaccionesConsumadas.add(transaccion);
+                    look_up_banco.disminuirSaldo(transaccion.getNumero_tarjeta(),transaccion.getPrecio_total());
                     return true;
                 }
             } else {
